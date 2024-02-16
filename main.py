@@ -72,6 +72,7 @@ def signup():
         cursor = db.cursor()
 
         existing_user = cursor.execute("select phoneno from users where phoneno = ?",(phone,)).fetchone()
+        print(existing_user)
         if existing_user:
             flash('User already exist, Login !')
             return redirect(url_for('login'))

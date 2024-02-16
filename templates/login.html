@@ -10,34 +10,43 @@
 <body>
 	<div class="main">  	
 		<input type="checkbox" id="chk" aria-hidden="true">
-
-			<div class="LOGin">
-				<form>
-					<label for="chk" aria-hidden="true" class="logme" style="color: black";>Login</label>
-					<input type="tel" name="tel" placeholder="Phone Number "  required="" minlength="10" maxlength="10">
-					<input  class="form-control"   id="contact"   name="pswd" type="text"  minlength="6" placeholder="Password" />
-					<div class="forget" ><a> Forget Password?</a></div>
-					<button>Login</button>
-				</form>
-			</div>
+		
+		<div class="LOGin">
+			<form action="/login" method="POST">
+				<label for="chk" aria-hidden="true" class="logme" style="color: black";>Login</label>
+				<input type="tel" name="phone" placeholder="Phone Number "  required="" minlength="10" maxlength="10">
+				<input  class="form-control"   id="contact"   name="password" type="text"  minlength="6" placeholder="Password" />
+				<div class="forget" ><a> Forget Password?</a></div>
+				<button type="submit">Login</button>
+			</form>
+			{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+			<ul>
+			{% for category, message in messages %}
+				<li class="{{ category }}">{{ message }}</li>
+			{% endfor %}
+			</ul>
+			{% endif %}
+			{% endwith %}
+		</div>
 
 			<div class="SIGNup">
-				<form>
+				<form action="/signup" method="POST">
 					<label  class="heads"  for="chk" aria-hidden="true">Signup</label>
 					<div class="otp">
 						
-					<input type="tel" name="email" placeholder="Phone Number" required="" minlength="10" maxlength="10">
+					<input type="tel" placeholder="Phone Number" name="phone"  minlength="10" maxlength="10">
 					<button>Get Otp</button>
 					</div>
 					
 						<div class="verify">
-							<input type="tel" name="otp" placeholder="Enter OTP" required="">
+							<input type="tel" name="otp" placeholder="Enter OTP" >
 							<button class="bt">Verify</button>
 						</div>
 						<div class="create">
-							<input type="text" name="pswd" placeholder="Create password" required="" minlength="6">  
+							<input type="text" name="password" placeholder="Create password" required="" minlength="6">  
 						</div>
-					<button  class="upsign" >Signup</button>
+					<button  class="upsign" type="submit">Signup</button>
 				</form>
 			</div>
 		</div>
