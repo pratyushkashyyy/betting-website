@@ -62,6 +62,23 @@ def logout():
     flash('You have been logged out', 'info')
     return redirect(url_for('index'))
 
+@app.route('/get-otp', methods=["POST","GET"])
+def get_otp():
+    if request.method == "POST":
+        phone = request.form['phone']
+    return render_template("verifyOtp.html")
+
+@app.route('/verify-otp',methods=["POST","GET"])
+def verify_otp():
+    if request.method == "POST":
+        otp = request.form['otp']
+        if otp == "1234":
+            return render_template("signup.html")
+        else:
+            return render_template("verifyOtp.html")
+        
+    return redirect(url_for('index'))
+
 @app.route("/signup", methods=["POST","GET"])
 def signup():
     if request.method == "POST":
@@ -190,6 +207,13 @@ def leaderboard():
     user = cursor.fetchone()
     db.close()
     return render_template("leaderboard.html",user=user)
+
+
+@app.route("/create-game",methods=["POST","GET"])
+def create_game():
+    if request.method == "POST":
+        
+        return redirect(url_for('dashboard'))
 
 if __name__ == "__main__":
     app.run(debug=True)

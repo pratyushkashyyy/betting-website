@@ -31,22 +31,14 @@
 		</div>
 
 			<div class="SIGNup">
-				<form action="/signup" method="POST">
+				<form action="/get-otp" method="POST">
 					<label  class="heads"  for="chk" aria-hidden="true">Signup</label>
 					<div class="otp">
 						
 					<input type="tel" placeholder="Phone Number" name="phone"  minlength="10" maxlength="10">
-					<button>Get Otp</button>
+					<button type="submit">Get Otp</button>
 					</div>
 					
-						<div class="verify">
-							<input type="tel" name="otp" placeholder="Enter OTP" >
-							<button class="bt">Verify</button>
-						</div>
-						<div class="create">
-							<input type="text" name="password" placeholder="Create password" required="" minlength="6">  
-						</div>
-					<button  class="upsign" type="submit">Signup</button>
 				</form>
 			</div>
 		</div>

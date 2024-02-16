@@ -7,7 +7,7 @@
     <div class="outer-container">
         <div class="game-container">
             <h2 class="game-heading">Create Game</h2> 
-            
+            <form action="/create-game" method="POST">
             <div class="input-container">
                 <label for="game-select" class="input-label">Select Game:</label><br>
                 <select id="game-select" class="select-input">
@@ -18,9 +18,10 @@
             <div class="input-container">
                 
                 <h2> COINS</h2>
-                <input type="text" id="coin-input" class="coin-input" min="30" placeholder="Minimum 30 coins">
+                <input type="text" id="coin-input" name="coin" class="coin-input" min="30" placeholder="Minimum 30 coins">
             </div>
-            <button id="create-button" class="create-button">Create</button>
+            <button id="create-button" class="create-button" type="submit">Create</button>
+        </form>
         </div>
     </div>
     {% endblock %}
