@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Ludo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="text-align: center;">
+    <div class="header">
+        <h2 class="user-name " style="text-decoration: underline;" >Hi! Garvit</h2>
+        <button class="menu-icon" onclick="toggleMenu()">Menu ☰</button>
+        <ul class="navbar-menu" id="navbarMenu">
+            <li><button>Home</button></li>
+            <li><button>Balance: 0</button></li>
+            <li><button>Add Coin</button></li>
+            <li><button>Withdraw</button></li>
+            <li><button>Profile</button></li>
+            <li><button>Leaderboard</button></li>
+            <li><button>History</button></li>
+            <li><button>Message</button></li>
+            <li><button>Logout</button></li>
+            <li><button class="close-btn" onclick="toggleMenu()">Close ✖</button></li>
+        </ul>
+    </div>
+
+    <div class="first-div">
+        <marquee behavior="scroll" direction="left">
+            <p>Top Winners: Garvit (Money Won: $1000), Vishal (Money Won: $500)</p>
+        </marquee>
+    </div>
+
+    <div class="second-div">
+        <p class="phone-pay-text">PhonePay: garvit@ybl</p>
+    </div>
+
+    <div class="third-div" style="background-color: red; padding-top: 7px; display: inline-block;">
+        <h3>DARE</h3>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var navbarMenu = document.getElementById("navbarMenu");
+            navbarMenu.classList.toggle("active");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+    DARE
+{% endblock %}
+{% block css %} <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dare.css') }}"> {% endblock %}
+{% block content %}
+    <div class="outer-container">
+        <div class="game-container">
+            <h2 class="game-heading">Create Game</h2> 
+            
+            <div class="input-container">
+                <label for="game-select" class="input-label">Select Game:</label><br>
+                <select id="game-select" class="select-input">
+                    <option value="ludo">Ludo</option>
+                    <option value="other">free fire </option>
+                </select>
+            </div>
+            <div class="input-container">
+                
+                <h2> COINS</h2>
+                <input type="text" id="coin-input" class="coin-input" min="30" placeholder="Minimum 30 coins">
+            </div>
+            <button id="create-button" class="create-button">Create</button>
+        </div>
+    </div>
+    {% endblock %}
+

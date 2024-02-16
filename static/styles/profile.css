@@ -1,0 +1,76 @@
+body{
+  background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
+}
+.profile-container {
+    width: 300px;
+    margin: 100px auto;
+    text-align: center;}
+    .profile-container {
+        width: 300px;
+        margin: 100px auto;
+        text-align: center;
+         background-color: #f4f7f9; /*Light grayish-blue background color */
+        
+        padding: 20px;
+        border: 2px solid #ccc; /* Border color */
+        border-radius: 8px;
+      }
+
+  .profile-container {
+    background-color: #f4f7f9; /* Light grayish-blue background color */
+    background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
+  }
+  .profile-form {
+    background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
+   
+    /* background-color: #ffffff; /* White background for the form */
+  } 
+  
+  .profile-form {
+      
+   
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    width: calc(100% - 12px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button.update-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.update-button:hover {
+    background-color: #45a049;
+  }
+  
+  button.update-button:active {
+    transform: scale(0.98);
+  }
+  

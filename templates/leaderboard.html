@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}
+    dashboard
+{% endblock %}
+{% block css %} <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/leaderboard.css') }}"> {% endblock %}
+  {% block content %}
+
+<div class="leaderboard-container">
+  <div class="leaderboard-heading">
+    <h2>Leaderboard</h2> <!-- Added h2 here -->
+    <div class="monthly-win-container">
+      <h1 class="monthly-win-heading">Monthly Win: 0</h1>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="color: azure;">Name</th>
+        <th style="color: white;">Win</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Player 1</td>
+        <td>$500</td>
+      </tr>
+      <tr>
+        <td>Player 2</td>
+        <td>$400</td>
+      </tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

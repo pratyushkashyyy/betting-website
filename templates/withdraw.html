@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}
+    dashboard
+{% endblock %}
+{% block css %} <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/withdraw.css') }}"> {% endblock %}
+  {% block content %}
+
+<div class="form-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	<ul>
+	{% for category, message in messages %}
+		<li class="{{ category }}">{{ message }}</li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+	{% endwith %}
+    <form action="/withdraw" method="POST">
+    <h2 class="heading">Withdraw Coins</h2>
+    <div class="form-group">
+        <label for="balance">Your Balance :</label>
+        <input type="text" id="balance" name="balance" placeholder="{{ user['balance'] }}" readonly>
+      </div>
+    <div class="form-group">
+        <label for="coins">Enter Coins:</label>
+        <input type="number" id="coins" name="coins" min="200" placeholder="Minimum 200 coins" required>
+    </div>
+    <div class="form-group">
+        <label for="source">To:</label>
+        <select id="source" name="source" required>
+            <option value="phone_pay">Phone Pay</option>
+            <option value="google_pay">Google Pay</option>
+            <option value="paytm">Paytm</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="paytm_id">Payment ID:</label>
+        <input type="text" id="paytm_id" name="paytm_id" placeholder="Enter Paytm ID" required>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="withdraw-button">Withdraw</button>
+    </div>
+</form>
+</div>
+
+{% endblock %}

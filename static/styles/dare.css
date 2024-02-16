@@ -1,0 +1,85 @@
+BODY{
+    background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
+}.outer-container {
+    border: 2px solid black;
+    padding: 20px; /* Increase padding for a larger div */
+    width: 40%; /* Set width to make it larger */
+    margin: 0 auto; 
+    margin-top: 30PX;/* Center the div horizontally */
+}
+
+.game-container {
+    text-align: center;
+}
+
+.game-heading {
+    font-size: 24px; /* Increase font size */
+    font-weight: bold;
+    color: #0d0101;
+    text-decoration: underline; /* Dark color */
+}
+
+.underline {
+    border: none;
+    border-top: 2px solid #222; /* Dark color */
+    width: 50px; /* Set width of underline */
+    margin: 10px auto; /* Center the underline */
+}
+
+.input-container {
+    margin-top: 20px; /* Increase margin */
+}
+
+.input-label {
+    font-size: 18px; /* Increase font size */
+    font-weight: bold;
+    color: #222; /* Dark color */
+}
+h2{
+    font-size: 18px; /* Increase font size */
+    font-weight: bold;
+    color: #222;
+}
+
+.select-input,
+.coin-input {
+    font-size: 18px; /* Increase font size */
+    padding: 10px; /* Increase padding */
+    width: 80%; /* Set width */
+    max-width: 300px; /* Set maximum width */
+}
+
+.create-button {
+    font-size: 18px;
+    padding: 12px 24px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: opacity 0.3s; /* Add transition for smoother effect */
+}
+.outer-container {
+    width: 400px;
+    height: 350px;
+    background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
+}
+
+.create-button:hover{
+    opacity: 0.9;
+
+}
+.create-button:active {
+    opacity: 0.4; /* Reduce opacity on hover and active states */
+}
+@media screen and (max-width: 600px) {
+    .outer-container {
+        width: 80%; /* Adjust width for smaller screens */
+        height: auto;
+         /* Let the height adjust automatically */
+    }
+   
+
+
+}

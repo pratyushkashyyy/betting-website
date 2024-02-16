@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}
+    history
+{% endblock %}
+{% block css %} <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/history.css') }}"> {% endblock %}
+  {% block content %}
+<body>
+  <div class="container">
+    <div class="button-container">
+      <button class="play-button">Play</button>
+      <button class="withdraw-button">Withdraw</button>
+      <button class="transaction-button">Transaction</button>
+    </div>
+  </div>
+
+  <div class="list-container">
+    <ul>
+      <li>Game</li>
+      <li>Entry coin</li>
+      <li>Dare by</li>
+      <li>Accepted by</li>
+      <li>Room Id</li>
+      <li>Winner</li>
+      <li>Win coin</li>
+      <li>Date and Time</li>
+    </ul>
+  </div>
+  {% endblock %} 

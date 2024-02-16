@@ -1,0 +1,141 @@
+/* Resetting default margin and padding for all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body { 
+    background-image: linear-gradient(45deg, #efefef 25%, rgba(239, 239, 239, 0) 25%, rgba(239, 239, 239, 0) 75%, #efefef 75%, #efefef), linear-gradient(45deg, #efefef 25%, rgba(239, 239, 239, 0) 25%, rgba(239, 239, 239, 0) 75%, #efefef 75%, #efefef);
+    font-family: Arial, sans-serif;
+}
+
+/* Header styles */
+.header {
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: rgb(27, 21, 21);
+}
+
+/* User name styles */
+.user-name {
+    color: white;
+}
+
+/* Menu button styles */
+.menu-icon {
+    padding: 10px 20px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.menu-icon:hover {
+    background-color: #2d5591;
+}
+
+.menu-icon:active {
+    opacity: 0.7;
+}
+
+/* Navbar styles */
+.navbar-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+    flex-direction: column;
+    background-color: rgb(27, 21, 21);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 50%;
+    right: 10%;
+    transform: translate(0, -50%);
+    z-index: 1;
+    transition: opacity 0.5s, visibility 0.5s;
+    opacity: 0;
+    width: 80%;
+    max-width: 300px;
+    visibility: hidden;
+}
+
+.navbar-menu.active {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-menu li {
+    margin: 5px 0;
+}
+
+.navbar-menu li button {
+    padding: 10px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-menu li button:hover {
+    background-color: #2d5591;
+}
+
+.navbar-menu li button:active {
+    opacity: 0.7;
+}
+
+/* First div styles */
+.first-div {
+    background-color: pink; /* Light pink background */
+    border: 2px solid darkpink; /* Dark pink border */
+    padding: 10px;
+}
+
+.first-div a {
+    color: darkorchid; /* Dark purple link color */
+    text-decoration: none; /* Remove underline */
+    border-bottom: 2px solid darkpink; /* Dark pink wave underline */
+}
+
+/* Second div styles */
+.second-div {
+    background-color: #9370DB; /* Light purple background */
+    color: white;
+    padding: 10px;
+    text-align: center; /* Center text */
+}
+
+.third-div {
+    border: none;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    color: #eeeeee;
+    font-weight: 600;
+    font-size: 15px;
+    background-color: purple;
+    padding: 10px 40px;
+    margin: 0 auto;
+}
+

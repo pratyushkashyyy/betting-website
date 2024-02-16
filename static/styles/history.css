@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: linear-gradient(45deg, #efefef 25%, rgba(239, 239, 239, 0) 25%, rgba(239, 239, 239, 0) 75%, #efefef 75%, #efefef),
+                      linear-gradient(45deg, #efefef 25%, rgba(239, 239, 239, 0) 25%, rgba(239, 239, 239, 0) 75%, #efefef 75%, #efefef);
+  }
+  
+  .container {
+    max-width: 650px;
+    margin: 100px auto 50px;
+    text-align: center;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid black;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .play-button {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .play-button:hover {
+    background-color: #45a049;
+  }
+  
+  .withdraw-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .withdraw-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .transaction-button {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  .transaction-button:hover {
+    background-color: #1976D2;
+  }
+  
+  .list-container {
+    position: relative;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .list-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .list-container li {
+    display: inline-block;
+    margin: 0 5px;
+    border: 1px solid #333;
+    padding: 5px 10px;
+  }
+  
+  /* Media query for phones */
+  @media only screen and (max-width: 600px) {
+    .container {
+      padding: 20px;
+    }
+  
+    .list-container {
+      width: calc(100% - 40px); /* Adjust width to account for padding */
+      margin: 0 auto;
+      top: 0;
+      position: sticky; /* Make it sticky */
+      z-index: 1; /* Make sure it's above the other content */
+    }
+  
+    .button-container {
+      position: relative;
+      z-index: 2; /* Ensure it's above the list */
+      background-color: #f0f0f0;
+      margin-top: -30px; /* Adjust this value as needed */
+    }
+  }
+  

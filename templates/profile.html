@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}
+    Profile Page
+{% endblock %}
+{% block css %} <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/profile.css') }}"> {% endblock %}
+  {% block content %}
+  <div class="profile-container">
+    <h2>Your Profile</h2>
+    <div class="profile-form">
+      <div class="form-group">
+        <label for="name"> Display Name:</label>
+        <input type="text" id="name" name="name" placeholder="{% if user['lastname'] %}{{ user['firstname'] }} {{ user['lastname'] }}{% else %}{{ user['firstname'] }}{% endif %}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="phone">Balance:</label>
+        <input type="text" id="balance" name="balance" placeholder=" {{ user['balance'] }}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="display-name">user Name:</label>
+        <input type="text" id="display-name" name="display-name" placeholder=" {{ user['username'] }}">
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder=" {{ user['password'] }}">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" name="phone" placeholder=" {{ user['phoneno'] }}" readonly>
+      </div>
+      <div class="form-group">
+        <button type="button" class="update-button">Update</button>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

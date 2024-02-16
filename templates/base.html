@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}  {% endblock %}</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    {% block css %}  {% endblock %}
+</head>
+<body style="text-align: center;">
+    <div class="header">
+        <h2 class="user-name " style="text-decoration: underline;" >Hi! {{user['firstname']}}</h2>
+        <button class="menu-icon" onclick="toggleMenu()">Menu ☰</button>
+        <ul class="navbar-menu" id="navbarMenu">
+            <li><a href="/"><button>Home</button></a></li>
+            <li><a href="#"><button>Balance: {{ user['balance'] }}</button></a></li>
+            <li><a href="/addcoin"><button>Add Coin</button></a></li>
+            <li><a href="/withdraw"><button>Withdraw</button></a></li>
+            <li><a href="/profile"><button>Profile</button></a></li>
+            <li><a href="/leaderboard"><button>Leaderboard</button></a></li>
+            <li><a href="/history"><button>History</button></a></li>
+            <li><a href="#"><button>Message</button></a></li>
+            <li><a href="/logout"><button>Logout</button></a></li>
+            <li><button class="close-btn" onclick="toggleMenu()">Close ✖</button></li>
+        </ul>
+    </div>
+
+    <div class="first-div">
+        <marquee behavior="scroll" direction="left">
+            <p>Top Winners: Garvit (Money Won: $1000), Vishal (Money Won: $500)</p>
+        </marquee>
+    </div>
+
+    <div class="second-div">
+        <p class="phone-pay-text">PhonePay: garvit@ybl</p>
+    </div>
+
+    <div class="third-div" >
+        <h3><a href="/dare">DARE</a></h3>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var navbarMenu = document.getElementById("navbarMenu");
+            navbarMenu.classList.toggle("active");
+        }
+    </script>
+</body>
+{% block content %}
+
+
+{%  endblock %}
+
+
+
+</html>
