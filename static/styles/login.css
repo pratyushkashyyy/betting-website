@@ -86,7 +86,12 @@ button{
     font-size: 16px; /* Optionally, adjust font size */
     width: auto;
 	align-items: center;
-	margin-left: 125px; /* Ensure width adjusts according to content */
+	margin-left: 135px;
+	background-color: green;
+	margin-left: 200px; /* Ensure width adjusts according to content */
+}
+.create button{
+	margin-left: 95px;
 }
 .upsign:hover{
 	opacity: 0.8;
@@ -97,8 +102,8 @@ button{
 }
 
 .verify {
-	margin: 10px;
-    display: flex;
+	margin-top: 100PX;
+    
     align-items: center;
 }
 
@@ -116,11 +121,12 @@ button{
     border-radius: 4px;
 
 
-		padding: 8px 12px; /* Adjust padding to make the input field smaller */
+		/* Adjust padding to make the input field smaller */
 		font-size: 12px; /* Adjust font size to make the input text smaller */
 		width: auto;
-		margin-left: 0px;
-		margin-left: 30px;
+		margin-left: 60PX;
+		padding-right: 25PX;
+		padding-left: 25PX;
 		font-size: 14px;
 		 /* Ensure width adjusts according to content */
 	}
@@ -132,15 +138,15 @@ button{
     color: white;
     border: none;
     border-radius: 4px;
-    margin-left: 4px;
-	margin-right: 16px;
+   
     cursor: pointer;
 		padding: 8px 12px; /* Adjust padding to make the button smaller */
 		font-size: 12px; /* Adjust font size to make the button text smaller */
 		width: auto;
+		margin-top: 10PX;
+   margin-left: 140PX;		
 		
-		margin-right: 27px; 
-		padding-left: 20px;/* Ensure width adjusts according to content */
+		/* Ensure width adjusts according to content */
 	}
 
 	
@@ -153,7 +159,7 @@ button{
 
 
 	margin: 10px;
-    display: flex;
+    
     align-items: center;
 
 }
@@ -165,13 +171,13 @@ button{
 	
 }
 .otp input[type="tel"] {
-    flex: 1;
+    
     border: 1px solid #ccc;
     border-radius: 4px;
 		padding: 8px 12px; /* Adjust padding to make the input field smaller */
 		font-size: 12px; /* Adjust font size to make the input text smaller */
-		width: auto;
-		margin-left: 30px;
+		
+		margin-left: 45px;
 		font-size: 14px;
 		 /* Ensure width adjusts according to content */
 	}
@@ -180,12 +186,13 @@ button{
     color: white;
     border: none;
     border-radius: 4px;
-    margin-left: 4px;
-	margin-right: 16px;
+   font-size: 16PX;
+   margin-top: 10PX;
     cursor: pointer;
 		padding: 8px 12px; /* Adjust padding to make the button smaller */
 		font-size: 12px; /* Adjust font size to make the button text smaller */
 		width: auto;
+		margin-left: 126PX;
 		margin-right: 27px; /* Ensure width adjusts according to content */
 	}
 	.otp button:hover {
@@ -205,6 +212,7 @@ button{
 }
 .create {
     padding-left: 30px;
+	
 }
 
 .create input[type="text"] {
@@ -216,6 +224,7 @@ button{
     font-size: 16px;
     outline: none;
 	margin-left: 10px;
+	margin-top: 10px;
 	
 }
 

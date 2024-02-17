@@ -4,6 +4,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<title>log in </title>
+	
+
 	<link rel= "stylesheet" type="text/css" href= "{{ url_for('static',filename='styles/login.css') }}"> 
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
 </head>
@@ -22,12 +24,12 @@
 			{% if messages %}
 			<ul>
 			{% for category, message in messages %}
-				<li class="{{ category }}">{{ message }}</li>
+			 <li class="{{ category }}"> {{ message }}</li>
 			{% endfor %}
 			</ul>
 			{% endif %}
 			{% endwith %}
 		</div>
-
+        
 </body>
 </html>

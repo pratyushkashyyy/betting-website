@@ -66,6 +66,7 @@ def logout():
 def get_otp():
     if request.method == "POST":
         phone = request.form['phone']
+        session['phone'] = phone
     return render_template("verifyOtp.html")
 
 @app.route('/verify-otp',methods=["POST","GET"])
@@ -82,8 +83,11 @@ def verify_otp():
 @app.route("/signup", methods=["POST","GET"])
 def signup():
     if request.method == "POST":
-        phone = request.form['phone']
+        phone = session.get('phone')
         password = request.form['password']
+        username = request.form['username']
+        firstname = request.form['firstname'].capitalize()
+        lastname = request.form['lastname'].capitalize()
 
         db = get_database()
         cursor = db.cursor()
@@ -91,15 +95,17 @@ def signup():
         existing_user = cursor.execute("select phoneno from users where phoneno = ?",(phone,)).fetchone()
         print(existing_user)
         if existing_user:
+            session.pop('phone',None)
             flash('User already exist, Login !')
             return redirect(url_for('login'))
         else:
-            cursor.execute("INSERT INTO users (username,phoneno, password) VALUES ('helloji',?, ?)", (phone, password))
+            cursor.execute("INSERT INTO users (username,phoneno, password, firstname, lastname) VALUES (?,?,?,?,?)", (username, phone, password, firstname, lastname))
             db.commit()
             db.close()
+            session.pop('phone',None)
             flash('Sign Up Successful', 'info')
             return redirect(url_for("index"))
-    
+        
     if request.method == "GET":
         return redirect(url_for("index"))
     return redirect(url_for('index'))
@@ -114,7 +120,6 @@ def profile():
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
     db.close()
-    # print(user['phoneno'])
     return render_template("profile.html",user=user)
 
 @app.route("/dare")
@@ -126,7 +131,6 @@ def dare():
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
     db.close()
-    # print(user['phoneno'])
     return render_template("dare.html",user=user)
 
 @app.route("/addcoin",methods=["POST","GET"])
