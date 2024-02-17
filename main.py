@@ -1,6 +1,8 @@
 from flask import Flask, request,url_for,render_template,redirect,flash,session
 from database import connect_to_database,get_database
 from functools import wraps
+from twilio.rest import Client
+import random
 
 
 app = Flask(__name__)
@@ -62,18 +64,31 @@ def logout():
     flash('You have been logged out', 'info')
     return redirect(url_for('index'))
 
+def generate_otp():
+    return ''.join(random.choice('0123456789') for _ in range(6))
+
 @app.route('/get-otp', methods=["POST","GET"])
 def get_otp():
     if request.method == "POST":
         phone = request.form['phone']
         session['phone'] = phone
+        otp = generate_otp()
+        print(otp)
+        session['otp'] = otp
+        client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '7575763b58468f99e31c0e443f50398d')
+        message = client.messages.create(
+                        body='Your otp is'+otp,
+                        from_='+18144580408',
+                        to='+91'+phone
+                     )
     return render_template("verifyOtp.html")
 
 @app.route('/verify-otp',methods=["POST","GET"])
 def verify_otp():
     if request.method == "POST":
         otp = request.form['otp']
-        if otp == "1234":
+        print('session otp '+session.get('otp'))
+        if otp == session.get('otp'):
             return render_template("signup.html")
         else:
             return render_template("verifyOtp.html")
