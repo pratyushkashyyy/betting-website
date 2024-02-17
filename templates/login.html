@@ -19,7 +19,7 @@
 				<label for="chk" aria-hidden="true" class="logme" style="color: black";>Login</label>
 				<input type="tel" name="phone" placeholder="Phone Number "  required="" minlength="10" maxlength="10">
 				<input  class="form-control"   id="contact"   name="password" type="text"  minlength="6" placeholder="Password" />
-				<div class="forget" ><a> Forget Password?</a></div>
+				<div class="forget" ><a href="/forget-password"> Forget Password?</a></div>
 				<button type="submit">Login</button>
 			</form>
 			{% with messages = get_flashed_messages(with_categories=true) %}

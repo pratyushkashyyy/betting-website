@@ -92,7 +92,6 @@ def verify_otp():
             return render_template("signup.html")
         else:
             return render_template("verifyOtp.html")
-        
     return redirect(url_for('index'))
 
 @app.route("/signup", methods=["POST","GET"])
@@ -125,6 +124,54 @@ def signup():
         return redirect(url_for("index"))
     return redirect(url_for('index'))
 
+@app.route('/forget-password',methods=["POST","GET"])
+def forget_password():
+    if request.method == "POST":
+        phone = request.form['phone']
+        session['number'] = phone
+        otp = generate_otp()
+        print(otp)
+        session['otp'] = otp
+        client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '7575763b58468f99e31c0e443f50398d')
+        message = client.messages.create(
+                        body='Your otp is'+otp,
+                        from_='+18144580408',
+                        to='+91'+phone
+                     )
+        
+        return redirect(url_for('verifyotp'))
+    return render_template('forgetpassword.html')
+
+@app.route('/verifyotp',methods=["POST","GET"])
+def verifyotp():
+    if request.method == "POST":
+        otp = request.form['otp']
+        if otp == session.get('otp'):
+            
+            return render_template("newpass.html")
+        return redirect(url_for('verifyotp'))
+    return render_template("forgetverify.html")
+    
+@app.route('/confirm-password',methods=["POST","GET"])
+def confirm_password():
+    if request.method == "POST":
+        password = str(request.form['password'])
+        confirm_password =  str(request.form['password1'])
+        print(password,confirm_password)
+        phone = session.get('number')
+        if password == confirm_password:
+            db = get_database()
+            cursor = db.cursor()
+            existing_user = cursor.execute("select phoneno from users where phoneno = ?",(phone,)).fetchone()
+            if existing_user:
+                cursor.execute("UPDATE users set password = ? where phoneno = ?",(password,phone))
+                db.commit()
+                db.close()
+                
+                flash('Password Reset Successful', 'info')
+                return redirect(url_for("index"))
+        flash('password do not match','warning')
+    return render_template("newpass.html")
 
 @app.route("/profile")
 @login_required

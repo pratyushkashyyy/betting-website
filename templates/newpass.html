@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>log in </title>
+	<link rel= "stylesheet" type="text/css" href= "{{ url_for('static',filename='styles/forget.css') }}"> 
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+		
+			
+		</head>
+		<body>
+			<div class="main"> 
+		
+        <div class="LOGin">
+			
+				<form action="/confirm-password" method="POST">
+
+					<div class="create">
+						<input type="text" name="password" placeholder="Create New Password " required=""  minlength="3" maxlength="25">  
+						<input type="text" name="password1" placeholder="Confirm Password" required="" min="3" maxlength="25" >  
+					</div>
+					{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+			<ul>
+			{% for category, message in messages %} 
+				 <li class="{{ category }}">   {{ message }}</li>
+			{% endfor %}
+			</ul>
+			{% endif %}
+			{% endwith %}
+						
+					<button  class="upsign" type="submit">Signup</button>
+				</div>
+				</form>
+			</div>
+			</div>
+		
+</body>
+</html> 

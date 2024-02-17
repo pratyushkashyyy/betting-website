@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}  {% endblock %}</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link rel="style.sheet" href="style.css">
     {% block css %}  {% endblock %}
 </head>
 <body style="text-align: center;">
@@ -21,7 +22,7 @@
             <li><a href="/history"><button>History</button></a></li>
             <li><a href="#"><button>Message</button></a></li>
             <li><a href="/logout"><button>Logout</button></a></li>
-            <li><button class="close-btn" onclick="toggleMenu()">Close ✖</button></li>
+            <li><button class="close-btn" style="background-color: red;" onclick="toggleMenu()">Close ✖</button></li>
         </ul>
     </div>
 
@@ -36,7 +37,7 @@
     </div>
 
     <div class="third-div" >
-        <h3><a href="/dare">DARE</a></h3>
+       <button class="mt small diagonal"> <a href="/dare" style="color: white;">DARE</a></button>
     </div>
 
     <script>
@@ -45,12 +46,18 @@
             navbarMenu.classList.toggle("active");
         }
     </script>
-</body>
+
 {% block content %}
 
 
 {%  endblock %}
 
 
-
+<footer class="footer">
+    <div class="footer-content">
+        <p> <a  href="#" style="color: white;">( Contact Admin @ Garvit ) </a></p>
+        <p class="rights">( Play Ludo. All rights reserved. )</p>
+    </div>
+</footer>
+</body>
 </html>

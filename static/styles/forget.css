@@ -1,0 +1,124 @@
+body{
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	font-family: 'Jost', sans-serif;
+	background: linear-gradient(to bottom, #403d5a, #302b63, #24243e);
+	background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
+	
+}
+
+.main{
+	width: 350px;
+	height: 500px;
+	background: red;
+	overflow: hidden;
+	background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+	border-radius: 10px;
+	box-shadow: 5px 20px 50px #785f5f;
+}
+.verify {
+	margin-top: 100PX;
+    
+    align-items: center;
+}
+
+
+.verify input[type="tel"],
+.verify button {
+    margin: 0;
+    padding: 8px 12px;
+    font-size: 14px;
+	color: black;
+}
+
+.verify input[type="tel"] {
+    flex: 1;
+    border: 1px solid black;
+    border-radius: 4px;
+
+
+		/* Adjust padding to make the input field smaller */
+		font-size: 12px; /* Adjust font size to make the input text smaller */
+		width: auto;
+		margin-left: 60PX;
+		padding-right: 25PX;
+		padding-left: 25PX;
+		font-size: 14px;
+
+		 /* Ensure width adjusts according to content */
+	}
+	
+
+
+.verify button {
+    background-color: rgb(12, 142, 31);
+    color: white;
+    border: none;
+    border-radius: 4px;
+   
+    cursor: pointer;
+		padding: 8px 12px; /* Adjust padding to make the button smaller */
+		font-size: 14px; /* Adjust font size to make the button text smaller */
+		width: auto;
+		margin-top: 10PX;
+   margin-left: 130PX;		
+		
+		/* Ensure width adjusts according to content */
+	}
+
+	
+
+
+.verify button:hover {
+    background-color: rgb(10, 120, 26);
+}
+
+.SIGNup{
+	
+	height: 460px;
+	 background:/* #eee */ #8F00FF;
+	border-radius: 60% / 10%;
+	transform: translateY(-180px);
+	transition: .8s ease-in-out;
+	
+}
+.create {
+    padding-left: 30px;
+	margin-top: 100px;
+	
+	
+}
+.second{
+	margin-top: 10px;
+}
+.create input[type="text"] {
+    width: 240px;
+	height: 7px; /* Increase the width of the input field */
+    padding: 15px; /* Increase the padding for more space inside the input field */
+    
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+	margin-left: 10px;
+	margin-top: 10px;
+	border: 2px solid black;
+	
+}
+.upsign {
+    background-color: rgb(51, 44, 44);
+    color: white;
+    padding: 8px 14px; /* Adjust padding to your liking */
+    font-size: 16px; /* Optionally, adjust font size */
+    width: auto;
+	align-items: center;
+	margin-left: 135px;
+	background-color: green;
+	margin-left: 130px;
+	margin-top: 9px;
+	cursor: pointer;
+	border-radius: 10px; /* Ensure width adjusts according to content */
+}
