@@ -4,7 +4,7 @@ body{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: 100vh;
+	min-height: 80vh;
 	font-family: 'Jost', sans-serif;
 	background: linear-gradient(to bottom, #403d5a, #302b63, #24243e);
 	background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
@@ -12,7 +12,7 @@ body{
 }
 
 .main{
-	width: 350px;
+	width: 400px;
 	height: 500px;
 	background: red;
 	overflow: hidden;
@@ -57,7 +57,7 @@ input{
 button{
 	width: 60%;
 	height: 40px;
-	margin: 10px\\ auto;
+	margin: auto;
 	justify-content: center;
 	display: block;
 	color: #fff;
@@ -77,7 +77,7 @@ button{
 	cursor: pointer ;
 }
 .LOGin button{
-	margin-left: 70px;
+	text-align: center;
 }
 .upsign {
     background-color: rgb(51, 44, 44);
@@ -86,9 +86,8 @@ button{
     font-size: 16px; /* Optionally, adjust font size */
     width: auto;
 	align-items: center;
-	margin-left: 135px;
+	text-align: center;
 	background-color: green;
-	margin-left: 200px; /* Ensure width adjusts according to content */
 }
 .create button{
 	margin-left: 95px;
@@ -110,7 +109,6 @@ button{
 
 .verify input[type="tel"],
 .verify button {
-    margin: 0;
     padding: 8px 12px;
     font-size: 14px;
 }
@@ -119,12 +117,12 @@ button{
     flex: 1;
     border: 1px solid #ccc;
     border-radius: 4px;
-
-
+	text-align: center;
+	align-items: center;
+	align-content: center;
 		/* Adjust padding to make the input field smaller */
 		font-size: 12px; /* Adjust font size to make the input text smaller */
 		width: auto;
-		margin-left: 60PX;
 		padding-right: 25PX;
 		padding-left: 25PX;
 		font-size: 14px;
@@ -144,7 +142,7 @@ button{
 		font-size: 12px; /* Adjust font size to make the button text smaller */
 		width: auto;
 		margin-top: 10PX;
-   margin-left: 140PX;		
+	
 		
 		/* Ensure width adjusts according to content */
 	}
@@ -165,7 +163,6 @@ button{
 }
 .otp input[type="tel"],
 .otp button {
-    margin: 0;
     padding: 8px 12px;
     font-size: 14px;
 	
@@ -174,14 +171,14 @@ button{
     
     border: 1px solid #ccc;
     border-radius: 4px;
-		padding: 8px 12px; /* Adjust padding to make the input field smaller */
-		font-size: 12px; /* Adjust font size to make the input text smaller */
-		
-		margin-left: 45px;
+	text-align: center;
+	align-content: center;
+		padding: 8px 12px;
 		font-size: 14px;
 		 /* Ensure width adjusts according to content */
 	}
 .otp button {
+	text-align: center;
     background-color: rgb(12, 142, 31);
     color: white;
     border: none;
@@ -192,17 +189,23 @@ button{
 		padding: 8px 12px; /* Adjust padding to make the button smaller */
 		font-size: 12px; /* Adjust font size to make the button text smaller */
 		width: auto;
-		margin-left: 126PX;
-		margin-right: 27px; /* Ensure width adjusts according to content */
+		
 	}
 	.otp button:hover {
 		background-color: rgb(10, 120, 26);
 	}
 
 
+	
+	
+
+	
+	
 
 .SIGNup{
-	
+	text-align: center;
+	align-items: center;
+	align-content: center;
 	height: 460px;
 	 background:/* #eee */ #8F00FF;
 	border-radius: 60% / 10%;
@@ -243,16 +246,32 @@ button{
 	transform: scale(.6);
 }
 
-/* @media only screen and (max-width: 400px) { */
-   
-  /*  body {
-        font-size: 18px;
-    }
 
-    /* Adjust other elements as needed} */
+	
+
 @media screen and (max-width: 600px) {
+	.main{
+		max-width: 80%;
+	}
     .form-container {
-        max-width: 90%; /* Adjust container width for smaller screens */
-        border: none; /* Remove the border for smaller screens */
+        max-width: 90%;
+        border: none;
     }
+    .LOGin button {
+        margin: 0 auto; 
+        display: block;
+		margin-top: 14px; /* Ensure it takes full width */
+    }
+	.otp button{
+		margin: 0 auto;
+		display: block;
+		margin-top: 14px;
+	}
+	.otp input[type="tel"]{
+		margin: 0 auto;
+		display: block;
+		margin-top: 14px;
+
+	}
 }
+

@@ -71,7 +71,7 @@ def generate_otp():
 def get_otp():
     if request.method == "POST":
         phone = request.form['phone']
-        session['phone'] = phone
+        session['number'] = phone
         otp = generate_otp()
         print(otp)
         session['otp'] = otp
@@ -97,7 +97,7 @@ def verify_otp():
 @app.route("/signup", methods=["POST","GET"])
 def signup():
     if request.method == "POST":
-        phone = session.get('phone')
+        phone = session.get('number')
         password = request.form['password']
         username = request.form['username']
         firstname = request.form['firstname'].capitalize()
@@ -282,4 +282,4 @@ def create_game():
         return redirect(url_for('dashboard'))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0',port=80)

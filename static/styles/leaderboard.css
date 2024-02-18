@@ -1,29 +1,25 @@
 /* Base styles */
 body {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
   background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
 }
 
 .leaderboard-container {
-  max-width: 800px;
+  max-width: 500px;
   border: 2px solid #333;
   border-radius: 8px;
   padding: 40px;
+  margin-bottom: 40px;
   background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
 }
 
 .leaderboard-heading {
-  display: flex;
-  justify-content: space-between;
+
   align-items: center;
 }
 
 .leaderboard-heading h2 {
-  margin: 0;
+
   font-size: 24px;
   color: black;
 }
@@ -42,7 +38,7 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 30px;
+  margin-top: 10px;
   table-layout: fixed;
 }
 
@@ -58,21 +54,7 @@ th {
 
 /* Media queries for responsive design */
 @media only screen and (max-width: 600px) {
-  .leaderboard-container {
-    padding: 20px;
-    border: none; /* Remove border */
-  }
-
-  .leaderboard-heading h2 {
-    font-size: 20px;
-  }
-
-  .monthly-win-heading {
-    font-size: 28px;
-    margin-bottom: 15px;
-  }
-
-  th, td {
-    padding: 8px;
+  .leaderboard-container{
+    max-width: 85%;
   }
 }

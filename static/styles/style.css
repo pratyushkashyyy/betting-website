@@ -48,8 +48,6 @@ body {
 /* Navbar styles */
 .navbar-menu {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
     display: none;
     flex-direction: column;
     background-color: rgb(27, 21, 21);
@@ -57,13 +55,12 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 50%;
-    right: 10%;
+    right: 0;
     transform: translate(0, -50%);
-    z-index: 2;
+    z-index: 10;
     transition: opacity 0.5s, visibility 0.5s;
     opacity: 0;
-    width: 80%;
-    max-width: 300px;
+    width: 200px;
     visibility: hidden;
 }
 
@@ -87,10 +84,11 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    width: 100%;
+    margin-top: 10px;
+    width: 150px;
     height: 40px;
-    margin-bottom: 5px;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
+    margin-bottom: 10px;
+    transition: background-color 1s ease-in-out, opacity 0.3s ease;
 }
 
 .navbar-menu li button:hover {
@@ -147,6 +145,7 @@ body {
 
 .small {
   width: 120px;
+  border-radius: 10px;
 }
 .diagonal {
     position: relative;
@@ -166,7 +165,7 @@ body {
     top: 0;
     left: 0;
     width: 500%;
-    height: 1000%;
+
     background: #bd34b4;
     z-index: -1;
     transform-origin: 0% 0%;
@@ -180,37 +179,48 @@ body {
     
 
 .footer {
-    position: fixed;
-    bottom: 0;
+    bottom: auto;
+    position: scroll;
     width: 100%;
-    
     background: linear-gradient(45deg, #8a2be2, #ff69b4); 
-    height: 55px; /* Set a fixed height */
+    height: auto;
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    justify-content: space-evenly;
+    
 }
 a{
     text-decoration: none;
 }
+.mr{
+    border-radius: 10px;
+}
 
 .footer-content {
     display: flex;
-    justify-content: space-between; /* Even space between elements */
-    align-items: center; /* Center vertically */
+    
     width: 80%; /* Adjust width as needed */
-    max-width: 800px; /* Maximum width for centering */
+    max-width: 100%; /* Maximum width for centering */
     padding: 20px; 
     color: aliceblue;/* Adjust padding as needed */
     cursor: pointer;
 }
 
-.footer-content p {
-    margin: 0;
-}
+
 
 .rights {
     margin-left: auto; /* Push the "All rights reserved" text to the right */
 }
 
-
+@media screen and (max-width: 600px){
+    .footer-content{
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .navbar-menu{
+        max-height: 100%;
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+    }
+}

@@ -7,20 +7,20 @@ body {
   }
   
   .container {
-    max-width: 650px;
-    margin: 100px auto 50px;
+    max-width: 500px;
+    margin: 50px auto 0 auto;
     text-align: center;
     background-color: #f0f0f0;
     border-radius: 8px;
     padding: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border: 2px solid black;
   }
   
   .button-container {
-    display: flex;
+    position: relative;
     justify-content: space-evenly;
     margin-top: 20px;
+    
     
   }
   

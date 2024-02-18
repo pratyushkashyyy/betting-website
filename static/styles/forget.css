@@ -4,6 +4,8 @@ body{
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	text-align: center;
+
 	min-height: 100vh;
 	font-family: 'Jost', sans-serif;
 	background: linear-gradient(to bottom, #403d5a, #302b63, #24243e);
@@ -12,7 +14,7 @@ body{
 }
 
 .main{
-	width: 350px;
+	width: 400px;
 	height: 500px;
 	background: red;
 	overflow: hidden;
@@ -29,7 +31,7 @@ body{
 
 .verify input[type="tel"],
 .verify button {
-    margin: 0;
+
     padding: 8px 12px;
     font-size: 14px;
 	color: black;
@@ -39,14 +41,14 @@ body{
     flex: 1;
     border: 1px solid black;
     border-radius: 4px;
-
+	
 
 		/* Adjust padding to make the input field smaller */
 		font-size: 12px; /* Adjust font size to make the input text smaller */
 		width: auto;
-		margin-left: 60PX;
-		padding-right: 25PX;
-		padding-left: 25PX;
+		text-align: center;
+		/* padding-right: 25PX;
+		padding-left: 25PX; */
 		font-size: 14px;
 
 		 /* Ensure width adjusts according to content */
@@ -59,13 +61,14 @@ body{
     color: white;
     border: none;
     border-radius: 4px;
-   
+	margin: 0 auto;
+	display: block;
     cursor: pointer;
 		padding: 8px 12px; /* Adjust padding to make the button smaller */
 		font-size: 14px; /* Adjust font size to make the button text smaller */
 		width: auto;
 		margin-top: 10PX;
-   margin-left: 130PX;		
+   
 		
 		/* Ensure width adjusts according to content */
 	}
@@ -80,15 +83,17 @@ body{
 .SIGNup{
 	
 	height: 460px;
-	 background:/* #eee */ #8F00FF;
+	background:/* #eee */ #8F00FF;
 	border-radius: 60% / 10%;
 	transform: translateY(-180px);
 	transition: .8s ease-in-out;
 	
 }
 .create {
-    padding-left: 30px;
+	text-align: center;
 	margin-top: 100px;
+	align-items: center;
+	align-content: center;
 	
 	
 }
@@ -103,7 +108,9 @@ body{
     border-radius: 5px;
     font-size: 16px;
     outline: none;
-	margin-left: 10px;
+	text-align: center;
+	align-items: center;
+	align-content: center;
 	margin-top: 10px;
 	border: 2px solid black;
 	
@@ -115,10 +122,26 @@ body{
     font-size: 16px; /* Optionally, adjust font size */
     width: auto;
 	align-items: center;
-	margin-left: 135px;
+
 	background-color: green;
-	margin-left: 130px;
+
 	margin-top: 9px;
 	cursor: pointer;
 	border-radius: 10px; /* Ensure width adjusts according to content */
+}
+
+@media screen and (max-width: 600px) {
+
+	.verify button	{
+	margin: 0 auto;
+	display: block;
+	margin-top: 14px;
+
+}
+.main {
+	max-width: 80%;
+}
+.verify input[type="tel"]  {
+	text-align: center;
+}
 }

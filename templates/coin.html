@@ -24,20 +24,18 @@
 					{% endwith %}
         <label for="coins">Enter Coins:</label>
         <input type="number" id="coins" name="coins" min="30" placeholder="Minimum 30 coins" required>
-    </div>
-    <div class="form-group">
+    
+ 
         <label for="source">From:</label>
         <select id="source" name="source" required>
             <option value="phone_pay">Phone Pay</option>
             <option value="google_pay">Google Pay</option>
             <option value="paytm">Paytm</option>
         </select>
-    </div>
-    <div class="form-group">
+
         <label for="utr">UTR of Transaction:</label>
         <input type="text" id="utr" name="utr" placeholder="Enter UTR" required>
-    </div>
-    <div class="form-group">
+
         <button type="submit" class="add-button">Add</button>
     </div>
     <div class="pay-by-qr">
