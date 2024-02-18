@@ -11,7 +11,8 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* Header styles */
+
+
 .header {
     
     display: flex;
@@ -62,6 +63,7 @@ body {
     opacity: 0;
     width: 200px;
     visibility: hidden;
+
 }
 
 .navbar-menu.active {
@@ -80,6 +82,7 @@ body {
     padding: 10px;
     background-color: #0d6efd;
     color: white;
+    overflow: inherit;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -183,10 +186,7 @@ body {
     position: scroll;
     width: 100%;
     background: linear-gradient(45deg, #8a2be2, #ff69b4); 
-    height: auto;
-    display: flex;
-    justify-content: space-evenly;
-    
+    height: auto
 }
 a{
     text-decoration: none;
@@ -197,13 +197,15 @@ a{
 
 .footer-content {
     display: flex;
-    
-    width: 80%; /* Adjust width as needed */
-    max-width: 100%; /* Maximum width for centering */
-    padding: 20px; 
-    color: aliceblue;/* Adjust padding as needed */
+    flex-direction: column;
+    line-height: 25px;
+    flex-wrap: wrap;
+    width: 80%; 
+    padding: 15px;     
+    color: aliceblue;
     cursor: pointer;
 }
+
 
 
 
@@ -215,6 +217,7 @@ a{
     .footer-content{
         display: flex;
         flex-direction: column;
+        
     }
     
     .navbar-menu{

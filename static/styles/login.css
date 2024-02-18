@@ -29,6 +29,7 @@ body{
 	position: relative;
 	width:100%;
 	height: 100%;
+		
 }
 label{
 	color: #fff;
@@ -89,9 +90,7 @@ button{
 	text-align: center;
 	background-color: green;
 }
-.create button{
-	margin-left: 95px;
-}
+
 .upsign:hover{
 	opacity: 0.8;
 
@@ -101,8 +100,10 @@ button{
 }
 
 .verify {
-	margin-top: 100PX;
-    
+	margin-top: -100px;
+	padding-top: 250px;
+	background-color: #9000ffdb;
+	height: 400px;
     align-items: center;
 }
 
@@ -213,23 +214,21 @@ button{
 	transition: .8s ease-in-out;
 	
 }
-.create {
-    padding-left: 30px;
-	
-}
+
 
 .create input[type="text"] {
-    width: 240px;
+    width: 180px;
 	height: 7px; /* Increase the width of the input field */
     padding: 15px; /* Increase the padding for more space inside the input field */
     
     border-radius: 5px;
     font-size: 16px;
     outline: none;
-	margin-left: 10px;
-	margin-top: 10px;
+	
+	
 	
 }
+
 
 .login label{
 	color: rgb(192, 159, 159);

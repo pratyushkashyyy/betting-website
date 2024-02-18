@@ -243,12 +243,17 @@ def withdraw():
         phone = session['phone']
         cursor.execute("SELECT balance FROM users WHERE phoneno = ?", (phone,))
         current_balance = cursor.fetchone()['balance']
-        new_balance = current_balance - int(coin)
-        cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone))
-        db.commit()
-        db.close()
-        flash('Coins withdrawn successfully!', 'success')
-        return redirect(url_for("withdraw"))
+        if int(coin) <= int(current_balance):
+            new_balance = current_balance - int(coin)
+            cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone))
+            db.commit()
+            db.close()
+            flash('Coins withdrawn successfully!', 'success')
+            return redirect(url_for("withdraw"))
+        else:
+            flash('You Dont Have Balance in Your Account !','warning')
+            return redirect(url_for("withdraw"))
+
     return render_template('profile.html')
 
 @app.route("/history", methods=["POST", "GET"])

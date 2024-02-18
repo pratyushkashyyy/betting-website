@@ -6,6 +6,7 @@ body {
 
 .leaderboard-container {
   max-width: 500px;
+  margin: 50px auto 0 auto;
   border: 2px solid #333;
   border-radius: 8px;
   padding: 40px;
