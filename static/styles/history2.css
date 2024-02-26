@@ -8,17 +8,16 @@ body {
   
   .container {
     max-width: 500px;
-    margin: 50px auto  auto;
+    margin: 50px auto 0 auto;
     text-align: center;
     background-color: #f0f0f0;
+    border-radius: 8px;
     padding: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
   }
   
   .button-container {
-    display: flex;
-    flex-direction: row;
+    position: relative;
     justify-content: space-evenly;
     margin-top: 20px;
     
@@ -29,10 +28,10 @@ body {
     padding: 10px 20px;
     font-size: 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    margin-left: 20px;
     transition: background-color 0.3s ease;
+  
   }
   
   .play-button {
@@ -62,58 +61,49 @@ body {
     background-color: #1976D2;
   }
   
-  .table-container {
+  .list-container {
+    position: relative;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS devices */
-  }
-  
-  .table-wrapper {
-    overflow-x: scroll;
-    overflow-y: hidden;
     white-space: nowrap;
   }
   
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    border: 1px solid #ccc;
+  .list-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
   }
   
-  th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: center;
+  .list-container li {
+    display: inline-block;
+    margin: 0 5px;
+    border: 1px solid #333;
+    padding: 5px 10px;
   }
   
-  th {
-    background-color: #333;
-    color: #fff;
-    font-weight: bold;
-  }
-  
+  /* Media query for phones */
   @media only screen and (max-width: 600px) {
-    th, td {
-
-      width: auto;
+    .container {
+      padding: 20px;
     }
-    .table-container {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS devices */
+  
+    .list-container {
+      width: calc(100% - 40px); /* Adjust width to account for padding */
+      margin: 0 auto;
+      top: 0;
+      position: sticky; /* Make it sticky */
+      z-index: 1; /* Make sure it's above the other content */
     }
-    .container{
-      margin-bottom: 10PX;
-      display: flex;
-      width: 95%;
-     
+  
+    .button-container {
+      position: relative;
+      z-index: 2; /* Ensure it's above the list */
+      background-color: #f0f0f0;
+      margin-top: -30px; /* Adjust this value as needed */
     }
-    .button-container{
-      display: flex;
-      justify-content: space-between;
-      padding-right: 5PX;
-    }
-    
-    
-    
-    
   }
   

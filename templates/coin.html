@@ -13,19 +13,30 @@
     <form action="/addcoin" method="POST">
     <h2 class="heading">Add Coin</h2>
     <div class="form-group">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-					{% if messages %}
-						<ul>
-						{% for category, message in messages %}
-							<li class="{{ category }}">{{ message }}</li>
-						{% endfor %}
-						</ul>
-					{% endif %}
-					{% endwith %}
+        
+                    {% if success_message %}
+                    <script>
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+                
+                        Toast.fire({
+                            icon: "success",
+                            title: "{{ success_message }}"
+                        });
+                    </script>
+                {% endif %}
         <label for="coins">Enter Coins:</label>
         <input type="number" id="coins" name="coins" min="30" placeholder="Minimum 30 coins" required>
     
- 
         <label for="source">From:</label>
         <select id="source" name="source" required>
             <option value="phone_pay">Phone Pay</option>

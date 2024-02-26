@@ -6,23 +6,52 @@
   {% block content %}
 <body>
   <div class="container">
-    <div class="button-container">
+    <div class="button-container"><center>
       <button class="play-button">Play</button>
       <button class="withdraw-button">Withdraw</button>
       <button class="transaction-button">Transaction</button>
+    </center></div>
+  </div>
+  <div class="table-container">
+    <div class="table-wrapper">
+      <div class="table-container">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Game</th>
+                <th>Entry coin</th>
+                <th>Dare by</th>
+                <th>Accepted by</th>
+                <th>Room Id</th>
+                <th>Winner</th>
+                <th>Win coin</th>
+                <th>Date and Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for match in challenges %}
+              <tr>
+                <td>{{ match['game_type'] }}</td>
+                <td>{{ match['coins'] }}</td>
+                <td>{{ match['first_user'] }}</td>
+                <td>{{ match['second_user'] }}</td>
+                <td>{{ match['room_code'] }}</td>
+                <td>{{ match['match_status'] }}</td>
+                <!-- <td>{{ match['win_coin'] }}</td> -->
+                <!-- <td>{{ match['date_time'] }}</td> -->
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+      
+      
     </div>
   </div>
-
-  <div class="list-container">
-    <ul>
-      <li>Game</li>
-      <li>Entry coin</li>
-      <li>Dare by</li>
-      <li>Accepted by</li>
-      <li>Room Id</li>
-      <li>Winner</li>
-      <li>Win coin</li>
-      <li>Date and Time</li>
-    </ul>
-  </div>
+  
+  
+  
   {% endblock %} 

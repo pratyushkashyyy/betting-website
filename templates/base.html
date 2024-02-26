@@ -4,10 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}  {% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>   
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
     {% block css %}  {% endblock %}
 </head>
 <body style="text-align: center;">
+    <div id="preloader">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+    
     <div class="header">
         <h2 class="user-name " style="text-decoration: underline;" >Hi! {{user['firstname']}}</h2>
         <button class="menu-icon" onclick="toggleMenu()">Menu ☰</button>
@@ -24,10 +34,18 @@
             <li><button class="close-btn" style="background-color: red;" onclick="toggleMenu()">Close ✖</button></li>
         </ul>
     </div>
+   
+<script>
+  
+    function toggleMenu() {
+        const navbarMenu = document.getElementById('navbarMenu');
+        navbarMenu.classList.toggle('show'); // Toggle the 'show' class to slide the menu in and out
+    }
 
+</script>
     <div class="first-div">
         <marquee behavior="scroll" direction="left">
-            <p>Top Winners: Garvit (Money Won: $1000), Vishal (Money Won: $500)</p>
+            <p>Top Winners: Garvit (Money Won: 10000), Vishal (Money Won: 5000), Pratus (Money Won: 3000)</p>
         </marquee>
     </div>
 
@@ -45,6 +63,17 @@
             var navbarMenu = document.getElementById("navbarMenu");
             navbarMenu.classList.toggle("active");
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const preloader = document.getElementById('preloader');
+            const loginPage = document.querySelector('.main');
+    
+            setTimeout(function(){
+                preloader.style.display = 'none';
+                loginPage.style.display = 'block'; // Display login page after preloader
+            }, 500); // Adjusted to 1500 milliseconds for 1.5 seconds
+        });
     </script>
 
 {% block content %}

@@ -1,0 +1,132 @@
+.outer {
+    width: 25%;
+    height: 600px;
+    border: 2px solid black;
+    background-color: rgb(255, 247, 247);
+    margin-top: 60px;
+    border-radius: 10px;
+}
+.line {
+    border-style: dashed;
+}
+button {
+    padding: 10px;
+    padding-left: 70px;
+    padding-right: 70px;
+   display: flex;
+    margin-top: 70px;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    border-radius: 40px;
+}
+.win,
+.loss,
+.cancel {
+    width: 200px;
+    height: 50px;
+    border: none; 
+    color: #fff;
+    
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+
+.win {
+    background-color: #5ddd2b; /* Dim green color */
+    box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.3); /* Dim green glow */
+    animation: glowing-green 2s infinite alternate;
+}
+
+/* Red Button */
+.loss {
+    background-color: #c80808; /* Dim red color */
+    box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.3); /* Dim red glow */
+    animation: glowing-red 2s infinite alternate;
+}
+
+/* Black Button */
+.cancel {
+    background-color: #342f2f; /* Dim black color */
+    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.3); /* Dim black glow */
+    animation: glowing-black 2s infinite alternate;
+}
+
+@keyframes glowing-green {
+    0% {
+        background-color: #5ddd2b; /* Dim green */
+        box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.3); /* Dim green glow */
+    }
+    50% {
+        background-color: #00ff00; /* Bright green */
+        box-shadow: 0 0 15px 10px rgba(0, 255, 0, 0.7); /* Bright green glow */
+    }
+    100% {
+        background-color: #5ddd2b; /* Dim green */
+        box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.3); /* Dim green glow */
+    }
+}
+
+@keyframes glowing-red {
+    0% {
+        background-color: #c80808; /* Dim red */
+        box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.3); /* Dim red glow */
+    }
+    50% {
+        background-color: #ff0000; /* Bright red */
+        box-shadow: 0 0 15px 10px rgba(255, 0, 0, 0.7); /* Bright red glow */
+    }
+    100% {
+        background-color: #c80808; /* Dim red */
+        box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.3); /* Dim red glow */
+    }
+}
+
+@keyframes glowing-black {
+    0% {
+        background-color: #342f2f; /* Dim black */
+        box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.3); /* Dim black glow */
+    }
+    50% {
+        background-color: #000; /* Bright black */
+        box-shadow: 0 0 15px 10px rgba(0, 0, 0, 0.7); /* Bright black glow */
+    }
+    100% {
+        background-color: #342f2f; /* Dim black */
+        box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.3); /* Dim black glow */
+    }
+}
+
+.glow-green:active,
+.glow-red:active,
+.glow-black:active {
+    color: #000;
+}
+@media screen and (max-width: 600px) {
+.win,
+.loss,
+.cancel {
+    width: 220px;
+    height: 50px;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 20px;   
+}
+}
+@media screen and (max-width: 600px) {
+    .outer {
+        width:90%;
+        height:600px;
+    }
+    .win,
+    .loss,
+    .cancel {
+        width: 75%;   
+        padding: 10px; 
+        margin-top: 50px; 
+        font-size: 16px;
+    }
+}

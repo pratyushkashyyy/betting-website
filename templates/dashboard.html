@@ -2,23 +2,197 @@
 {% block title %}
     dashboard
 {% endblock %}
-{% block css %}    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dashboard.css') }}"> 
+{% block css %}
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<link rel="stylesheet" href="{{ url_for('static',filename='styles/chat.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dashboard.css') }}"> 
 {% endblock %} 
 {% block content%}
 <div class="container">
-    <div class="box">
-        <h2>Ludo</h2>
-        <p>Name: Garvit</p>
-        <p> Win: 1000</p>
+    {% if success_message %}
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: "success",
+            title: "{{ success_message }}"
+        });
+    </script>
+{% endif %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <script>
+                    const Toast1 = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+                        }
+                    });
+
+                    Toast1.fire({
+                        icon: "{{ category }}",
+                        title: "{{ message }}"
+                    });
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+{% for challenge in challenges %}
+    <div class="box" data-aos="fade-up">
+        
+        <div class="box-1">
+        <center>
+        <h4>{{ challenge['game_type'] }}</h4>
+        <p> {{ challenge['first_user']}} {% if challenge['second_user'] %} v/s {{ challenge['second_user'] }} {% endif %}
+        </p> 
+        <p> Dare: {{ challenge['coins'] }}</p>
+        </div></center>
+        <center>
+            <div class="box-2">
+                <h4>Playing</h4>
+                {% if challenge['status'] == 'open' %}
+                    {% if challenge['first_user'] == user['username'] %}
+                        <form action="{{ url_for('cancel_challenge', challenge_id=challenge['id']) }}" method="post">
+                            <button class="can" type="submit">Cancel</button>
+                        </form>
+                    {% endif %}
+                    {% if challenge['first_user'] != user['username'] %}
+                        <form action="{{ url_for('accept_challenge', challenge_id=challenge['id']) }}" method="post">
+                            <button class="acc"  type="submit">Accept</button>
+                        </form>
+                    {% endif %}
+                {% elif challenge['status'] == 'accepted' %}
+
+                    {% if challenge['first_user'] == user['username'] %}
+                    <button id="enter-room-code-btn">Enter Room Code</button>
+                    <form id="enter-room-code-form" action="{{ url_for('enter_room_code', challenge_id=challenge['id']) }}" method="post" style="display: none;">
+                        <input type="text" id="room-code" name="room_code">
+                    </form>
+                    {% elif challenge['second_user'] == user['username'] %}
+
+                        <form action="{{ url_for('cancel_accepted_challenge', challenge_id=challenge['id']) }}" method="post">
+                            <button class="can" type="submit">Cancel</button>
+                        </form>
+                    {% endif %}
+                {% elif challenge['status'] == 'started' %}
+                    {% if challenge['second_user'] == user['username'] %}
+                    <p>Room Code : {{ challenge['room_code'] }} </p><br />
+                    <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result</a>                    
+                    <button onclick="openPopup()" class="top chat">Chat</button>
+                    <div id="popup" class="popup">
+                    <div class="popup-content">
+                        <!-- Close button --><div class="close">
+                        <button id="closeButton" class="close-button" onclick="closePopup()">×</button>
+                    </div>
+                        <!-- Cancel Game button -->
+                        <button class="cancel-button" onclick="cancelGame()">Cancel Game</button>
+                        <!-- Other buttons -->
+                        <button onclick="ok()">Ok..!</button>
+                        <button onclick="roomCodeWrong()">Room Code Wrong</button>
+                    </div>
+                    </div>
+
+                    {% elif challenge['first_user'] == user['username'] %}
+                    <p>Room Code : {{ challenge['room_code'] }} </p><br />
+                    <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result</a>
+                    <button onclick="openPopup()" class="top chat">Chat</button>
+                    <div id="popup" class="popup">
+                    <div class="popup-content">
+                   <div class="close">
+                        <button id="closeButton" class="close-button" onclick="closePopup()">×</button>
+                    </div>
+                        <button class="cancel-button" onclick="cancelGame()">Cancel Game</button>
+                        <button onclick="ok()">Ok..!</button>
+                        <button onclick="roomCodeWrong()">Room Code Wrong</button>
+                    </div>
+                    </div>
+
+                    {% else  %}
+                    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+                    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+                    <dotlottie-player src="https://lottie.host/0c4a9f6c-fddf-48d5-ac77-e54019a82b17/QM0ltcOIar.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+                    {% endif %}
+            
+                {% endif %}
+            </div>
+        </center>
+        
+        
     
     </div>
-    <div class="box">
-        <h2>Free Fire</h2>
-    </div>
-    <div class="box"></div>
-    <div class="box"></div>
-    <div class="box"></div>
+    {% endfor %}
 </div>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script> 
+<script>
+    AOS.init();
+
+    document.getElementById('enter-room-code-btn').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Enter Room Code',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off',
+                required: true
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            showLoaderOnConfirm: true,
+            preConfirm: (roomCode) => {
+                console.log("Submitting room code:", roomCode);
+                document.getElementById('room-code').value = roomCode;
+                document.getElementById('enter-room-code-form').submit();
+            }
+        });
+    });
+</script>
+<script>
+    function openPopup() {
+      document.getElementById("popup").style.display = "block";
+      document.getElementById("closeButton").style.display = "block"; 
+    }
+    
+    function cancelGame() {
+      alert("Game cancelled");
+      closePopup();
+    }
+    
+    function ok() {
+      alert("Ok clicked");
+      closePopup();
+    }
+    
+    function roomCodeWrong() {
+      alert("Room code wrong");
+      closePopup();
+    }
+    
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+      document.getElementById("closeButton").style.display = "none"; 
+    }
+    </script>
+
 
 
 
