@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+    <title>Document</title>
+    <style>
+        #table-container {
+            overflow-x: auto;
+            max-width: 100%; 
+        }
+    </style>
+</head>
+<body>
+    
+
+<div id="all-users-section" >
+    <div class="all-users-heading">
+        <h3>All Users</h3>
+        <input type="text" class="search-input" placeholder="Search">
+    </div>
+
+    
+    <div id="table-container" >
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone no.</th>
+                    <th>User name</th>
+                    <th>Pass</th>
+                    <th>Balance</th>
+                    <th>Total game</th>
+                    <th>Actions</th> <!-- New column for Edit and Delete buttons -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+<tr>
+    <td>{{ user['firstname'] + ' ' + user['lastname'] }}</td>
+    <td>{{ user['phoneno'] }}</td>
+    <td>{{ user['username'] }}</td>
+    <td>{{ user['password'] }}</td>
+    <td>{{ user['balance'] }}</td>
+    <td>10</td>
+    <td>
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+    </td>
+</tr>
+{% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

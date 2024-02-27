@@ -25,8 +25,7 @@
                 <th>Accepted by</th>
                 <th>Room Id</th>
                 <th>Winner</th>
-                <th>Win coin</th>
-                <th>Date and Time</th>
+
               </tr>
             </thead>
             <tbody>
@@ -37,9 +36,8 @@
                 <td>{{ match['first_user'] }}</td>
                 <td>{{ match['second_user'] }}</td>
                 <td>{{ match['room_code'] }}</td>
-                <td>{{ match['match_status'] }}</td>
-                <!-- <td>{{ match['win_coin'] }}</td> -->
-                <!-- <td>{{ match['date_time'] }}</td> -->
+                <td>{{ match['winner'] }}</td>
+
               </tr>
               {% endfor %}
             </tbody>

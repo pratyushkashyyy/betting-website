@@ -5,19 +5,14 @@ from twilio.rest import Client
 import random,os
 from werkzeug.utils import secure_filename
 
-
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 
-
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 def login_required(f):
     @wraps(f)
@@ -28,20 +23,17 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
 @app.route('/')
 def index():
     if 'phone' in session:
         return redirect(url_for("dashboard"))
     return render_template("login.html")
 
-
 @app.route('/login',methods=["POST","GET"])
 def login():
     if request.method == "POST":
         phone = request.form['phone']
         password = request.form['password']
-
         db = get_database()
         cursor = db.cursor()
         cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
@@ -51,12 +43,14 @@ def login():
                 session['username'] = user['username']
                 session['phone'] = phone
                 session['id'] = user['id']
+                if session['phone'] == '8406909448':
+                    session['admin'] = True
+                    flash('Logged in successfully as admin!', 'success')
                 db.close()
                 return redirect(url_for('dashboard'))
             else:
                 db.close()
                 return render_template("login.html",error_message="Incorrect Login Password !")
-
         else:
             db.close()
             return render_template("login.html",error_message="Incorrect Login Password !")
@@ -226,26 +220,41 @@ def dare():
     db.close()
     return render_template("dare.html",user=user)
 
+@app.route("/approvecoin",methods=["POST","GET"])
+@login_required
+def approve_addcoin():
+    if request.method == "POST":
+        db = get_database()
+        cursor = db.cursor()
+        phone = session['phone']
+        user = cursor.execute("SELECT balance FROM users WHERE phoneno = ?", (phone,)).fetchone()
+        current_balance = user['balance']
+        username = user['username']
+        coin = cursor.execute("SELECT amount FROM add_coin where username = ?",(username,)).fetchone()
+        new_balance = current_balance + int(coin)
+        cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone,))
+        db.commit()
+        db.close()  
+        flash('Balance added successfully!', 'success')      
+        return redirect(url_for('admin'))
+
 @app.route("/addcoin",methods=["POST","GET"])
 @login_required
 def addcoin():
     if request.method == "POST":
         coin = request.form['coins']
+        payment_method = request.form['payment-method']
+        utr = request.form['utr']
         db = get_database()
         cursor = db.cursor()
         phone = session['phone']
-        print(phone)
-        cursor.execute("SELECT balance FROM users WHERE phoneno = ?", (phone,))
-        user = cursor.fetchone()
-        current_balance = user['balance']
-        new_balance = current_balance + int(coin)
-        cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone,))
+        user = cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,)).fetchone()
+        cursor.execute("INSERT INTO add_coin (username,amount,transaction_type,utr,status) VALUES(?,?,?,?,'pending')",(user['username'],coin,payment_method,utr))        
         db.commit()
         db.close()
 
-        flash('Balance added successfully!', 'success')
-        # return redirect(url_for("addcoin")) 
-        return render_template("coin.html",success_message="Balance Added !",user=user)
+        flash('Wait for Admin Approval !', 'warning')
+        return render_template("coin.html",success_message="Wait for Admin Approval !",user=user)
     if request.method == "GET":
         db = get_database()
         cursor = db.cursor()
@@ -256,6 +265,25 @@ def addcoin():
         
         return render_template("coin.html",user=user)
     return render_template("coin.html")
+
+@app.route("/approvewithdraw", methods = ["POST","GET"])
+@login_required
+def approve_withdraw():
+    if request.method == "POST":
+
+        db = get_database()
+        cursor = db.cursor()
+        phone = session['phone']
+        user = cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,)).fetchone()
+        current_balance = user['balance']
+        coin = cursor.execute("SELECT amount FROM withdraw_coin where username = ?",(user['username'],)).fetchone()
+        if int(coin) <= int(current_balance):
+            flash('Coins withdrawn successfully!', 'success')
+            return render_template("withdraw.html",success_message="Withdrawal Success !",user=user)
+        else:
+            flash('You Dont Have Balance in Your Account !','warning')
+            return render_template("withdraw.html",error_message="You Dont Have Balance in Your Account !",user=user)
+
 
 @app.route("/withdraw", methods=["POST", "GET"])
 @login_required
@@ -270,21 +298,22 @@ def withdraw():
         return render_template("withdraw.html",user=user)
     elif request.method == "POST":
         coin = request.form['coins']
+        payment_method = request.form['payment-method']
+        payment_id = request.form['payment-number']
         db = get_database()
         cursor = db.cursor()
         phone = session['phone']
-        cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
-        user = cursor.fetchone()
-        phone = session['phone']
+        user = cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,)).fetchone()
         cursor.execute("SELECT balance FROM users WHERE phoneno = ?", (phone,))
         current_balance = cursor.fetchone()['balance']
         if int(coin) <= int(current_balance):
+            cursor.execute("INSERT INTO withdraw_coin (username, amount, transaction_type, number,status) VALUES (?, ?, ?, ?, 'open')",(user['username'],coin,payment_method,payment_id,))
             new_balance = current_balance - int(coin)
             cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone))
             db.commit()
             db.close()
-            flash('Coins withdrawn successfully!', 'success')
-            return render_template("withdraw.html",success_message="Withdrawal Success !",user=user)
+            flash('Wait for Admin Approval !', 'success')
+            return render_template("withdraw.html",success_message="Wait for Admin Approval !",user=user)
         else:
             flash('You Dont Have Balance in Your Account !','warning')
             return render_template("withdraw.html",error_message="You Dont Have Balance in Your Account !",user=user)
@@ -299,10 +328,9 @@ def history():
     username = session['username']
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
-    results = cursor.execute("SELECT * FROM results WHERE user_id = ?", (username,)).fetchall()
     challenges = cursor.execute("select * from challenges where first_user = ?",(username,)).fetchall()
     db.close()
-    return render_template("history.html",user=user,results=results,challenges=challenges)
+    return render_template("history.html",user=user,challenges=challenges)
 
 
 @app.route("/leaderboard", methods=["POST", "GET"])
@@ -315,7 +343,6 @@ def leaderboard():
     user = cursor.fetchone()
     db.close()
     return render_template("leaderboard.html",user=user)
-
     
 @app.route('/create-challenge', methods=['GET', 'POST'])
 @login_required
@@ -324,13 +351,11 @@ def create_challenge():
         game_type = request.form['game-select']
         coins_involved = request.form['coin']
         phone = session['phone']
-
         db = get_database()
         cursor = db.cursor()
         user = cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,)).fetchone()
         creator_id = user['username']
         session['username'] = creator_id
-
         current_balance = user['balance']
         if int(coins_involved) <= int(current_balance):
             new_balance = current_balance - int(coins_involved)
@@ -508,19 +533,36 @@ def submit_result(challenge_id):
             screenshot.save(file_path)
             db = get_database()
             cursor = db.cursor()
-            existing_result = cursor.execute("SELECT * FROM results WHERE challenge_id = ? AND user_id = ?",
-                                             (challenge_id, session['username'])).fetchone()
-            if existing_result:
-                flash('You have already submitted!', 'warning')
+            existing_result = cursor.execute("SELECT * FROM results WHERE challenge_id = ?", (challenge_id,)).fetchone()
+            if not existing_result:
+                cursor.execute("INSERT INTO results (challenge_id,status) VALUES(?,?)",(challenge_id,'undecided',))
+                db.commit()
+            existing_submission = cursor.execute("SELECT * FROM results where challenge_id = ? AND (first_user = ? or second_user = ?)",(challenge_id,session['username'],session['username'])).fetchone()
+            if existing_submission:
+                flash('You have already submitted a result for this challenge','warning')
                 return redirect(url_for('dashboard'))
+
+            first_user = cursor.execute("SELECT first_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+            second_user = cursor.execute("SELECT second_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
             
-            else:
-                    cursor.execute("INSERT INTO results (challenge_id, user_id, screenshot_path, match_status) VALUES (?,?,?,?)",(challenge_id,session['username'],filename,result))
-                    db.commit()
+            if second_user:
+                    cursor.execute("UPDATE results SET first_user = ?, screenshot1 = ?, match_status = ? WHERE challenge_id = ?",
+                                   (session['username'], filename, result, challenge_id))
                     flash('Result submitted successfully!', 'success')
+                    db.commit()
                     return redirect(url_for('dashboard',challenge_id=challenge_id))
 
-                     
+            elif first_user:
+                    cursor.execute("UPDATE results SET second_user = ?, screenshot2 = ?, match_status2 = ? WHERE challenge_id = ?",
+                                   (session['username'], filename, result, challenge_id))
+                    flash('Result submitted successfully!', 'success')
+                    db.commit()
+                    return redirect(url_for('dashboard',challenge_id=challenge_id))
+            else:
+                cursor.execute("UPDATE results SET first_user = ?, screenshot1 = ?, match_status = ? WHERE challenge_id = ?",(session['username'], filename, result, challenge_id))
+                flash('Result submitted successfully!', 'success')
+                db.commit()                    
+                return redirect(url_for('dashboard',challenge_id=challenge_id))
         else:
             flash('Invalid file format or size!', 'error')
             return redirect(url_for('submit_result',challenge_id=challenge_id))
@@ -531,6 +573,152 @@ def submit_result(challenge_id):
         user = cursor.execute("SELECT * FROM users WHERE username = ?",(user_id,)).fetchone()
         challenge = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()
         return render_template("result.html",user=user,challenge=challenge)
+
+@app.route('/admin')
+@login_required
+def admin():
+    if session['phone'] == '8406909448':
+        return render_template('admin.html')
+    else:
+        return render_template("404.html")
+    
+@app.route('/admin/all_user')
+@login_required
+def admin_alluser():
+    if session['phone'] == '8406909448':
+        db = get_database()
+        cursor = db.cursor()
+        users = cursor.execute("SELECT * FROM users").fetchall()
+        return render_template('all_user.html',users=users)
+    else:
+        return render_template("404.html")
+    
+@app.route('/admin/challenge_id',methods=["POST","GET"])
+@login_required
+def admin_challengeid():
+    if session['phone'] == '8406909448':
+        if request.method == "GET":
+            db = get_database()
+            cursor = db.cursor()
+            challenges = cursor.execute("SELECT * FROM challenges").fetchall()
+            db.close()
+            return render_template('challenge_id.html',challenges=challenges)
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            id = request.form['challenge_id']
+            cursor.execute("DELETE FROM challenges WHERE id = ?",(id,))
+            db.commit()
+            return redirect(url_for('admin_challengeid'))
+
+    else:
+        return render_template("404.html")
+    
+@app.route('/admin/admin_result')
+@login_required
+def admin_result():
+    if session['phone'] == '8406909448':
+        db = get_database()
+        cursor = db.cursor()
+        results = cursor.execute("SELECT * FROM results")     
+        return render_template('admin_result.html',results=results)
+    else:
+        return render_template("404.html")
+    
+@app.route('/admin/decide_winner',methods=["POST"])
+@login_required
+def admin_decide_winner():
+    if session['phone'] == '8406909448':
+        challenge_id = request.form['challenge_id']
+        winner = request.form['user']
+        db = get_database()
+        cursor = db.cursor()
+        cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(winner,challenge_id,))
+        cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("closed",challenge_id,))
+        cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
+        bet_amount = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()['coins']
+        users = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()
+        if users['first_user'] == winner:
+            loser = users['second_user']
+        elif users['second_user'] == winner:
+            loser = users['first_user']
+        else:
+            return "an error happend"
+        winning_amount = bet_amount + int(bet_amount-bet_amount*0.06)
+        cursor.execute("UPDATE users SET balance = balance + ? where username = ?",(winning_amount,winner))
+        cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,winner))
+        cursor.execute("UPDATE users SET balance = balance - ? where username = ?",(bet_amount,loser))
+        db.commit()
+        db.close()
+        flash("winner selected","success")
+        return redirect(url_for('admin_result'))
+    else:
+        return render_template("404.html")
+
+
+@app.route('/admin/add_coin',methods=["POST","GET"])
+@login_required
+def admin_addcoin():
+    if session['phone'] == '8406909448':
+        if request.method == "GET":
+            db = get_database()
+            cursor = db.cursor()
+            payments = cursor.execute("SELECT * FROM add_coin").fetchall()
+            db.close()
+            return render_template('add_coin.html',payments=payments)
+        
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            amount = request.form['amount']
+            username = request.form['username']
+            id = request.form['id']
+            button = request.form['button']
+            cursor.execute("UPDATE users set balance = balance + ? WHERE username = ?",(amount,username))
+            cursor.execute("UPDATE add_coin set status = ? WHERE id = ?",(button,id))
+            db.commit()
+            return redirect(url_for('admin_addcoin'))
+    else:
+        return render_template("404.html")
+    
+@app.route('/admin/withdraw_coin', methods=["POST","GET"])
+@login_required
+def admin_withdrawcoin():
+    if session['phone'] == '8406909448':
+        if request.method == "GET":
+            db = get_database()
+            cursor = db.cursor()
+            withdraws = cursor.execute("SELECT * FROM withdraw_coin").fetchall()
+            db.close()
+            return render_template('withdraw_coin.html',withdraws = withdraws)
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            id = request.form['id']
+            button = request.form['button']
+            cursor.execute("UPDATE withdraw_coin SET status = ? WHERE id = ?",(button,id,))
+            db.commit()
+            return redirect(url_for('admin_withdrawcoin'))
+    else:
+        return render_template("404.html")
+
+@app.route('/admin/message')
+@login_required
+def admin_message():
+    if session['phone'] == '8406909448':
+        return render_template('message.html')
+    else:
+        return render_template("404.html")
+
+@app.route('/admin/setting')
+@login_required
+def setting():
+    if session['phone'] == '8406909448':
+        return render_template('setting.html')
+    else:
+        return render_template("404.html")
+
+
 
 
 if __name__ == "__main__":

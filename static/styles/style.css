@@ -98,7 +98,7 @@ body {
     width: 200px;
     visibility: hidden;
     transition: left 0.3s ease; 
-    max-height: 10px; /* Adjust as needed */
+   /* Adjust as needed */
     overflow-y: hidden;
 
 }

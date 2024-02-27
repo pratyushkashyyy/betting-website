@@ -125,14 +125,18 @@
                         <button onclick="roomCodeWrong()">Room Code Wrong</button>
                     </div>
                     </div>
-
                     {% else  %}
                     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
-
+                    
                     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
-
+                    
                     <dotlottie-player src="https://lottie.host/0c4a9f6c-fddf-48d5-ac77-e54019a82b17/QM0ltcOIar.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
                     {% endif %}
+                {% elif challenge['status'] == 'closed' %}
+                <p>Winner :{{ challenge['winner'] }}</p>
+                <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+                <dotlottie-player src="https://lottie.host/3a6fd657-6a57-42fc-8a69-160d367285f2/byOH0a67Z8.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop autoplay></dotlottie-player>
             
                 {% endif %}
             </div>

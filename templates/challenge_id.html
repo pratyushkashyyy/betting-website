@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+    <title>Document</title>
+    <style>
+        /* Additional CSS for table container */
+        #challenge-id-table-container {
+            overflow-x: auto; /* Enable horizontal scrolling */
+            max-width: 100%; /* Ensure the table container doesn't exceed the viewport width */
+        }
+    </style>
+</head>
+<body>
+    
+
+<div id="challenge-id-section" >
+    <div class="challenge-id-heading">
+        <h3>Challange id </h3>
+        <input type="text" class="search-input" placeholder="Search">
+    </div>
+
+    
+    <div id="challenge-id-table-container" >
+        
+        <div id="challenge-table-container">
+            <!-- Table heading -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>challange id</th>
+                        <th>Game type</th>
+                        <th>Accept by</th>
+                        <th>Coin </th>
+                        <th>Winner Select</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for challenge in challenges %}
+                    <tr>
+                        <td>{{ challenge['id']}}</td>
+                        <td>{{ challenge['game_type'] }}</td>
+                        <td>{{ challenge['first_user'] }} V/S {{challenge['second_user'] }}</td>
+                        <td>{{ challenge['coins'] }}</td>
+                        <td>{{ challenge['winner'] }}</td>
+                        <td>
+                            <form action="/admin/challenge_id" method="POST">
+                                <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                                <button class="del-btn" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+    </div>
+</div>
+
+</body>
+</html>

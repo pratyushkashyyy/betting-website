@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+    <title>Add Coin</title>
+    <style>
+        #add-coin-table-container {
+            overflow-x: auto; 
+            max-width: 100%; 
+        }
+    </style>
+</head>
+<body>
+    
+
+<div id="add-coin-section">
+    <div class="add-coin-heading">
+        <h3>Add Coin</h3>
+        <input type="text" class="search-input" placeholder="Search">
+    </div>
+
+    <div id="add-coin-table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>User Name</th>
+                    <th>UTR</th>
+                    <th>Coin Amount</th>
+                    <th>Date and time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payments %}
+                <tr>
+                    <center>
+                    <td>{{ payment['id'] }}</td>
+                    <td>{{payment['username']}}</td>
+                    <td>{{payment['utr']}}</td>
+                    <td>{{payment['amount']}}</td>
+                    <td>{{payment['transaction_date']}}</td>
+                    <form action="/admin/add_coin" method="POST">
+                    <td>
+                        <input type="hidden" name="amount" value="{{ payment['amount'] }}">
+                        <input type="hidden" name="username" value="{{ payment['username'] }}">
+                        <input type="hidden" name="id" value="{{ payment['id'] }}">
+                        {% if payment['status'] == "pending" %}
+                        <button class="app-btn" name="button" value="approved" type="submit">Approve</button>
+                        <button class="deny-btn" name="button" value="denied" type="submit">Deny</button>
+                        <button class="deny-btn" name="button" value="duplicate" type="submit">Duplicate</button>
+                        {% elif payment['status'] == "approved" %}
+                        <button class="app-btn" name="button" value="approved">Approved</button>
+                        {% elif payment['status'] == "denied" %}
+                        <button class="deny-btn" name="button" value="denied">Denied</button>
+                        {% elif payment['status'] == "duplicate" %}
+                        <button class="deny-btn" style="background-color: yellow; color: black;" name="button" value="duplicate">Duplicate</button>
+                        {% endif %}
+                    </td>
+                </center>
+                </form>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

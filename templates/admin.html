@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+    <style>
+        #mainFrame {
+            width: 100%;
+            height: 90vh;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2 class="admin-panel-header">Admin Panel</h2>
+
+<div class="admin-navigation-container">
+    <div class="admin-navigation">
+        <button class="nav-item" onclick="loadAllUsers()">All Users</button>
+        <button class="nav-item" onclick="loadChallengeID()">Challenge ID</button>
+        <button class="nav-item" onclick="loadResult()">Result</button>
+        <button class="nav-item" onclick="loadAddCoin()">Add Coin</button>
+        <button class="nav-item" onclick="loadWithdrawCoin()">Withdraw Coin</button>
+        <button class="nav-item" onclick="loadMessage()">Message</button>
+        <button class="nav-item" onclick="loadSetting()">setting</button>
+    </div>
+</div>
+
+<iframe name="mainFrame" id="mainFrame" src="/admin/all_user"></iframe>
+
+<script>
+    function loadAllUsers() {
+        document.getElementById("mainFrame").src = "/admin/all_user";
+    }
+
+    function loadChallengeID() {
+        document.getElementById("mainFrame").src = "/admin/challenge_id";
+    }
+
+    function loadResult() {
+        document.getElementById("mainFrame").src = "/admin/admin_result";
+    }
+
+    function loadAddCoin() {
+        document.getElementById("mainFrame").src = "/admin/add_coin";
+    }
+
+    function loadWithdrawCoin() {
+        document.getElementById("mainFrame").src = "/admin/withdraw_coin";
+    }
+
+    function loadMessage() {
+        document.getElementById("mainFrame").src = "/admin/message";
+    }
+    function loadSetting() {
+        document.getElementById("mainFrame").src = "/admin/setting";
+    }
+   
+ 
+</script>
+
+</body>
+</html>

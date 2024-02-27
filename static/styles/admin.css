@@ -1,0 +1,410 @@
+
+/* Default styles */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.admin-panel-header {
+    background-color: black;
+    color: white;
+    text-align: center;
+    width: 100%;
+    height: 60px;
+    line-height: 60px; /* Vertically center the text */
+    margin: 0;
+}
+
+.admin-navigation-container {
+    overflow-x: auto;
+    background-color: rgb(42, 38, 38);
+    display: flex;
+    justify-content: space-around;
+}
+
+.admin-navigation {
+    padding: 10px; /* Add padding around the navigation */
+}
+.nav-item {
+    display: inline-block ;
+    padding: 12px 24px; /* Default padding */
+    text-decoration: none;
+    color: wheat;
+    background-color: black; /* Default background color for buttons */
+    border-radius: 5px; /* Rounded corners */
+    margin: 10px auto; /* Margin from all sides */
+    max-width: 200px;
+    margin-right: 100px; /* Limit button width */
+    /* Other styles for nav-item */
+}
+
+/* No hover effect */
+.nav-item:active {
+    background-color: #454242; /* No hover effect */
+}
+
+.all-users-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgb(137, 220, 238);
+    background-color: #180707; /* Dark background color */
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.search-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    margin-right: 15px; /* Add 15px padding from the right */
+}
+
+/* Table styles */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid white; /* Change border color to white */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+th, td {
+    border: 2px solid white; /* Change border color to white */
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #ddd; /* Light gray background for table headers */
+    color: black;
+}
+
+.edit-btn,
+.delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+.edit-btn {
+    background-color: rgb(15, 238, 15); /* Light green for Edit button */
+    color: white;
+}
+
+.delete-btn {
+    background-color: rgb(236, 11, 11); /* Light red for Delete button */
+    color: white;
+}
+
+/* Active state */
+.edit-btn:active,
+.delete-btn:active {
+    opacity: 0.6; /* Reduce opacity on click */
+}
+/* Challenge ID section */
+
+
+.challenge-id-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgb(137, 220, 238);
+    background-color: #180707; /* Dark background color */
+    padding: 5px;
+    margin: 5px 0;
+}
+
+
+#challenge-id-table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid white; /* Change border color to white */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+#challenge-id-table-container th, #challenge-id-table-container td {
+    border: 2px solid white; /* Change border color to white */
+    padding: 8px;
+    text-align: left;
+}
+
+#challenge-id-table-container th {
+    background-color: #ddd; /* Light gray background for table headers */
+    color: black;
+}
+
+/* Remove edit and delete buttons from Challenge ID table */
+#challenge-id-table-container .edit-btn,
+#challenge-id-table-container .delete-btn {
+    display: none;
+}
+
+.sub-btn,
+.del-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+
+.sub-btn {
+    background-color: rgb(15, 238, 15); /* Light green for Edit button */
+    color: white;
+}
+
+.del-btn {
+    background-color: rgb(236, 11, 11); /* Light red for Delete button */
+    color: white;
+}
+/* CSS for result type names */
+.result-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgb(137, 220, 238);
+    background-color: #180707; /* Dark background color */
+    padding: 5px;
+    margin: 5px 0;
+}
+
+#result-table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid white; /* Change border color to white */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+#result-table-container th,
+#result-table-container td {
+    border: 2px solid white; /* Change border color to white */
+    padding: 8px;
+    text-align: left;
+}
+
+#result-table-container th {
+    background-color: #ddd; /* Light gray background for table headers */
+    color: black;
+}
+
+/* Remove edit and delete buttons from Result table */
+#result-table-container .edit-btn,
+#result-table-container .delete-btn {
+    display: none;
+}
+.su{
+    background-color: rgb(15, 238, 15); /* Light green for Edit button */
+    color: white;
+    border: 2px solid black;
+}
+.su:active{
+opacity: 0.3;
+}
+/* CSS for add_coin.html */
+.add-coin-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgb(137, 220, 238);
+    background-color: #180707; /* Dark background color */
+    padding: 5px;
+    margin: 5px 0;
+}
+
+#add-coin-table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid white; /* Change border color to white */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+#add-coin-table-container th,
+#add-coin-table-container td {
+    border: 2px solid white; /* Change border color to white */
+    padding: 8px;
+    text-align: left;
+}
+
+#add-coin-table-container th {
+    background-color: #ddd; /* Light gray background for table headers */
+    color: black;
+}
+
+/* Remove edit and delete buttons from Add Coin table */
+#add-coin-table-container .edit-btn,
+#add-coin-table-container .delete-btn {
+    display: none;
+}
+.app-btn,
+.deny-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+.app-btn {
+    background-color: rgb(15, 238, 15); /* Light green for Edit button */
+    color: white;
+}
+
+.deny-btn {
+    background-color: rgb(236, 11, 11); /* Light red for Delete button */
+    color: white;
+}
+/* CSS for withdraw_coin.html */
+.withdraw-coin-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgb(137, 220, 238);
+    background-color: #180707; /* Dark background color */
+    padding: 5px;
+    margin: 5px 0;
+}
+
+#withdraw-coin-table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid white; /* Change border color to white */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+#withdraw-coin-table-container th,
+#withdraw-coin-table-container td {
+    border: 2px solid white; /* Change border color to white */
+    padding: 8px;
+    text-align: left;
+}
+
+#withdraw-coin-table-container th {
+    background-color: #ddd; /* Light gray background for table headers */
+    color: black;
+}
+
+/* Remove edit and delete buttons from Withdraw Coin table */
+#withdraw-coin-table-container .edit-btn,
+#withdraw-coin-table-container .delete-btn {
+    display: none;
+}
+.ap-btn,
+.den-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+.ap-btn {
+    background-color: rgb(15, 238, 15); /* Light green for Edit button */
+    color: white;
+}
+
+.den-btn {
+    background-color: rgb(236, 11, 11); /* Light red for Delete button */
+    color: white;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 50px;
+    width: 80%;
+    border: 1px solid black;
+}
+
+.message {
+    
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    width: 100px;
+    height: 100px;
+}
+
+
+
+.input-container {
+    display: flex;
+    margin-top: 20px;
+}
+
+.input-container input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.input-container button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.inputphonepay{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    border: 2px solid black;
+    padding: 5px;
+}
+.holder{
+    height: 20px;
+    
+}
+.phonepayedit{
+    background-color: rgb(58, 234, 58);
+  margin-left: 3px;
+  border-radius: 4px;
+   
+}
+.phonepayedit:active{
+    opacity: 0.5;
+}
+.qrcode{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    border: 2px solid black;
+    padding: 6px;
+}
+
+.qr{
+    background-color: rgb(58, 234, 58);
+  margin-left: 3px;
+  border-radius: 4px;
+   
+}
+.qr:active{
+    opacity: 0.5;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-item {
+        display: inline-block;
+        margin: 5px 5px;
+         /* Margin between buttons */
+        max-width: none; /* Reset max-width */
+    }
+}

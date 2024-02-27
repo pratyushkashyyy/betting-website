@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+    <title>Document</title>
+    <style>
+        #result-table-container {
+            overflow-x: auto; 
+            max-width: 100%; 
+        }
+    </style>
+</head>
+<body>
+    
+
+<div id="result-section" >
+    <div class="result-heading">
+        <h3>Result</h3>
+        <input type="text" class="search-input" placeholder="Search">
+    </div>
+
+    
+    <div id="result-table-container" >
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Challenge id </th>
+                    <th>User 1</th>
+                    <th>user 2</th>
+                    <th>Screenshot1</th>
+                    <th>Screenshot2</th>
+                    <th>Status 1</th>
+                    <th>Status 2</th>
+                    <th>Select Winner</th> 
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for result in results %}
+
+                <tr>
+                    <td>{{ result['challenge_id'] }}</td>
+                    <td>{{ result['first_user'] }}</td>
+                    <td>{{ result['second_user'] }}</td>
+                    <td><a href = "http://192.168.0.104/upload/{{ result['screenshot1'] }}" target="_blank">User 1</a></td>
+                    <td><a href = "http://192.168.0.104/upload/{{ result['screenshot2'] }}" target="_blank">User 2</a></td>
+                    <td>{{ result['match_status'] }}</td>
+                    <td>{{ result['match_status2'] }}</td>
+                    <td>{% if result['status'] == "undecided" %}
+                    <form action="/admin/decide_winner" method="POST">
+                        <input type="hidden" name="challenge_id" value="{{ result['challenge_id'] }}">
+                        <label for="users"></label>
+                        <select id="users" name="user">
+                            <option value="{{result['first_user']}}">{{result['first_user']}}</option>
+                            <option value="{{result['second_user']}}">{{result['second_user']}}</option>
+                        </select>
+                        
+                        <button  class="su"  type="submit">Submit</button>
+                        {% elif result['status'] == "decided" %}
+                            <button  class="su" >Winner Decided</button>
+                        {% endif %}
+                    </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
