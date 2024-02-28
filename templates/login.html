@@ -3,6 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
@@ -17,7 +18,30 @@
     <div class="dot"></div>
     <div class="dot"></div>
 </div>
-
+{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<script>
+						const Toast1 = Swal.mixin({
+							toast: true,
+							position: "top-end",
+							showConfirmButton: false,
+							timer: 3000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+								toast.addEventListener('mouseenter', Swal.stopTimer);
+								toast.addEventListener('mouseleave', Swal.resumeTimer);
+							}
+						});
+	
+						Toast1.fire({
+							icon: "{{ category }}",
+							title: "{{ message }}"
+						});
+					</script>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
 <div class="main">
     <input type="checkbox" id="chk" aria-hidden="true">
     <div class="LOGin" id="login-page">
@@ -77,8 +101,8 @@
 
         setTimeout(function(){
             preloader.style.display = 'none';
-            loginPage.style.display = 'block'; // Display login page after preloader
-        }, 1000); // Adjusted to 1500 milliseconds for 1.5 seconds
+            loginPage.style.display = 'block';
+        }, 1000);
     });
 </script>
 </body>

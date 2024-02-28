@@ -39,7 +39,7 @@
   
     function toggleMenu() {
         const navbarMenu = document.getElementById('navbarMenu');
-        navbarMenu.classList.toggle('show'); // Toggle the 'show' class to slide the menu in and out
+        navbarMenu.classList.toggle('show');
     }
 
 </script>
@@ -50,7 +50,7 @@
     </div>
 
     <div class="second-div">
-        <p class="phone-pay-text">PhonePay: garvit@ybl</p>
+        <p class="phone-pay-text">UPI ID: {{settings['upi_id']}}</p>
     </div>
 
     <div class="third-div" >
@@ -71,8 +71,8 @@
     
             setTimeout(function(){
                 preloader.style.display = 'none';
-                loginPage.style.display = 'block'; // Display login page after preloader
-            }, 500); // Adjusted to 1500 milliseconds for 1.5 seconds
+                loginPage.style.display = 'block';
+            }, 500);
         });
     </script>
 

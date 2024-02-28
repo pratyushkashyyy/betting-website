@@ -2,7 +2,7 @@ from flask import Flask, request,url_for,render_template,redirect,flash,session,
 from database import get_database
 from functools import wraps
 from twilio.rest import Client
-import random,os
+import random,os,hashlib
 from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -34,12 +34,13 @@ def login():
     if request.method == "POST":
         phone = request.form['phone']
         password = request.form['password']
+        password_hash = hashlib.md5(password.encode()).hexdigest()
         db = get_database()
         cursor = db.cursor()
         cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
         user = cursor.fetchone()
         if user:
-            if user['password'] == password:
+            if user['password'] == password_hash:
                 session['username'] = user['username']
                 session['phone'] = phone
                 session['id'] = user['id']
@@ -67,7 +68,16 @@ def dashboard():
     phone = session['phone']
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
-    challenges = cursor.execute("SELECT * FROM challenges ORDER BY id DESC").fetchall()
+    challenges = cursor.execute('''SELECT *
+    FROM challenges
+    ORDER BY CASE
+        WHEN status = 'open' THEN 1
+        WHEN status = 'started' THEN 2
+        WHEN status = 'accepted' THEN 3
+        WHEN status = 'closed' THEN 4
+        ELSE 5  -- Any other status, if applicable
+    END''').fetchall()
+    settings = cursor.execute("SELECT * FROM setting").fetchone()
     db.close()
     if 'success_message_displayed' not in session:
         session['success_message_displayed'] = True
@@ -76,7 +86,7 @@ def dashboard():
     else:
         success_message = None
 
-    return render_template("dashboard.html",user=user,challenges= challenges,success_message=success_message)
+    return render_template("dashboard.html",user=user,challenges= challenges,success_message=success_message,settings=settings)
 
 
 @app.route('/terms')
@@ -92,7 +102,7 @@ def logout():
 def generate_otp():
     return ''.join(random.choice('0123456789') for _ in range(6))
 
-@app.route('/get-otp', methods=["POST","GET"])
+@app.route('/get-otp', methods=["POST"])
 def get_otp():
     if request.method == "POST":
         phone = request.form['phone']
@@ -100,24 +110,26 @@ def get_otp():
         otp = generate_otp()
         print(otp)
         session['otp'] = otp
-        client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '7575763b58468f99e31c0e443f50398d')
+        client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '236ada804a2c1cfe6548633288e58fa0')
         message = client.messages.create(
                         body='Your otp is'+otp,
                         from_='+18144580408',
                         to='+91'+phone
                      )
-    return render_template("verifyOtp.html")
-
-@app.route('/verify-otp',methods=["POST","GET"])
+        flash("OTP Sent !","success")
+        return redirect(url_for('verify_otp'))
+ 
+@app.route('/otpverify',methods=["POST","GET"])
 def verify_otp():
     if request.method == "POST":
         otp = request.form['otp']
         print('session otp '+session.get('otp'))
         if otp == session.get('otp'):
-            return render_template("signup.html")
-        else:
-            return render_template("verifyOtp.html")
-    return redirect(url_for('index'))
+            flash("OTP verified !","success")
+            return redirect(url_for('signup'))
+        flash("wrong otp","warning")
+        return redirect(url_for('verify_otp'))
+    return render_template("otpverification.html")
 
 @app.route("/signup", methods=["POST","GET"])
 def signup():
@@ -127,27 +139,26 @@ def signup():
         username = request.form['username']
         firstname = request.form['firstname'].capitalize()
         lastname = request.form['lastname'].capitalize()
-
+        password_hash = hashlib.md5(password.encode()).hexdigest()
         db = get_database()
         cursor = db.cursor()
 
         existing_user = cursor.execute("select phoneno from users where phoneno = ?",(phone,)).fetchone()
-        print(existing_user)
+        existing_username = cursor.execute("SELECT COUNT(*) FROM users WHERE username = ?", (username,)).fetchone()
         if existing_user:
-            session.pop('phone',None)
+            session.pop('number',None)
             flash('User already exist, Login !')
             return redirect(url_for('login'))
+        if existing_username[0] > 0:
+                flash("Username already exists. Please choose a different username.", "error")
+                return redirect(url_for('signup'))
         else:
-            cursor.execute("INSERT INTO users (username,phoneno, password, firstname, lastname) VALUES (?,?,?,?,?)", (username, phone, password, firstname, lastname))
+            cursor.execute("INSERT INTO users (username,phoneno, password, firstname, lastname) VALUES (?,?,?,?,?)", (username, phone, password_hash, firstname, lastname))
             db.commit()
             db.close()
-            session.pop('phone',None)
             flash('Sign Up Successful', 'info')
             return redirect(url_for("index"))
-        
-    if request.method == "GET":
-        return redirect(url_for("index"))
-    return redirect(url_for('index'))
+    return render_template('signup.html')
 
 @app.route('/forget-password',methods=["POST","GET"])
 def forget_password():
@@ -157,13 +168,13 @@ def forget_password():
         otp = generate_otp()
         print(otp)
         session['otp'] = otp
-        client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '7575763b58468f99e31c0e443f50398d')
+        client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '236ada804a2c1cfe6548633288e58fa0')
         message = client.messages.create(
                         body='Your otp is'+otp,
                         from_='+18144580408',
                         to='+91'+phone
                      )
-        
+        flash("OTP sent !","success")
         return redirect(url_for('verifyotp'))
     return render_template('forgetpassword.html')
 
@@ -172,8 +183,9 @@ def verifyotp():
     if request.method == "POST":
         otp = request.form['otp']
         if otp == session.get('otp'):
-            
+            flash("OTP verified !","success")
             return render_template("newpass.html")
+        flash("Wrong Otp, try again !","warning")
         return redirect(url_for('verifyotp'))
     return render_template("forgetverify.html")
     
@@ -182,14 +194,14 @@ def confirm_password():
     if request.method == "POST":
         password = str(request.form['password'])
         confirm_password =  str(request.form['password1'])
-        print(password,confirm_password)
         phone = session.get('number')
         if password == confirm_password:
+            password_hash = hashlib.md5(password.encode()).hexdigest()
             db = get_database()
             cursor = db.cursor()
             existing_user = cursor.execute("select phoneno from users where phoneno = ?",(phone,)).fetchone()
             if existing_user:
-                cursor.execute("UPDATE users set password = ? where phoneno = ?",(password,phone))
+                cursor.execute("UPDATE users set password = ? where phoneno = ?",(password_hash,phone))
                 db.commit()
                 db.close()
                 
@@ -206,8 +218,9 @@ def profile():
     phone = session['phone']
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
+    settings = cursor.execute("SELECT * FROM setting").fetchone()
     db.close()
-    return render_template("profile.html",user=user)
+    return render_template("profile.html",user=user,settings=settings)
 
 @app.route("/dare")
 @login_required
@@ -217,8 +230,9 @@ def dare():
     phone = session['phone']
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
+    settings = cursor.execute("SELECT * FROM setting").fetchone()
     db.close()
-    return render_template("dare.html",user=user)
+    return render_template("dare.html",user=user,settings=settings)
 
 @app.route("/approvecoin",methods=["POST","GET"])
 @login_required
@@ -261,9 +275,10 @@ def addcoin():
         phone = session['phone']
         cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
         user = cursor.fetchone()
+        settings = cursor.execute("SELECT * FROM setting").fetchone()
         db.close()
         
-        return render_template("coin.html",user=user)
+        return render_template("coin.html",user=user,settings=settings)
     return render_template("coin.html")
 
 @app.route("/approvewithdraw", methods = ["POST","GET"])
@@ -294,8 +309,9 @@ def withdraw():
         phone = session['phone']
         cursor.execute("SELECT balance FROM users WHERE phoneno = ?", (phone,))
         user = cursor.fetchone()
+        settings = cursor.execute("SELECT * FROM setting").fetchone()
         db.close()
-        return render_template("withdraw.html",user=user)
+        return render_template("withdraw.html",user=user,settings=settings)
     elif request.method == "POST":
         coin = request.form['coins']
         payment_method = request.form['payment-method']
@@ -329,8 +345,10 @@ def history():
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
     challenges = cursor.execute("select * from challenges where first_user = ?",(username,)).fetchall()
+    settings = cursor.execute("SELECT * FROM setting").fetchone()
+
     db.close()
-    return render_template("history.html",user=user,challenges=challenges)
+    return render_template("history.html",user=user,challenges=challenges,settings=settings)
 
 
 @app.route("/leaderboard", methods=["POST", "GET"])
@@ -341,8 +359,10 @@ def leaderboard():
     phone = session['phone']
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
+    settings = cursor.execute("SELECT * FROM setting").fetchone()
+
     db.close()
-    return render_template("leaderboard.html",user=user)
+    return render_template("leaderboard.html",user=user,settings=settings)
     
 @app.route('/create-challenge', methods=['GET', 'POST'])
 @login_required
@@ -586,10 +606,26 @@ def admin():
 @login_required
 def admin_alluser():
     if session['phone'] == '8406909448':
-        db = get_database()
-        cursor = db.cursor()
-        users = cursor.execute("SELECT * FROM users").fetchall()
-        return render_template('all_user.html',users=users)
+        if request.method == "GET":
+            db = get_database()
+            cursor = db.cursor()
+            users = cursor.execute("SELECT * FROM users").fetchall()
+            return render_template('all_user.html',users=users)
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            username = request.form['username']
+            try:
+                cursor.execute("DELETE from users where username = ?",(username,))
+                db.commit()
+                flash("User Deleted !","success")
+            except Exception as e:
+                db.rollback()
+                flash(f"An Error happened: {str(e)}","error")
+            finally:
+                db.close()
+            
+            return render_template('all_user.html',users=users)    
     else:
         return render_template("404.html")
     
@@ -608,6 +644,7 @@ def admin_challengeid():
             cursor = db.cursor()
             id = request.form['challenge_id']
             cursor.execute("DELETE FROM challenges WHERE id = ?",(id,))
+            flash(f"Challenge no. {id} Deleted !","info")
             db.commit()
             return redirect(url_for('admin_challengeid'))
 
@@ -676,6 +713,7 @@ def admin_addcoin():
             button = request.form['button']
             cursor.execute("UPDATE users set balance = balance + ? WHERE username = ?",(amount,username))
             cursor.execute("UPDATE add_coin set status = ? WHERE id = ?",(button,id))
+            flash(f"Balance Update for user {username}","info")
             db.commit()
             return redirect(url_for('admin_addcoin'))
     else:
@@ -697,6 +735,7 @@ def admin_withdrawcoin():
             id = request.form['id']
             button = request.form['button']
             cursor.execute("UPDATE withdraw_coin SET status = ? WHERE id = ?",(button,id,))
+            flash(f"Withdrawal Approved !","success")
             db.commit()
             return redirect(url_for('admin_withdrawcoin'))
     else:
@@ -710,16 +749,51 @@ def admin_message():
     else:
         return render_template("404.html")
 
-@app.route('/admin/setting')
+@app.route('/admin/setting',methods=["POST","GET"])
 @login_required
 def setting():
     if session['phone'] == '8406909448':
-        return render_template('setting.html')
+        if request.method == "GET":
+            db = get_database()
+            cursor = db.cursor()
+            settings = cursor.execute("SELECT * FROM setting").fetchone()
+
+            return render_template('setting.html',settings=settings)
+        if request.method == "POST":
+            db =get_database()
+            cursor = db.cursor()
+            new_upi = request.form['upi_id']
+            cursor.execute("UPDATE setting set upi_id = ?",(new_upi,))
+            db.commit()
+            db.close()
+            flash("Upi Id updated","success")
+            return redirect(url_for('setting'))
+@app.route('/admin/setting/qr',methods=["POST","GET"])
+@login_required
+def setting_qr():
+    if session['phone'] == '8406909448':
+        if request.method == "GET":
+            db = get_database()
+            cursor = db.cursor()
+            settings = cursor.execute("SELECT * FROM setting").fetchone()
+
+            return render_template('setting.html',settings=settings)
+        if request.method == "POST":
+            db =get_database()
+            cursor = db.cursor()
+            qr_code = request.files['qrcode']
+            if qr_code and allowed_file(qr_code.filename):
+                filename = secure_filename(qr_code.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                qr_code.save(file_path)
+            cursor.execute("UPDATE setting set qr_code = ?",(filename,))
+            db.commit()
+            flash("QR Code Updated !","success")
+            db.close()
+            return redirect(url_for('setting'))
+
     else:
         return render_template("404.html")
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0',port=80)

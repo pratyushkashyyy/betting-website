@@ -2,17 +2,28 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 	<title>log in </title>
-	
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>   
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
 	<link rel= "stylesheet" type="text/css" href= "{{ url_for('static',filename='styles/forget.css') }}"> 
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+
 </head>
 <body>
 	<div class="main">  	
-		{% with messages = get_flashed_messages(with_categories=true) %}
+		
+		
+		<div class="LOGin">
+			<form action="/otpverify" method="POST">
+				<div class="verify">
+                    <input type="tel" name="otp" placeholder="Enter OTP" >
+                    <button class="bt" type="submit">Verify</button>
+                </div>
+			</form>
+			
+
+
+			{% with messages = get_flashed_messages(with_categories=true) %}
 			{% if messages %}
 				{% for category, message in messages %}
 					<script>
@@ -36,16 +47,6 @@
 				{% endfor %}
 			{% endif %}
 		{% endwith %}
-		
-		<div class="LOGin">
-			<form action="/forget-password" method="POST">
-				<div class="verify">
-                    <input type="tel" name="phone" required="" minlength="10" maxlength="10" placeholder="Phone Number"  >
-                    <button class="bt">Get Otp</button>
-                </div>
-			</form>
-			
-
 		</div>
         
 </body>

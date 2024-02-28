@@ -3,17 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>   
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
     <title>Document</title>
 </head>
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<script>
+						const Toast1 = Swal.mixin({
+							toast: true,
+							position: "top-end",
+							showConfirmButton: false,
+							timer: 3000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+								toast.addEventListener('mouseenter', Swal.stopTimer);
+								toast.addEventListener('mouseleave', Swal.resumeTimer);
+							}
+						});
+	
+						Toast1.fire({
+							icon: "{{ category }}",
+							title: "{{ message }}"
+						});
+					</script>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+    <center><h4>Current Upi id : {{ settings['upi_id'] }}</h4></center>
     <div class="inputphonepay">
-    <input type="text" class="holder"  placeholder="phone pay" required="">
-    <button class="phonepayedit">changee?</button>
+        <form action="/admin/setting" method="POST">
+            <input type="text" class="holder" name="upi_id" placeholder="UPI ID" required="">
+            <button class="phonepayedit" type="submit">changee?</button>
+        </form>
+        
 </div>
+<form action="/admin/setting/qr" method="POST" enctype="multipart/form-data">
 <div class="qrcode">
-    <input type="file" class="holder"  placeholder="qrcode" required="">
-    <button class="qr">chaange</button><p style="margin-left: 4px;">Qrcode </p>
+    <input type="file" class="holder" name="qrcode" accept="image/*" placeholder="qrcode" required><br><br>
+    <button type="submit" class="qr">chaange</button><p style="margin-left: 4px;">Qrcode </p>
+</div>
+</form>
+<div style="display: flex; align-items: center; justify-content: center; margin-top: 30px;">
+    <img src="http://192.168.0.104/upload/{{settings['qr_code']}}" height="300px"/>
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@
   {% block content %}
 
 <div class="payment-heading">
-    <p>Payment at: garvit@ybl</p>
+    <p>Payment at: {{settings['upi_id']}}</p>
 </div>
 
 <div class="form-container">
@@ -50,7 +50,7 @@
         <button type="submit" class="add-button">Add</button>
     </div>
     <div class="pay-by-qr">
-        <a href="qr_payment.html">Pay by QR Code</a>
+        <a href="http://192.168.0.104/upload/{{settings['qr_code']}}">Pay by QR Code</a>
     </div>
     </form>
 </div>

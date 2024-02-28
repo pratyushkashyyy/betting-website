@@ -4,47 +4,63 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<title>log in </title>
-	<link rel= "stylesheet" type="text/css" href= "{{ url_for('static',filename='styles/login.css') }}"> 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>   
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
+	<link rel= "stylesheet" type="text/css" href= "{{ url_for('static',filename='styles/signup.css') }}"> 
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
-
-
-	
 		
-			{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-			<ul>
-			{% for category, message in messages %}
-				 <li class="{{ category }}">   {{ message }}</li>
-			{% endfor %}
-			</ul>
-			{% endif %}
-			{% endwith %}
+			
 		</head>
 		<body>
+			
 			<div class="main"> 
-		
-        <div class="LOGin">
-				<form action="/signup" method="POST">
-					<label  class="heads"  for="chk" aria-hidden="true">Signup</label>
+                
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+        <script>
+            const Toast1 = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
 
-					<div class="create">
-						<input type="text" name="username" placeholder="Create User Name" required=""  minlength="3" maxlength="25">  
-					</div> 
-						
-						<div class="create">
-							<input type="text" name="firstname" placeholder="First Name" required="" min="3" maxlength="25" >  
-					</div>
-					<div class="create">
-						<input type="text" name="lastname" placeholder="Last Name" required="" minlength="3" maxlength="25">  
-				</div>
-							<div class="create">
-							<input type="text" name="password" placeholder="Create password" required="" minlength="6">  
-						
-					<button  class="upsign" type="submit">Sign Up</button>
-				</div>
-				</form>
-			</div>
-			</div>
-		
+            Toast1.fire({
+                icon: "{{ category }}",
+                title: "{{ message }}"
+            });
+        </script>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+                <div class="LOGin">
+                        <form action="/signup" method="POST">
+                            <label  class="heads"  for="chk" aria-hidden="true">Signup</label>
+        
+                            <div class="create">
+                                <input type="text" name="username" placeholder="Create User Name" required=""  minlength="3" maxlength="25">  
+                            </div> 
+                                
+                                <div class="create">
+                                    <input type="text" name="firstname" placeholder="First Name" required="" min="3" maxlength="25" >  
+                            </div>
+                            <div class="create">
+                                <input type="text" name="lastname" placeholder="Last Name" required="" minlength="3" maxlength="25">  
+                        </div>
+                                    <div class="create">
+                                    <input type="text" name="password" placeholder="Create password" required="" minlength="6">  
+                                
+                            <button  class="upsign" type="submit">Sign Up</button>
+                        </div>
+                        </form>
+                    </div>
+                    </div>
+                    
 </body>
-</html>
+</html> 
