@@ -106,7 +106,7 @@ def generate_otp():
 def get_otp():
     if request.method == "POST":
         phone = request.form['phone']
-        session['number'] = phone
+        session['phone'] = phone
         otp = generate_otp()
         print(otp)
         session['otp'] = otp
@@ -134,7 +134,7 @@ def verify_otp():
 @app.route("/signup", methods=["POST","GET"])
 def signup():
     if request.method == "POST":
-        phone = session.get('number')
+        phone = session.get('phone')
         password = request.form['password']
         username = request.form['username']
         firstname = request.form['firstname'].capitalize()
@@ -142,11 +142,10 @@ def signup():
         password_hash = hashlib.md5(password.encode()).hexdigest()
         db = get_database()
         cursor = db.cursor()
-
         existing_user = cursor.execute("select phoneno from users where phoneno = ?",(phone,)).fetchone()
         existing_username = cursor.execute("SELECT COUNT(*) FROM users WHERE username = ?", (username,)).fetchone()
         if existing_user:
-            session.pop('number',None)
+            session.pop('phone',None)
             flash('User already exist, Login !')
             return redirect(url_for('login'))
         if existing_username[0] > 0:
@@ -174,7 +173,7 @@ def forget_password():
                         from_='+18144580408',
                         to='+91'+phone
                      )
-        flash("OTP sent !","success")
+        flash("OTP sent !","info")
         return redirect(url_for('verifyotp'))
     return render_template('forgetpassword.html')
 
@@ -192,10 +191,11 @@ def verifyotp():
 @app.route('/confirm-password',methods=["POST","GET"])
 def confirm_password():
     if request.method == "POST":
-        password = str(request.form['password'])
-        confirm_password =  str(request.form['password1'])
+        password = str(request.form['password']).strip()
+        confirm_password =  str(request.form['password1']).strip()
         phone = session.get('number')
         if password == confirm_password:
+            print(password,confirm_password)
             password_hash = hashlib.md5(password.encode()).hexdigest()
             db = get_database()
             cursor = db.cursor()
@@ -205,8 +205,10 @@ def confirm_password():
                 db.commit()
                 db.close()
                 
-                flash('Password Reset Successful', 'info')
+                flash('Password Reset Successful', 'success')
                 return redirect(url_for("index"))
+            else:
+                flash("User Does not Exist !","warning")
         flash('password do not match','warning')
     return render_template("newpass.html")
 
@@ -263,12 +265,18 @@ def addcoin():
         cursor = db.cursor()
         phone = session['phone']
         user = cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,)).fetchone()
-        cursor.execute("INSERT INTO add_coin (username,amount,transaction_type,utr,status) VALUES(?,?,?,?,'pending')",(user['username'],coin,payment_method,utr))        
-        db.commit()
-        db.close()
+        settings = cursor.execute("SELECT * FROM setting").fetchone()
+        add_coin = cursor.execute("SELECT COUNT(*) FROM add_coin WHERE utr = ?", (utr,)).fetchone()
+        if add_coin:
+            flash("already submitted !","warning")
+            return render_template('coin.html',success_message="Already Submitted !",user=user,settings=settings)
+        else:
+            cursor.execute("INSERT INTO add_coin (username,amount,transaction_type,utr,status) VALUES(?,?,?,?,'pending')",(user['username'],coin,payment_method,utr))        
+            db.commit()
+            db.close()
 
-        flash('Wait for Admin Approval !', 'warning')
-        return render_template("coin.html",success_message="Wait for Admin Approval !",user=user)
+            flash('Wait for Admin Approval !', 'warning')
+            return render_template("coin.html",success_message="Wait for Admin Approval !",user=user,settings=settings)
     if request.method == "GET":
         db = get_database()
         cursor = db.cursor()
@@ -320,6 +328,7 @@ def withdraw():
         cursor = db.cursor()
         phone = session['phone']
         user = cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,)).fetchone()
+        settings = cursor.execute("SELECT * FROM settings").fetchall()
         cursor.execute("SELECT balance FROM users WHERE phoneno = ?", (phone,))
         current_balance = cursor.fetchone()['balance']
         if int(coin) <= int(current_balance):
@@ -329,10 +338,10 @@ def withdraw():
             db.commit()
             db.close()
             flash('Wait for Admin Approval !', 'success')
-            return render_template("withdraw.html",success_message="Wait for Admin Approval !",user=user)
+            return render_template("withdraw.html",success_message="Wait for Admin Approval !",user=user,settings=settings)
         else:
             flash('You Dont Have Balance in Your Account !','warning')
-            return render_template("withdraw.html",error_message="You Dont Have Balance in Your Account !",user=user)
+            return render_template("withdraw.html",error_message="You Dont Have Balance in Your Account !",user=user,settings=settings)
     return render_template('profile.html')
 
 @app.route("/history", methods=["POST", "GET"])
@@ -602,7 +611,7 @@ def admin():
     else:
         return render_template("404.html")
     
-@app.route('/admin/all_user')
+@app.route('/admin/all_user', methods=["POST","GET"])
 @login_required
 def admin_alluser():
     if session['phone'] == '8406909448':
@@ -617,6 +626,7 @@ def admin_alluser():
             username = request.form['username']
             try:
                 cursor.execute("DELETE from users where username = ?",(username,))
+                users = cursor.execute("SELECT * FROM users").fetchall()
                 db.commit()
                 flash("User Deleted !","success")
             except Exception as e:
@@ -624,7 +634,6 @@ def admin_alluser():
                 flash(f"An Error happened: {str(e)}","error")
             finally:
                 db.close()
-            
             return render_template('all_user.html',users=users)    
     else:
         return render_template("404.html")
@@ -701,7 +710,6 @@ def admin_addcoin():
             db = get_database()
             cursor = db.cursor()
             payments = cursor.execute("SELECT * FROM add_coin").fetchall()
-            db.close()
             return render_template('add_coin.html',payments=payments)
         
         if request.method == "POST":
@@ -711,10 +719,16 @@ def admin_addcoin():
             username = request.form['username']
             id = request.form['id']
             button = request.form['button']
-            cursor.execute("UPDATE users set balance = balance + ? WHERE username = ?",(amount,username))
-            cursor.execute("UPDATE add_coin set status = ? WHERE id = ?",(button,id))
-            flash(f"Balance Update for user {username}","info")
-            db.commit()
+            print(button)
+            if button == "approved":
+                cursor.execute("UPDATE users set balance = balance + ? WHERE username = ?",(amount,username))
+                cursor.execute("UPDATE add_coin set status = ? WHERE id = ?",(button,id))
+                flash(f"Balance Update for user {username}","info")
+                db.commit()
+            else:
+                cursor.execute("UPDATE add_coin set status = ? WHERE id = ?",(button,id))
+                db.commit()
+                flash(f"Duplicated or Rejected for user {username}","info")
             return redirect(url_for('admin_addcoin'))
     else:
         return render_template("404.html")

@@ -46,17 +46,9 @@
 						<input type="text" name="password" placeholder="Create New Password " required=""  minlength="3" maxlength="25">  
 						<input type="text" name="password1" placeholder="Confirm Password" required="" minlength="3" maxlength="25" >  
 					</div>
-					{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-			<ul>
-			{% for category, message in messages %} 
-				 <li class="{{ category }}">   {{ message }}</li>
-			{% endfor %}
-			</ul>
-			{% endif %}
-			{% endwith %}
+					
 						
-					<button  class="upsign" type="submit">Signup</button>
+					<button  class="upsign" type="submit">Reset Password</button>
 				</div>
 				</form>
 			</div>

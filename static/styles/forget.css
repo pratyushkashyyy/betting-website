@@ -116,18 +116,18 @@ body{
 	
 }
 .upsign {
-    background-color: rgb(51, 44, 44);
+   
     color: white;
     padding: 8px 14px; /* Adjust padding to your liking */
     font-size: 16px; /* Optionally, adjust font size */
     width: auto;
 	align-items: center;
 
-	background-color: green;
+	background-color: rgb(95, 192, 95);
 
 	margin-top: 9px;
 	cursor: pointer;
-	border-radius: 10px; /* Ensure width adjusts according to content */
+	border-radius: 10px; 
 }
 
 .LOGin{

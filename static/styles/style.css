@@ -89,6 +89,7 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: fixed;
+
     top: 50%;
     right: 0;
     transform: translate(0, -50%);
@@ -96,6 +97,7 @@ body {
     transition: opacity 0.5s, visibility 0.5s;
     opacity: 0;
     width: 200px;
+
     visibility: hidden;
     transition: left 0.3s ease; 
    /* Adjust as needed */
@@ -112,11 +114,11 @@ body {
 }
 
 .navbar-menu li {
-    margin: 5px 0;
+    margin: 0px 0;
 }
 
 .navbar-menu li button {
-    padding: 10px;
+
     background-color: #0d6efd;
     color: white;
     overflow: inherit;
@@ -126,7 +128,7 @@ body {
     font-size: 16px;
     margin-top: 10px;
     width: 150px;
-    height: 40px;
+    height: 4 0px;
     margin-bottom: 10px;
     transition: background-color 3s ease-in, opacity 3s ease-in;
     

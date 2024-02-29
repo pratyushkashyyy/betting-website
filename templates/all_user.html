@@ -58,7 +58,7 @@
                     <th>Pass</th>
                     <th>Balance</th>
                     <th>Total game</th>
-                    <th>Actions</th> <!-- New column for Edit and Delete buttons -->
+                    <th>Actions</th> 
                 </tr>
             </thead>
             <tbody>
@@ -72,7 +72,7 @@
     <td>10</td>
     <td>
         <button class="edit-btn">Edit</button>
-        <form accept="/admin/all_user" method="POST">
+        <form action="/admin/all_user" method="POST">
         <input type="hidden" name="username" value="{{ user['username'] }}">
         <button class="delete-btn" name="delete" type="submit">Delete</button>
         </form>
