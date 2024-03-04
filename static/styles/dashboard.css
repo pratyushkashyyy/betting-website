@@ -78,6 +78,10 @@
     padding: 7px;
     color: black;
 }
+.winer{
+    margin-top: 10px;
+    margin-left: 50px;
+}
 @media only screen and (max-width: 600px) {
     .chat{
 

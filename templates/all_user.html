@@ -55,26 +55,28 @@
                     <th>Name</th>
                     <th>Phone no.</th>
                     <th>User name</th>
-                    <th>Pass</th>
                     <th>Balance</th>
-                    <th>Total game</th>
+                    <th>Total Wins</th>
                     <th>Actions</th> 
                 </tr>
             </thead>
             <tbody>
                 {% for user in users %}
 <tr>
+    <form action="/admin/balance" method="POST">
     <td>{{ user['firstname'] + ' ' + user['lastname'] }}</td>
     <td>{{ user['phoneno'] }}</td>
     <td>{{ user['username'] }}</td>
-    <td>{{ user['password'] }}</td>
-    <td>{{ user['balance'] }}</td>
-    <td>10</td>
+    <td><input name = "balance" value="{{ user['balance'] }}" min="0" style="border: none;"> </td>
+    <td>{{ user['wins'] }}</td>
     <td>
-        <button class="edit-btn">Edit</button>
+            <input type="hidden" name="username" value="{{ user['username'] }}">
+            <button class="edit-btn" name="edit" type="submit">Edit</button>
+        </form>
+
         <form action="/admin/all_user" method="POST">
-        <input type="hidden" name="username" value="{{ user['username'] }}">
-        <button class="delete-btn" name="delete" type="submit">Delete</button>
+            <input type="hidden" name="username" value="{{ user['username'] }}">
+            <button class="delete-btn" name="delete" type="submit">Delete</button>
         </form>
     </td>
 </tr>

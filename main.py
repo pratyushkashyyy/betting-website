@@ -1,11 +1,11 @@
-from flask import Flask, request,url_for,render_template,redirect,flash,session,send_from_directory
+from flask import Flask, request,url_for,render_template,redirect,flash,session,send_from_directory,jsonify
 from database import get_database
 from functools import wraps
 from twilio.rest import Client
 import random,os,hashlib
 from werkzeug.utils import secure_filename
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -78,6 +78,8 @@ def dashboard():
         ELSE 5  -- Any other status, if applicable
     END''').fetchall()
     settings = cursor.execute("SELECT * FROM setting").fetchone()
+    message = cursor.execute("SELECT * FROM messages").fetchall()
+
     db.close()
     if 'success_message_displayed' not in session:
         session['success_message_displayed'] = True
@@ -86,7 +88,26 @@ def dashboard():
     else:
         success_message = None
 
-    return render_template("dashboard.html",user=user,challenges= challenges,success_message=success_message,settings=settings)
+    return render_template("dashboard.html",user=user,message=message,challenges=challenges,success_message=success_message,settings=settings)
+
+@app.route('/store_button_value', methods=['POST','GET'])
+def store_button_value():
+    db = get_database()
+    cursor = db.cursor()
+    content = request.form['button']
+    challenge = request.form['challenge_id']
+    id = cursor.execute("SELECT id FROM messages where challenge_id = ?",(challenge,)).fetchone()
+    print(challenge)
+    if id:
+        cursor.execute("UPDATE messages SET sender = ? , content = ? WHERE challenge_id = ?",(session['username'],content,challenge))
+        db.commit()
+        flash("Message sent","success")
+        return redirect(url_for('dashboard'))
+    else:
+        cursor.execute("INSERT INTO messages (sender, challenge_id, content) VALUES(?,?,?)",(session['username'],challenge,content))
+        db.commit()
+        flash("Message sent","success")
+        return redirect(url_for('dashboard'))
 
 
 @app.route('/terms')
@@ -267,7 +288,7 @@ def addcoin():
         user = cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,)).fetchone()
         settings = cursor.execute("SELECT * FROM setting").fetchone()
         add_coin = cursor.execute("SELECT COUNT(*) FROM add_coin WHERE utr = ?", (utr,)).fetchone()
-        if add_coin:
+        if add_coin[0] > 0:
             flash("already submitted !","warning")
             return render_template('coin.html',success_message="Already Submitted !",user=user,settings=settings)
         else:
@@ -328,7 +349,7 @@ def withdraw():
         cursor = db.cursor()
         phone = session['phone']
         user = cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,)).fetchone()
-        settings = cursor.execute("SELECT * FROM settings").fetchall()
+        settings = cursor.execute("SELECT * FROM setting").fetchall()
         cursor.execute("SELECT balance FROM users WHERE phoneno = ?", (phone,))
         current_balance = cursor.fetchone()['balance']
         if int(coin) <= int(current_balance):
@@ -369,10 +390,14 @@ def leaderboard():
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
     settings = cursor.execute("SELECT * FROM setting").fetchone()
-
-    db.close()
-    return render_template("leaderboard.html",user=user,settings=settings)
+    challenges = cursor.execute("SELECT user, COUNT(*) AS wins FROM (SELECT first_user AS user FROM challenges UNION ALL SELECT second_user AS user FROM challenges) AS all_users WHERE user != '' GROUP BY user ORDER BY wins DESC").fetchall()   
     
+    
+    db.close()
+    return render_template("leaderboard.html",user=user,settings=settings,challenges=challenges)
+
+
+
 @app.route('/create-challenge', methods=['GET', 'POST'])
 @login_required
 def create_challenge():
@@ -386,9 +411,13 @@ def create_challenge():
         creator_id = user['username']
         session['username'] = creator_id
         current_balance = user['balance']
-        if int(coins_involved) <= int(current_balance):
+        if user['active_challenge'] == 1:
+            flash('You already have an active challenge.', 'error')
+            return redirect(url_for('dashboard'))
+        elif int(coins_involved) <= int(current_balance):
             new_balance = current_balance - int(coins_involved)
             cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone))
+            cursor.execute("UPDATE users SET active_challenge = '1' where username = ?",(session['username'],))
             flash('Coins Deducted successfully!', 'success')
             cursor.execute("INSERT INTO challenges (game_type, coins, first_user, status) VALUES (?, ?, ?, ?)",
                    (game_type, coins_involved, creator_id, 'open'))
@@ -398,8 +427,6 @@ def create_challenge():
         else:
             flash('You Dont Have Enough Balance in Your Account !','warning')
             return redirect(url_for("dashboard"))
-
-
     return render_template('create_challenge.html')
 
 @app.route('/accept_challenge/<int:challenge_id>', methods=['POST'])
@@ -409,9 +436,11 @@ def accept_challenge(challenge_id):
 
     db = get_database()
     cursor = db.cursor()
-
+    user = cursor.execute("SELECT * FROM users WHERE username = ?", (second_user,)).fetchone()
     challenge = cursor.execute("SELECT * FROM challenges WHERE id = ? AND status = 'open'", (challenge_id,)).fetchone()
-
+    if user['active_challenge'] == 1:
+            flash('You already have an active challenge.', 'error')
+            return redirect(url_for('dashboard'))
     if challenge:
         check_balance = cursor.execute("SELECT balance FROM users WHERE username = ?", (second_user,)).fetchone()
         if check_balance:
@@ -420,6 +449,7 @@ def accept_challenge(challenge_id):
             if int(balance) > int(challenge_coin):
                 cursor.execute("UPDATE users SET balance = balance - ? WHERE username = ?", (challenge_coin, session['username']))
                 cursor.execute("UPDATE challenges SET status = 'accepted', second_user = ? WHERE id = ?", (second_user, challenge_id))
+                cursor.execute("UPDATE users SET active_challenge = 1 where username = ?",(session['username'],))
                 db.commit()
                 flash('Challenge accepted!', 'success')
             else:
@@ -439,12 +469,9 @@ def cancel_challenge(challenge_id):
         db = get_database()
         cursor = db.cursor()
         challenge_coin = cursor.execute("select coins from challenges where id = ?",(challenge_id,)).fetchone()
-        cursor.execute("UPDATE users SET balance = balance + ? WHERE username = ?", (challenge_coin[0], session['username']))
-
+        cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 WHERE username = ?", (challenge_coin[0], session['username']))
         cursor.execute("DELETE FROM challenges WHERE id = ? AND first_user = ? AND status = 'open'", (challenge_id, session['username']))
-
         db.commit()
-
         flash('Challenge canceled!', 'success')
     except Exception as e:
         flash('An error occurred while canceling the challenge.', 'error')
@@ -469,8 +496,7 @@ def cancel_accepted_challenge(challenge_id):
             if challenge['second_user'] == session['username']:
                 cursor.execute("UPDATE challenges SET status = 'open', second_user = NULL WHERE id = ?", (challenge_id,))
                 challenge_coin = cursor.execute("select coins from challenges where id = ?",(challenge_id,)).fetchone()
-                cursor.execute("UPDATE users SET balance = balance + ? WHERE username = ?", (challenge_coin[0], session['username']))
-
+                cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 WHERE username = ?", (challenge_coin[0], session['username']))
                 db.commit()
                 flash('Challenge canceled after acceptance.', 'success')
             else:
@@ -638,6 +664,21 @@ def admin_alluser():
     else:
         return render_template("404.html")
     
+@app.route('/admin/balance', methods=['POST'])
+@login_required
+def update_balance():
+    if session['phone'] == '8406909448':
+        if request.method == 'POST':
+            db = get_database()
+            cursor = db.cursor()
+            username = request.form['username']
+            new_balance = request.form['balance']
+            cursor.execute("UPDATE users SET balance = ? WHERE username =?",(new_balance,username))
+            db.commit()
+            flash("User Balance Updated !","success")
+            return redirect(url_for('admin_alluser'))
+
+    
 @app.route('/admin/challenge_id',methods=["POST","GET"])
 @login_required
 def admin_challengeid():
@@ -652,9 +693,17 @@ def admin_challengeid():
             db = get_database()
             cursor = db.cursor()
             id = request.form['challenge_id']
-            cursor.execute("DELETE FROM challenges WHERE id = ?",(id,))
-            flash(f"Challenge no. {id} Deleted !","info")
-            db.commit()
+            challenge = cursor.execute("SELECT * FROM challenges WHERE id = ?", (id,)).fetchone()
+            
+            if challenge['winner']:
+                flash("Winner already decided !","warning")
+                return redirect(url_for('admin_challengeid'))
+            else:
+                cursor.execute("UPDATE users SET balance = balance + ? WHERE username IN (?, ?)", (challenge['coins'],challenge['first_user'], challenge['second_user']))
+                cursor.execute("UPDATE users SET active_challenge = 0 WHERE username IN (?, ?)", (challenge['first_user'], challenge['second_user']))
+                cursor.execute("DELETE FROM challenges WHERE id = ?",(id,))
+                flash(f"Challenge no. {id} Deleted !","info")   
+                db.commit()
             return redirect(url_for('admin_challengeid'))
 
     else:
@@ -682,6 +731,7 @@ def admin_decide_winner():
         cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(winner,challenge_id,))
         cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("closed",challenge_id,))
         cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
+        cursor.execute("UPDATE results SET winner = ? WHERE challenge_id = ?",(winner,challenge_id))
         bet_amount = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()['coins']
         users = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()
         if users['first_user'] == winner:
@@ -691,9 +741,9 @@ def admin_decide_winner():
         else:
             return "an error happend"
         winning_amount = bet_amount + int(bet_amount-bet_amount*0.06)
-        cursor.execute("UPDATE users SET balance = balance + ? where username = ?",(winning_amount,winner))
+        cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 where username = ?",(winning_amount,winner))
         cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,winner))
-        cursor.execute("UPDATE users SET balance = balance - ? where username = ?",(bet_amount,loser))
+        cursor.execute("UPDATE users SET balance = balance - ? , active_challenge = 0 where username = ?",(bet_amount,loser))
         db.commit()
         db.close()
         flash("winner selected","success")
@@ -808,6 +858,7 @@ def setting_qr():
 
     else:
         return render_template("404.html")
+    
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0',port=80)

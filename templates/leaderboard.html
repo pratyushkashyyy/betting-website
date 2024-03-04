@@ -20,36 +20,12 @@
       </tr>
     </thead>
     <tbody>
+      {% for user in challenges %}
       <tr>
-        <td>Player 1</td>
-        <td>$500</td>
+        <td>{{ user[0] }}</td>
+        <td>{{ user[1] }}</td>
       </tr>
-      <tr>
-        <td>Player 2</td>
-        <td>$400</td>
-      </tr><tr>
-        <td>Player 1</td>
-        <td>$500</td>
-      </tr>
-      <tr>
-        <td>Player 2</td>
-        <td>$400</td>
-      </tr><tr>
-        <td>Player 1</td>
-        <td>$500</td>
-      </tr>
-      <tr>
-        <td>Player 2</td>
-        <td>$400</td>
-      </tr><tr>
-        <td>Player 1</td>
-        <td>$500</td>
-      </tr>
-      <tr>
-        <td>Player 2</td>
-        <td>$400</td>
-      </tr>
-      <!-- Add more rows as needed -->
+      {% endfor %}
     </tbody>
   </table>
 </div>

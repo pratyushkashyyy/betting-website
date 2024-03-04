@@ -100,44 +100,85 @@
                     <button onclick="openPopup()" class="top chat">Chat</button>
                     <div id="popup" class="popup">
                     <div class="popup-content">
-                        <!-- Close button --><div class="close">
+                        <div class="close">
                         <button id="closeButton" class="close-button" onclick="closePopup()">×</button>
+                        </div>
+                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                        <input type="hidden" name="button" value="cancel game">
+                        <button type="submit" class="cancel-button">Cancel Game</button>
+                    </form>
+                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                        <input type="hidden" name="button" value="ok">
+                        <button type="submit" class="cancel-button">okk</button>
+                    </form>
+                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                        <input type="hidden" name="button" value="wrong room code">
+                        <button type="submit" class="cancel-button">Wrong Room Code</button>
+                    </form>
                     </div>
-                        <!-- Cancel Game button -->
-                        <button class="cancel-button" onclick="cancelGame()">Cancel Game</button>
-                        <!-- Other buttons -->
-                        <button onclick="ok()">Ok..!</button>
-                        <button onclick="roomCodeWrong()">Room Code Wrong</button>
                     </div>
-                    </div>
+                    <div class="message-section">
 
+                        {% for mes in message %}
+                            {% if mes["challenge_id"] == challenge['id'] %}
+                                    <div class="message">
+                                    <p><strong>{{ mes['sender'] }}</strong>: {{ mes['content'] }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                        
                     {% elif challenge['first_user'] == user['username'] %}
                     <p>Room Code : {{ challenge['room_code'] }} </p><br />
                     <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result</a>
                     <button onclick="openPopup()" class="top chat">Chat</button>
                     <div id="popup" class="popup">
                     <div class="popup-content">
-                   <div class="close">
+                    <div class="close">
                         <button id="closeButton" class="close-button" onclick="closePopup()">×</button>
                     </div>
-                        <button class="cancel-button" onclick="cancelGame()">Cancel Game</button>
-                        <button onclick="ok()">Ok..!</button>
-                        <button onclick="roomCodeWrong()">Room Code Wrong</button>
+                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                        <input type="hidden" name="button" value="cancel game">
+                        <button type="submit" class="cancel-button">Cancel Game</button>
+                    </form>
+                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                        <input type="hidden" name="button" value="ok">
+                        <button type="submit" class="cancel-button">okk</button>
+                    </form>
+                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                        <input type="hidden" name="button" value="wrong room code">
+                        <button type="submit" class="cancel-button">Wrong Room Code</button>
+                    </form>
                     </div>
                     </div>
+                    <div class="message-section">
+
+                        {% for mes in message %}
+                            {% if mes["challenge_id"] == challenge['id'] %}
+                                    <div class="message">
+                                    <p><strong>{{ mes['sender'] }}</strong>: {{ mes['content'] }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+
                     {% else  %}
                     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
-                    
-                    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
-                    
+                    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>  
                     <dotlottie-player src="https://lottie.host/0c4a9f6c-fddf-48d5-ac77-e54019a82b17/QM0ltcOIar.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
                     {% endif %}
                 {% elif challenge['status'] == 'closed' %}
                 <p>Winner :{{ challenge['winner'] }}</p>
-                <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
-
-                <dotlottie-player src="https://lottie.host/3a6fd657-6a57-42fc-8a69-160d367285f2/byOH0a67Z8.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop autoplay></dotlottie-player>
-            
+              
+               
+         
                 {% endif %}
             </div>
         </center>
@@ -175,21 +216,7 @@
       document.getElementById("popup").style.display = "block";
       document.getElementById("closeButton").style.display = "block"; 
     }
-    
-    function cancelGame() {
-      alert("Game cancelled");
-      closePopup();
-    }
-    
-    function ok() {
-      alert("Ok clicked");
-      closePopup();
-    }
-    
-    function roomCodeWrong() {
-      alert("Room code wrong");
-      closePopup();
-    }
+
     
     function closePopup() {
       document.getElementById("popup").style.display = "none";
