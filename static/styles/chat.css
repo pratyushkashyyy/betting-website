@@ -7,32 +7,40 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    z-index: 1000000;
    
   }
   
   .popup-content {
-    
     position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgb(12, 236, 172);
-    padding: 20px;
+    
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     border: 2px solid black; 
-    width: 80%; 
+    width: 80%;
+    width: 800px;
     display: flex; 
     flex-direction: column; 
     align-items: center; 
+    
   }
   
   .popup-content button {
-    width: 80%; 
+   background-color: rgb(241, 234, 234);
+   color: black;
+   padding: 10px;
     margin: 5px 0; 
-    padding: 5px 0; 
+   
   }
+  .popup-content .close .close-button {
+    background-color: transparent;
+    color: red;
+  }
+
   .close-button {
     position: relative; 
     top:0; 
@@ -59,8 +67,14 @@
 }
   
 .close{
-    font-size: large    ;
+    font-size: large   ;
     position: absolute;
     right: 17px;
     top: -18px;
+}
+
+@media screen and (max-width: 600px){
+  .popup-content{
+    width: 300px;
+  }
 }

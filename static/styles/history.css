@@ -2,18 +2,23 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: linear-gradient(45deg, #efefef 25%, rgba(239, 239, 239, 0) 25%, rgba(239, 239, 239, 0) 75%, #efefef 75%, #efefef),
-                      linear-gradient(45deg, #efefef 25%, rgba(239, 239, 239, 0) 25%, rgba(239, 239, 239, 0) 75%, #efefef 75%, #efefef);
+   
   }
+  BODY{
+    background-image: url("https://i.ibb.co/txtY9ZR/bg.jpg");
+        background-size: cover;
+    }
   
   .container {
     max-width: 500px;
-    margin: 50px auto  auto;
+    margin: 20px auto  auto;
     text-align: center;
     background-color: #f0f0f0;
     padding: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    background-color: #73b3f3;
+    padding-left: 50px;
   }
   
   .button-container {
@@ -21,6 +26,7 @@ body {
     flex-direction: row;
     justify-content: space-evenly;
     margin-top: 20px;
+    
     
     
   }
@@ -64,7 +70,8 @@ body {
   
   .table-container {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS devices */
+    -webkit-overflow-scrolling: touch;
+    background-color: #c6e1f1; /* Enable smooth scrolling on iOS devices */
   }
   
   .table-wrapper {

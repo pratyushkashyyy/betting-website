@@ -4,11 +4,16 @@
 {% endblock %}
 {% block css %}
 <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 <link rel="stylesheet" href="{{ url_for('static',filename='styles/chat.css') }}">
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dashboard.css') }}"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
 {% endblock %} 
 {% block content%}
-<div class="container">
+
+<div class="main-container">
     {% if success_message %}
     <script>
         const Toast = Swal.mixin({
@@ -28,49 +33,55 @@
             title: "{{ success_message }}"
         });
     </script>
-{% endif %}
+    {% endif %}
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <script>
+                const Toast1 = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <script>
-                    const Toast1 = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    });
-
-                    Toast1.fire({
-                        icon: "{{ category }}",
-                        title: "{{ message }}"
-                    });
-                </script>
-            {% endfor %}
-        {% endif %}
+                Toast1.fire({
+                    icon: "{{ category }}",
+                    title: "{{ message }}"
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
     {% endwith %}
+    {% for challenge in challenges %}
+    <div   data-aos="slide-up" class="box">
+        <div class="top-row">
+            <div class="top-div1">
 
+                <h4 style="color: rgb(12, 92, 253);"><u>{{ challenge['game_type'] }}</u></h4><br />
+                <p style="font-weight: bold;"> {{ challenge['first_user']}} {% if challenge['second_user'] %} <center><dotlottie-player src="https://lottie.host/bc9b00b3-9472-4055-a2d1-20ee4adecdf2/zDjmjfDWxW.lottie" background="transparent" speed="1" style="width: 30px; height: 30px;" loop autoplay></dotlottie-player></center>{{ challenge['second_user'] }} {% endif %}</p> 
+                <p style="font-weight: bold;"> Dare: {{ challenge['coins'] }}</p>
+            
+            </div>
+            <div class="top-div2">
 
-{% for challenge in challenges %}
-    <div class="box" data-aos="fade-up">
-        
-        <div class="box-1">
-        <center>
-        <h4>{{ challenge['game_type'] }}</h4>
-        <p> {{ challenge['first_user']}} {% if challenge['second_user'] %} v/s {{ challenge['second_user'] }} {% endif %}
-        </p> 
-        <p> Dare: {{ challenge['coins'] }}</p>
-        </div></center>
-        <center>
-            <div class="box-2">
-                <h4>Playing</h4>
+                <h4 style="color: rgb(12, 92, 253);"><u>Playing</u></h4>
                 {% if challenge['status'] == 'open' %}
                     {% if challenge['first_user'] == user['username'] %}
+                    <script type="text/javascript">
+                        function autoRefresh() {
+                          setTimeout(function() {
+                            location.reload(true);
+                          }, 10000);
+                        }
+                        window.onload = autoRefresh;
+                      </script>
                         <form action="{{ url_for('cancel_challenge', challenge_id=challenge['id']) }}" method="post">
                             <button class="can" type="submit">Cancel</button>
                         </form>
@@ -81,114 +92,151 @@
                         </form>
                     {% endif %}
                 {% elif challenge['status'] == 'accepted' %}
-
+                <script type="text/javascript">
+                    function autoRefresh() {
+                      setTimeout(function() {
+                        location.reload(true);
+                      }, 10000);
+                    }
+                    window.onload = autoRefresh;
+                  </script>
                     {% if challenge['first_user'] == user['username'] %}
-                    <button id="enter-room-code-btn">Enter Room Code</button>
-                    <form id="enter-room-code-form" action="{{ url_for('enter_room_code', challenge_id=challenge['id']) }}" method="post" style="display: none;">
-                        <input type="text" id="room-code" name="room_code">
-                    </form>
-                    {% elif challenge['second_user'] == user['username'] %}
+                    {% if challenge['game_type'] == "Free Fire" %}
+                        <button id="enter-room-code-btn1">Enter Room Code</button>
+                        <form id="enter-room-code-form1" action="{{ url_for('enter_room_code1', challenge_id=challenge['id']) }}" method="post" style="display: none;">
+                            <input type="text" id="room-code" name="room_code">
+                            <input type="text" id="password" name="password" placeholder="Password">
+                        </form>
+                    {% else %}
+                        <button id="enter-room-code-btn">Enter Room Code</button>
+                        <form id="enter-room-code-form" action="{{ url_for('enter_room_code', challenge_id=challenge['id']) }}" method="post" style="display: none;">                              
+                            <input type="text" id="room-code" name="room_code">
+                        </form>
+                    {% endif %}
 
+
+                    {% elif challenge['second_user'] == user['username'] %}
                         <form action="{{ url_for('cancel_accepted_challenge', challenge_id=challenge['id']) }}" method="post">
                             <button class="can" type="submit">Cancel</button>
                         </form>
                     {% endif %}
                 {% elif challenge['status'] == 'started' %}
                     {% if challenge['second_user'] == user['username'] %}
-                    <p>Room Code : {{ challenge['room_code'] }} </p><br />
-                    <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result</a>                    
+                    <p style="font-size: 13px; font-weight: bold;">Room Code: <button onclick="copyText()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="room_code"> {{ challenge['room_code'] }} </p>
+                    {% if challenge['password'] %}<p style="font-size: 12px; font-weight: bold;">password: <button onclick="copyPass()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="password">{{ challenge['password'] }}</p> {% endif %}
+                    <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result  </a>        
                     <button onclick="openPopup()" class="top chat">Chat</button>
                     <div id="popup" class="popup">
-                    <div class="popup-content">
-                        <div class="close">
-                        <button id="closeButton" class="close-button" onclick="closePopup()">×</button>
+                        <div class="popup-content">
+                            <div class="close">
+                            <button id="closeButton" class="close-button" onclick="closePopup()"></button>
+                            </div>
+                        <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                            <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                            <input type="hidden" name="button" value="{{settings['button1']}}">
+                            <button  type="submit" class="cancel-button">{{settings["button1"]}}</button>
+                        </form>
+                        <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                            <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                            <input type="hidden" name="button" value="{{settings['button2']}}">
+                            <button type="submit" class="cancel-button">{{settings["button2"]}}</button>
+                        </form>
+                        <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                            <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                            <input type="hidden" name="button" value="{{settings['button3']}}">
+                            <button type="submit" class="cancel-button">{{settings["button3"]}}</button>
+                        </form>
                         </div>
-                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
-                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
-                        <input type="hidden" name="button" value="cancel game">
-                        <button type="submit" class="cancel-button">Cancel Game</button>
-                    </form>
-                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
-                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
-                        <input type="hidden" name="button" value="ok">
-                        <button type="submit" class="cancel-button">okk</button>
-                    </form>
-                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
-                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
-                        <input type="hidden" name="button" value="wrong room code">
-                        <button type="submit" class="cancel-button">Wrong Room Code</button>
-                    </form>
-                    </div>
-                    </div>
-                    <div class="message-section">
-
-                        {% for mes in message %}
-                            {% if mes["challenge_id"] == challenge['id'] %}
-                                    <div class="message">
-                                    <p><strong>{{ mes['sender'] }}</strong>: {{ mes['content'] }}</p>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                        
+                        </div>
+                  
                     {% elif challenge['first_user'] == user['username'] %}
-                    <p>Room Code : {{ challenge['room_code'] }} </p><br />
-                    <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result</a>
+                    <p style="font-size: 12px; font-weight: bold;">Room Code: <button onclick="copyText()" class="icon-button"><i class="fas fa-copy"></i></button></p><p id="room_code"> {{ challenge['room_code'] }} </p>
+                    {% if challenge['password'] %}<p style="font-size: 12px; font-weight: bold;">Password : <button onclick="copyPass()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="password">{{challenge['password']}}</p> {% endif %}
+                    <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result</a>         
                     <button onclick="openPopup()" class="top chat">Chat</button>
                     <div id="popup" class="popup">
-                    <div class="popup-content">
-                    <div class="close">
-                        <button id="closeButton" class="close-button" onclick="closePopup()">×</button>
-                    </div>
-                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
-                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
-                        <input type="hidden" name="button" value="cancel game">
-                        <button type="submit" class="cancel-button">Cancel Game</button>
-                    </form>
-                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
-                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
-                        <input type="hidden" name="button" value="ok">
-                        <button type="submit" class="cancel-button">okk</button>
-                    </form>
-                    <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
-                        <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
-                        <input type="hidden" name="button" value="wrong room code">
-                        <button type="submit" class="cancel-button">Wrong Room Code</button>
-                    </form>
-                    </div>
-                    </div>
-                    <div class="message-section">
+                        <div class="popup-content">
+                            <div class="close">
+                            <button id="closeButton" class="close-button" onclick="closePopup()">×</button>
+                            </div>
+                        <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                            <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                            <input type="hidden" name="button" value="{{settings['button1']}}">
+                            <button type="submit" class="cancel-button">{{settings["button1"]}}</button>
+                        </form>
+                        <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                            <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                            <input type="hidden" name="button" value="{{settings['button2']}}">
+                            <button type="submit" class="cancel-button">{{settings["button2"]}}</button>
+                        </form>
+                        <form action="{{ url_for('store_button_value') }}" method="post" id="result-form">
+                            <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
+                            <input type="hidden" name="button" value="{{settings['button3']}}">
+                            <button type="submit" class="cancel-button">{{settings["button3"]}}</button>
+                        </form>
+                        </div>
+                        </div>
 
-                        {% for mes in message %}
-                            {% if mes["challenge_id"] == challenge['id'] %}
-                                    <div class="message">
-                                    <p><strong>{{ mes['sender'] }}</strong>: {{ mes['content'] }}</p>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    
-
-                    {% else  %}
+                    {% else %}
+                    <center>
                     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
                     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>  
                     <dotlottie-player src="https://lottie.host/0c4a9f6c-fddf-48d5-ac77-e54019a82b17/QM0ltcOIar.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
-                    {% endif %}
+                        </center>
+
+                    {%endif%}
+
                 {% elif challenge['status'] == 'closed' %}
+                <br />
                 <p>Winner :{{ challenge['winner'] }}</p>
-              
-               
-         
-                {% endif %}
+                <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+                <center><dotlottie-player src="https://lottie.host/e2d56c13-aacc-4d77-bc21-58174bca8ec6/EWu1JtV55e.json" background="transparent" speed="1" style="width: 100px; height: 100px;" playMode="bounce" loop autoplay></dotlottie-player></center>
+
+                {%endif%}
             </div>
-        </center>
-        
-        
-    
-    </div>
+        </div>
+        {% if challenge['status'] == 'started' %}
+            <div class="bottom-row">
+            <div class="bottom-div">
+            {% if challenge['second_user'] == user['username'] %}
+                {% for mes in message %}
+                    {% if mes["challenge_id"] == challenge['id'] %}                          
+                        <p><strong>{{ mes['sender'] }}</strong>: {{ mes['content'] }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% elif challenge['first_user'] == user['username'] %}
+                {% for mes in message %}
+                    {% if mes["challenge_id"] == challenge['id'] %}                          
+                        <p><strong>{{ mes['sender'] }}</strong>: {{ mes['content'] }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+                
+            </div>
+            </div>
+        {% endif %}
+   </div>
+   
+   {% endfor %}
+   <div class="pagination  nextpage">
+    {% if page > 1 %}
+        <a href="{{ url_for('dashboard', page=page-1) }}">Previous</a>
+    {% endif %}
+
+    {% for p in range(1, total_pages+1) %}
+        <a href="{{ url_for('dashboard', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
     {% endfor %}
+
+    {% if page < total_pages %}
+        <a href="{{ url_for('dashboard', page=page+1) }}" class="next">Next</a>
+    {% endif %}
+    </div>
 </div>
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script> 
+       
+
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
     AOS.init();
 
@@ -211,6 +259,41 @@
         });
     });
 </script>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    AOS.init();
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('enter-room-code-btn1').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Enter Room Code',
+            html: '<input id="swal-room-code" class="swal2-input" placeholder="Room Code" autocapitalize="off" required>' +
+                '<input id="swal-password" class="swal2-input" placeholder="Password" type="text" autocapitalize="off" required>',
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                const roomCode = document.getElementById('swal-room-code').value;
+                const password = document.getElementById('swal-password').value;
+                console.log("Submitting room code:", roomCode);
+                console.log("Submitting password:", password);
+                if (!roomCode || !password) {
+                    Swal.showValidationMessage('Room code and password are required');
+                    return false; 
+                }
+                document.getElementById('room-code').value = roomCode;
+                document.getElementById('password').value = password;
+                document.getElementById('enter-room-code-form1').submit();
+            }
+        });
+    });
+});
+
+</script>
+
+
+
+
 <script>
     function openPopup() {
       document.getElementById("popup").style.display = "block";
@@ -223,11 +306,66 @@
       document.getElementById("closeButton").style.display = "none"; 
     }
     </script>
+      <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+      <script>
+        AOS.init();
+      </script>
+    <script>
+        function copyText() {
+            var roomCode = document.getElementById("room_code").innerText;
+            var tempTextArea = document.createElement("textarea");
+            tempTextArea.value = roomCode;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempTextArea);
+            
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+        });
+        Toast.fire({
+        icon: "success",
+        title: "Room Code Copied !"
+        });
 
 
+        }
+    </script>
+    <script>
+        function copyPass() {
+            var password = document.getElementById("password").innerText;
+            var tempTextArea = document.createElement("textarea");
+            tempTextArea.value = password;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempTextArea);
+            const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+        });
+        Toast.fire({
+        icon: "success",
+        title: "Password Copied !"
+        });
+
+        }
+    </script>
 
 
-    
-   {% endblock%}
-
-                                                                                                                    
+{% endblock %}

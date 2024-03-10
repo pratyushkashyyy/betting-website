@@ -19,7 +19,7 @@
     </div>
     
     <div class="header">
-        <h2 class="user-name " style="text-decoration: underline;" >Hi! {{user['firstname']}}</h2>
+        <h2 class="user-name " style="text-decoration: underline;" ><a href="/" style="color: white;">Hi! {{user['firstname']}}</a></h2>
         <button class="menu-icon" onclick="toggleMenu()">Menu ☰</button>
         <ul class="navbar-menu" id="navbarMenu">
             <li><a href="/"><button>Home</button></a></li>
@@ -29,7 +29,7 @@
             <li><a href="/profile"><button>Profile</button></a></li>
             <li><a href="/leaderboard"><button>Leaderboard</button></a></li>
             <li><a href="/history"><button>History</button></a></li>
-            <li><a href="#"><button>Message</button></a></li>
+            <li><a href="https://tawk.to/chat/65e5bbfd9131ed19d974c1a2/1ho4mclmg"><button>Message</button></a></li>
             <li><a href="/logout"><button>Logout</button></a></li>
             <li><button class="close-btn" style="background-color: red;" onclick="toggleMenu()">Close ✖</button></li>
         </ul>
@@ -45,7 +45,7 @@
 </script>
     <div class="first-div">
         <marquee behavior="scroll" direction="left">
-            <p>Top Winners: Garvit (Money Won: 10000), Vishal (Money Won: 5000), Pratus (Money Won: 3000)</p>
+            <p> {{ settings['header'] }}</p>
         </marquee>
     </div>
 
@@ -84,8 +84,8 @@
 
 <footer class="footer"><center>
     <div class="footer-content">
-        <center><p> <a  href="#" style="color: white;">Contact Admin @ Garvit</a></p></center>
-        <center><p class="rights">Play Ludo. All rights reserved.</p></center>
+        <center><p> <a  href="https://tawk.to/chat/65e5bbfd9131ed19d974c1a2/1ho4mclmg" style="color: white;">Contact Admin</a></p></center>
+        <center><p class="rights"><a href="/terms" style="color: white;"> Play Ludo. All rights reserved.</a></p></center>
     </div></center>
 </footer>
 </body>

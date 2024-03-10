@@ -1,6 +1,8 @@
 BODY{
-    background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
-}.outer-container {
+    background-image: url("https://i.ibb.co/txtY9ZR/bg.jpg");
+        background-size: cover;
+    }
+.outer-container {
     border: 2px solid black;
     padding: 20px; /* Increase padding for a larger div */
     width: 40%; /* Set width to make it larger */
@@ -10,6 +12,7 @@ BODY{
 
 .game-container {
     text-align: center;
+    
 }
 
 .game-heading {
@@ -64,7 +67,7 @@ h2{
     width: 400px;
     height: 350px;
     margin-bottom: 90px;
-    background-image: linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,rgba(239,239,239,0) 25%,rgba(239,239,239,0) 75%,#efefef 75%,#efefef);
+   background-color: rgb(92, 164, 232);
 }
 
 .create-button:hover{

@@ -83,7 +83,7 @@ body {
 /* Navbar styles */
 .navbar-menu {
     list-style-type: none;
-    display: none;
+    
     flex-direction: column;
     background-color: rgb(27, 21, 21);
     border-radius: 5px;
@@ -131,6 +131,7 @@ body {
     height: 4 0px;
     margin-bottom: 10px;
     transition: background-color 3s ease-in, opacity 3s ease-in;
+    padding: 10px;
     
 }
 
@@ -149,25 +150,19 @@ body {
   
 }
 
-/* First div styles */
 .first-div {
-    background-color: #e40ef7; /* Light pink background */
+    background-color: #0d6efd;
+    color: #aee6f0;
     border: 2px solid darkpink; /* Dark pink border */
     padding: 10px;
 }
 
-.first-div a {
-    color: rgb(210, 189, 216); /* Dark purple link color */
-    text-decoration: none; /* Remove underline */
-    border-bottom: 2px solid darkpink; /* Dark pink wave underline */
-}
-
-/* Second div styles */
 .second-div {
-    background-color:  rgb(252, 135, 248);; /* Light purple background */
-    color: black;
+    
+    color: rgb(9, 172, 253);
     padding: 10px;
-    text-align: center; /* Center text */
+    text-align: center;
+    background-color: rgb(255, 255, 255); /* Center text */
 }
 
 .third-div {
@@ -228,14 +223,12 @@ body {
     transform: translateY(10%) translateX(-25px) rotate(-45deg);
   }
  
-  
-    
 
 .footer {
     bottom: auto;
     position: scroll;
     width: 100%;
-    background: linear-gradient(45deg, #8a2be2, #ff69b4); 
+    background: linear-gradient(45deg, #4c4b4e, #ff69b4); 
     height: auto
 }
 a{
@@ -261,6 +254,9 @@ a{
 
 .rights {
     margin-left: auto; /* Push the "All rights reserved" text to the right */
+}
+.navbar-menu li button{
+    padding: 10px;
 }
 
 @media screen and (max-width: 600px){

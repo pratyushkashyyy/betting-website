@@ -70,8 +70,8 @@
                     <td>{{ result['challenge_id'] }}</td>
                     <td>{{ result['first_user'] }}</td>
                     <td>{{ result['second_user'] }}</td>
-                    <td><a href = "http://192.168.0.104/upload/{{ result['screenshot1'] }}" target="_blank">User 1</a></td>
-                    <td><a href = "http://192.168.0.104/upload/{{ result['screenshot2'] }}" target="_blank">User 2</a></td>
+                    <td><a href = "https://gamemates.in/upload/{{ result['screenshot1'] }}" target="_blank">User 1</a></td>
+                    <td><a href = "https://gamemates.in/upload/{{ result['screenshot2'] }}" target="_blank">User 2</a></td>
                     <td>{{ result['match_status'] }}</td>
                     <td>{{ result['match_status2'] }}</td>
                     <td>{% if result['status'] == "undecided" %}
@@ -91,6 +91,19 @@
                     </td>
                 </tr>
                 {% endfor %}
+                <div class="pagination  nextpage">
+                    {% if page > 1 %}
+                        <a href="{{ url_for('admin_result', page=page-1) }}">Previous</a>
+                    {% endif %}
+                
+                    {% for p in range(1, total_pages+1) %}
+                        <a href="{{ url_for('admin_result', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
+                    {% endfor %}
+                
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('admin_result', page=page+1) }}" class="next">Next</a>
+                    {% endif %}
+                    </div>
             </tbody>
         </table>
     </div>

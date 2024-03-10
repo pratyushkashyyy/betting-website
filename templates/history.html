@@ -8,7 +8,6 @@
   <div class="container">
     <div class="button-container"><center>
       <button class="play-button">Play</button>
-      <button class="withdraw-button">Withdraw</button>
       <button class="transaction-button">Transaction</button>
     </center></div>
   </div>
@@ -25,6 +24,7 @@
                 <th>Accepted by</th>
                 <th>Room Id</th>
                 <th>Winner</th>
+                <th>Winning Amount</th>
 
               </tr>
             </thead>
@@ -37,6 +37,7 @@
                 <td>{{ match['second_user'] }}</td>
                 <td>{{ match['room_code'] }}</td>
                 <td>{{ match['winner'] }}</td>
+                <td>{{ match['winnning_amount'] }}</td>
 
               </tr>
               {% endfor %}

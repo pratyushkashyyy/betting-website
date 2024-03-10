@@ -50,8 +50,21 @@
         <button type="submit" class="add-button">Add</button>
     </div>
     <div class="pay-by-qr">
-        <a href="http://192.168.0.104/upload/{{settings['qr_code']}}">Pay by QR Code</a>
-    </div>
+        <a href="https://gamemates.in/upload/{{settings['qr_code']}}" id="pay-by-qr">Pay by QR Code</a>
+
+        <script>
+            const payByQR = document.getElementById('pay-by-qr');
+                payByQR.addEventListener('click', function(event) {
+                event.preventDefault();
+                        Swal.fire({
+                    title: "Pay by QR Code",
+                    text: "Scan the QR Code to make the payment.",
+                    imageUrl: "https://gamemates.in/upload/{{settings['qr_code']}}",
+                    imageAlt: "QR Code"
+                });
+            });
+        </script>
+            </div>
     </form>
 </div>
 {% endblock %} 

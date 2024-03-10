@@ -8,10 +8,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
     <title>Document</title>
     <style>
-        /* Additional CSS for table container */
         #challenge-id-table-container {
-            overflow-x: auto; /* Enable horizontal scrolling */
-            max-width: 100%; /* Ensure the table container doesn't exceed the viewport width */
+            overflow-x: auto;
+            max-width: 100%;
         }
     </style>
 </head>
@@ -79,7 +78,19 @@
                         </td>
                     </tr>
                     {% endfor %}
-
+                    <div class="pagination  nextpage">
+                        {% if page > 1 %}
+                            <a href="{{ url_for('admin_challengeid', page=page-1) }}">Previous</a>
+                        {% endif %}
+                    
+                        {% for p in range(1, total_pages+1) %}
+                            <a href="{{ url_for('admin_challengeid', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
+                        {% endfor %}
+                    
+                        {% if page < total_pages %}
+                            <a href="{{ url_for('admin_challengeid', page=page+1) }}" class="next">Next</a>
+                        {% endif %}
+                        </div>
                 </tbody>
             </table>
     </div>

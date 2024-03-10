@@ -48,7 +48,30 @@
 </div>
 </form>
 <div style="display: flex; align-items: center; justify-content: center; margin-top: 30px;">
-    <img src="http://192.168.0.104/upload/{{settings['qr_code']}}" height="300px"/>
+    <img src="https://gamemates.in/upload/{{settings['qr_code']}}" height="100px"/>
 </div>
+
+<div class="inputphonepay">
+	<h3>
+		Change Chat Buttons: 
+	</h3>
+	<form action="/admin/setting/button" method="POST">
+		<input type="text" class="holder" name="button1" placeholder="Button 1" required="">
+		<input type="text" class="holder" name="button2" placeholder="Button 2" required="">
+		<input type="text" class="holder" name="button3" placeholder="Button 3" required="">
+		<button class="phonepayedit" type="submit">changee?</button>
+	</form>
+</div>
+
+<div class="inputphonepay">
+	<h3>
+		Change Header Scroll : 
+	</h3>
+	<form action="/admin/setting/header" method="POST">
+		<input type="text" class="holder" name="header" placeholder="Header Value" required="">
+		<button class="phonepayedit" type="submit">changee?</button>
+	</form>
+</div>
+
 </body>
 </html>

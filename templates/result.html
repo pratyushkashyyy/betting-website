@@ -45,9 +45,15 @@
                 <input type="hidden" name="challenge_id" value="{{ challenge_id }}">
                 <button type="submit" class="win glow-green" name="result" value="win"><a>win</a></button>
                 <button type="submit" class="loss glow-red" name="result" value="loss"><a>loss</a></button>
-                <button type="submit" class="cancel glow-black"><a>cancel</a></button>
             </form>
-            
+			<button class="cancel glow-black" onclick="redirectToHomepage()">Cancel</button>
+
+			<script>
+			  function redirectToHomepage() {
+				window.location.href = "/";
+			  }
+			</script>
+						
         </div>
     </center>
 </body>
