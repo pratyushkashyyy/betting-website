@@ -8,8 +8,9 @@
     <h2>Your Profile</h2>
     <div class="profile-form">
       <div class="form-group">
+        
         <label for="name"> Display Name:</label>
-        <input type="text" id="name" name="name" placeholder="{% if user['lastname'] %}{{ user['firstname'] }} {{ user['lastname'] }}{% else %}{{ user['firstname'] }}{% endif %}" readonly>
+        <input type="text" id="name" name="name" placeholder="{% if user['lastname'] %}{{ user['firstname'] }} {{ user['lastname'] }}{% else %}{{ user['firstname'] }}{% endif %}">
       </div>
       <div class="form-group">
         <label for="phone">Balance:</label>
@@ -28,7 +29,7 @@
         <input type="text" id="phone" name="phone" placeholder=" {{ user['phoneno'] }}" readonly>
       </div>
       <div class="form-group">
-        <!-- <button type="button" class="update-button">Update</button> -->
+        <button type="button" class="update-button">Update</button>
       </div>
     </div>
   </div>

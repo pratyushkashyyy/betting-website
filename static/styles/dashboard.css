@@ -13,6 +13,7 @@ body{
     border-radius: 10px;
     border: 2px solid black;
     margin-bottom: 10px;
+    box-shadow: 7px 7px 7px rgb(0, 132, 255);
   }
   
   .top-row, .bottom-row {
@@ -22,10 +23,19 @@ body{
   
   .top-div1,.top-div2, .bottom-div {
     flex: 1;
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     padding: 10px;
-    
+       
   }
+
+  .buttons{
+    display: flex;
+    flex-direction: row;
+  }
+
   .result{
     color: black;
     border: 1px solid black;
@@ -57,6 +67,13 @@ body{
     border: 2px solid black;
   }
   #enter-room-code-btn{
+
+   
+    padding: 7px;
+    margin-top: 8px;
+    border: 2px solid black;
+  }
+  #enter-room-code-btn1{
 
    
     padding: 7px;

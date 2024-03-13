@@ -50,7 +50,7 @@
         <button class="nav-item" onclick="loadResult()">Result</button>
         <button class="nav-item" onclick="loadAddCoin()">Add Coin</button>
         <button class="nav-item" onclick="loadWithdrawCoin()">Withdraw Coin</button>
-        <button class="nav-item" onclick="loadMessage()">Message</button>
+        <a href="https://dashboard.tawk.to/#/dashboard" target="_blank"> <button class="nav-item">Message</button></a>
         <button class="nav-item" onclick="loadSetting()">setting</button>
     </div>
 </div>
@@ -78,9 +78,6 @@
         document.getElementById("mainFrame").src = "/admin/withdraw_coin";
     }
 
-    function loadMessage() {
-        document.getElementById("mainFrame").src = "/admin/message";
-    }
     function loadSetting() {
         document.getElementById("mainFrame").src = "/admin/setting";
     }

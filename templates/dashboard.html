@@ -60,25 +60,25 @@
     {% endif %}
     {% endwith %}
     {% for challenge in challenges %}
-    <div   data-aos="slide-up" class="box">
+    <div data-aos="slide-up" class="box">
         <div class="top-row">
             <div class="top-div1">
 
-                <h4 style="color: rgb(12, 92, 253);"><u>{{ challenge['game_type'] }}</u></h4><br />
-                <p style="font-weight: bold;"> {{ challenge['first_user']}} {% if challenge['second_user'] %} <center><dotlottie-player src="https://lottie.host/bc9b00b3-9472-4055-a2d1-20ee4adecdf2/zDjmjfDWxW.lottie" background="transparent" speed="1" style="width: 30px; height: 30px;" loop autoplay></dotlottie-player></center>{{ challenge['second_user'] }} {% endif %}</p> 
-                <p style="font-weight: bold;"> Dare: {{ challenge['coins'] }}</p>
+                <h3 style="color: rgb(255, 255, 255); margin-bottom: 7px;"><u>{{ challenge['game_type'] }}</u></h3>
+                <p><b>{{ challenge['first_user']}}</b> {% if challenge['second_user'] %} V/S <b>{{ challenge['second_user'] }}</b> {% endif %}</p> 
+                
+                <p> <b>Dare: </b>{{ challenge['coins'] }}</p>
             
             </div>
             <div class="top-div2">
-
-                <h4 style="color: rgb(12, 92, 253);"><u>Playing</u></h4>
+            
                 {% if challenge['status'] == 'open' %}
                     {% if challenge['first_user'] == user['username'] %}
                     <script type="text/javascript">
                         function autoRefresh() {
                           setTimeout(function() {
                             location.reload(true);
-                          }, 10000);
+                          }, 15000);
                         }
                         window.onload = autoRefresh;
                       </script>
@@ -96,7 +96,7 @@
                     function autoRefresh() {
                       setTimeout(function() {
                         location.reload(true);
-                      }, 10000);
+                      }, 20000);
                     }
                     window.onload = autoRefresh;
                   </script>
@@ -122,10 +122,12 @@
                     {% endif %}
                 {% elif challenge['status'] == 'started' %}
                     {% if challenge['second_user'] == user['username'] %}
-                    <p style="font-size: 13px; font-weight: bold;">Room Code: <button onclick="copyText()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="room_code"> {{ challenge['room_code'] }} </p>
-                    {% if challenge['password'] %}<p style="font-size: 12px; font-weight: bold;">password: <button onclick="copyPass()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="password">{{ challenge['password'] }}</p> {% endif %}
+                    <p style="font-size: 15px; font-weight: bold;">Room Code: <button onclick="copyText()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="room_code"> {{ challenge['room_code'] }} </p>
+                    {% if challenge['password'] %}<p style="font-size: 15px; font-weight: bold;">password: <button onclick="copyPass()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="password">{{ challenge['password'] }}</p> {% endif %}
+                    <div class="buttons"> 
                     <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result  </a>        
                     <button onclick="openPopup()" class="top chat">Chat</button>
+                    </div>
                     <div id="popup" class="popup">
                         <div class="popup-content">
                             <div class="close">
@@ -150,10 +152,12 @@
                         </div>
                   
                     {% elif challenge['first_user'] == user['username'] %}
-                    <p style="font-size: 12px; font-weight: bold;">Room Code: <button onclick="copyText()" class="icon-button"><i class="fas fa-copy"></i></button></p><p id="room_code"> {{ challenge['room_code'] }} </p>
-                    {% if challenge['password'] %}<p style="font-size: 12px; font-weight: bold;">Password : <button onclick="copyPass()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="password">{{challenge['password']}}</p> {% endif %}
+                    <p style="font-size: 15px; font-weight: bold;">Room Code: <button onclick="copyText()" class="icon-button"><i class="fas fa-copy"></i></button></p><p id="room_code"> {{ challenge['room_code'] }} </p>
+                    {% if challenge['password'] %}<p style="font-size: 15px; font-weight: bold;">Password : <button onclick="copyPass()"  class="icon-button"><i class="fas fa-copy"></i></button></p><p id="password">{{challenge['password']}}</p> {% endif %}
+                    <div class="buttons">
                     <a href="{{ url_for('submit_result', challenge_id=challenge['id']) }}" class="top result"> Result</a>         
                     <button onclick="openPopup()" class="top chat">Chat</button>
+                    </div>
                     <div id="popup" class="popup">
                         <div class="popup-content">
                             <div class="close">
@@ -187,12 +191,9 @@
                     {%endif%}
 
                 {% elif challenge['status'] == 'closed' %}
-                <br />
-                <p>Winner :{{ challenge['winner'] }}</p>
-                <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
-
-                <center><dotlottie-player src="https://lottie.host/e2d56c13-aacc-4d77-bc21-58174bca8ec6/EWu1JtV55e.json" background="transparent" speed="1" style="width: 100px; height: 100px;" playMode="bounce" loop autoplay></dotlottie-player></center>
-
+                <p><b>Winner: </b>{{ challenge['winner'] }}</p>
+                <p><b>Amount: </b>{{ challenge['winnning_amount'] }}</p>
+                
                 {%endif%}
             </div>
         </div>
@@ -221,16 +222,23 @@
    {% endfor %}
    <div class="pagination  nextpage">
     {% if page > 1 %}
-        <a href="{{ url_for('dashboard', page=page-1) }}">Previous</a>
-    {% endif %}
+    <a href="{{ url_for('dashboard', page=page-1) }}">Previous</a>
+{% endif %}
 
-    {% for p in range(1, total_pages+1) %}
+{% for p in range(1, total_pages+1) %}
+    {% if page - 5 <= p <= page + 5 %}
         <a href="{{ url_for('dashboard', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
-    {% endfor %}
-
-    {% if page < total_pages %}
-        <a href="{{ url_for('dashboard', page=page+1) }}" class="next">Next</a>
+    {% elif p == 1 or p == total_pages %}
+        <a href="{{ url_for('dashboard', page=p) }}">{{ p }}</a>
+    {% elif p == page - 6 or p == page + 6 %}
+        <span>...</span>
     {% endif %}
+{% endfor %}
+
+{% if page < total_pages %}
+    <a href="{{ url_for('dashboard', page=page+1) }}" class="next">Next</a>
+{% endif %}
+
     </div>
 </div>
        

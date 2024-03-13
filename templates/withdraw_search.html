@@ -54,60 +54,39 @@
                 <tr>
                     <th>User ID</th>
                     <th>User Name</th>
-                    <th>payment method</th>
+                    <th>Payment Method</th>
                     <th>Coin Amount</th>
                     <th>UPI ID</th>
-                    <th>Date and time</th>
+                    <th>Date and Time</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for withdraw in withdraws %}
+                {% for result in search %}
                 <tr>
-                    <td>{{withdraw['id']}}</td>
-                    <td>{{withdraw['username']}}</td>
-                    <td>{{withdraw['transaction_type']}}</td>
-                    <td>{{withdraw['amount']}}</td>
-                    <td>{{withdraw['number']}}</td>
-                    <td>{{withdraw['transaction_date']}}</td>
+                    <td>{{ result['id'] }}</td>
+                    <td>{{ result['username'] }}</td>
+                    <td>{{ result['transaction_type'] }}</td>
+                    <td>{{ result['amount'] }}</td>
+                    <td>{{ result['number'] }}</td>
+                    <td>{{ result['transaction_date'] }}</td>
                     <td>
-                        {% if withdraw['status'] == 'open' %}
+                        {% if result['status'] == 'open' %}
                         <form action="/admin/withdraw_coin" method="POST">
-                            <input type="hidden" name="id" value="{{ withdraw['id'] }}">
-                            <input type="hidden" name="username" value="{{ withdraw['username'] }}">
-                            <input type="hidden" name="amount" value="{{ withdraw['amount'] }}">
+                            <input type="hidden" name="id" value="{{ result['id'] }}">
+                            <input type="hidden" name="username" value="{{ result['username'] }}">
+                            <input type="hidden" name="amount" value="{{ result['amount'] }}">
                             <button class="ap-btn" name="button" value="approved" type="submit">Approve</button>
                             <button class="den-btn" name="button" value="denied" type="submit">Reject</button>
                         </form>
-                        {% elif withdraw['status'] == 'approved' %}
+                        {% elif result['status'] == 'approved' %}
                         <button class="ap-btn">Approved</button>
-                        {% elif withdraw['status'] == 'denied' %}
+                        {% elif result['status'] == 'denied' %}
                         <button class="den-btn">Denied</button>
                         {% endif %}
                     </td>
                 </tr>
-                {% endfor %}
-                
-                <div class="pagination  nextpage">
-                    {% if page > 1 %}
-    <a href="{{ url_for('admin_withdrawcoin', page=page-1) }}">Previous</a>
-{% endif %}
-
-{% for p in range(1, total_pages+1) %}
-    {% if page - 5 <= p <= page + 5 %}
-        <a href="{{ url_for('admin_withdrawcoin', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
-    {% elif p == 1 or p == total_pages %}
-        <a href="{{ url_for('admin_withdrawcoin', page=p) }}">{{ p }}</a>
-    {% elif p == page - 6 or p == page + 6 %}
-        <span>...</span>
-    {% endif %}
-{% endfor %}
-
-{% if page < total_pages %}
-    <a href="{{ url_for('admin_withdrawcoin', page=page+1) }}" class="next">Next</a>
-{% endif %}
-
-                    </div>
+                {% endfor %}                 
             </tbody>
         </table>
     </div>

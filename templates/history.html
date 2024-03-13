@@ -1,56 +1,127 @@
 {% extends "base.html" %}
+
 {% block title %}
-    history
+    History
 {% endblock %}
-{% block css %} <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/history.css') }}"> {% endblock %}
-  {% block content %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/history.css') }}">
+{% endblock %}
+
+{% block content %}
 <body>
   <div class="container">
-    <div class="button-container"><center>
-      <button class="play-button">Play</button>
-      <button class="transaction-button">Transaction</button>
-    </center></div>
-  </div>
-  <div class="table-container">
-    <div class="table-wrapper">
-      <div class="table-container">
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Game</th>
-                <th>Entry coin</th>
-                <th>Dare by</th>
-                <th>Accepted by</th>
-                <th>Room Id</th>
-                <th>Winner</th>
-                <th>Winning Amount</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              {% for match in challenges %}
-              <tr>
-                <td>{{ match['game_type'] }}</td>
-                <td>{{ match['coins'] }}</td>
-                <td>{{ match['first_user'] }}</td>
-                <td>{{ match['second_user'] }}</td>
-                <td>{{ match['room_code'] }}</td>
-                <td>{{ match['winner'] }}</td>
-                <td>{{ match['winnning_amount'] }}</td>
-
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          
-        </div>
-      </div>
-      
-      
+    <div class="button-container">
+      <center>
+        <button onclick="displayGameplayTable()" class="play-button   but">Total Gameplay</button>
+        <button onclick="addcoin()" class="transaction-button   but">Recharge</button>
+        <button onclick="withdrawcoin()" class="transaction-button  but">Withdraws</button>
+      </center>
     </div>
   </div>
-  
-  
-  
-  {% endblock %} 
+
+  <div id="gameplay-table" class="table-container">
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Game</th>
+            <th>Entry coin</th>
+            <th>Dare by</th>
+            <th>Accepted by</th>
+            <th>Room Id</th>
+            <th>Winner</th>
+            <th>Winning Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for match in challenges %}
+          <tr>
+            <td>{{ match['game_type'] }}</td>
+            <td>{{ match['coins'] }}</td>
+            <td>{{ match['first_user'] }}</td>
+            <td>{{ match['second_user'] }}</td>
+            <td>{{ match['room_code'] }}</td>
+            <td>{{ match['winner'] }}</td>
+            <td>{{ match['winning_amount'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="recharge-table" class="table-container" style="display: none;">
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Transaction Type</th>
+            <th>Amount</th>
+            <th>UTR</th>
+            <th>Status</th>
+            <th>Transaction Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for transaction in recharge %}
+          <tr>
+            <td>{{ transaction['transaction_type'] }}</td>
+            <td>{{ transaction['amount'] }}</td>
+            <td>{{ transaction['utr'] }}</td>
+            <td>{{ transaction['status'] }}</td>
+            <td>{{ transaction['transaction_date'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="withdraw-table" class="table-container" style="display: none;">
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Transaction Type</th>
+            <th>Amount</th>
+            <th>UPI</th>
+            <th>Status</th>
+            <th>Transaction Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for transaction in withdraw %}
+          <tr>
+            <td>{{ transaction['transaction_type'] }}</td>
+            <td>{{ transaction['amount'] }}</td>
+            <td>{{ transaction['number'] }}</td>
+            <td>{{ transaction['status'] }}</td>
+            <td>{{ transaction['transaction_date'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function displayGameplayTable() {
+      document.getElementById('gameplay-table').style.display = 'block';
+      document.getElementById('recharge-table').style.display = 'none';
+      document.getElementById('withdraw-table').style.display = 'none';
+    }
+
+    function addcoin() {
+      document.getElementById('gameplay-table').style.display = 'none';
+      document.getElementById('recharge-table').style.display = 'block';
+      document.getElementById('withdraw-table').style.display = 'none';
+    }
+
+    function withdrawcoin() {
+      document.getElementById('gameplay-table').style.display = 'none';
+      document.getElementById('recharge-table').style.display = 'none';
+      document.getElementById('withdraw-table').style.display = 'block';
+    }
+  </script>
+{% endblock %}

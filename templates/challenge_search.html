@@ -52,7 +52,6 @@
     <div id="challenge-id-table-container" >
         
         <div id="challenge-table-container">
-            <!-- Table heading -->
             <table>
                 <thead>
                     <tr>
@@ -65,7 +64,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for challenge in challenges %}
+                    {% for challenge in search %}
                     <tr>
                         <td>{{ challenge['id']}}</td>
                         <td>{{ challenge['game_type'] }}</td>
@@ -80,26 +79,7 @@
                         </td>
                     </tr>
                     {% endfor %}
-                    <div class="pagination  nextpage">
-                        {% if page > 1 %}
-    <a href="{{ url_for('admin_challengeid', page=page-1) }}">Previous</a>
-{% endif %}
-
-{% for p in range(1, total_pages+1) %}
-    {% if page - 5 <= p <= page + 5 %}
-        <a href="{{ url_for('admin_challengeid', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
-    {% elif p == 1 or p == total_pages %}
-        <a href="{{ url_for('admin_challengeid', page=p) }}">{{ p }}</a>
-    {% elif p == page - 6 or p == page + 6 %}
-        <span>...</span>
-    {% endif %}
-{% endfor %}
-
-{% if page < total_pages %}
-    <a href="{{ url_for('admin_challengeid', page=page+1) }}" class="next">Next</a>
-{% endif %}
-
-                        </div>
+                   
                 </tbody>
             </table>
     </div>

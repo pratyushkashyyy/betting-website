@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<title> Result Submission </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -36,24 +37,16 @@
 		{% endwith %}
     <center>
         <div class="outer">
-           
             <h1>Alert...</h1>
             <hr class="line">
             <h3>Screenshot:</h3>
             <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
-                <input type="file" id="screenshot" name="screenshot" accept="image/*" required><br><br>
+                <input type="file" id="screenshot" name="screenshot" accept="image/*"><br><br>
                 <input type="hidden" name="challenge_id" value="{{ challenge_id }}">
                 <button type="submit" class="win glow-green" name="result" value="win"><a>win</a></button>
                 <button type="submit" class="loss glow-red" name="result" value="loss"><a>loss</a></button>
+				<button class="cancel glow-black" name="result" value="cancel">Cancel</button>
             </form>
-			<button class="cancel glow-black" onclick="redirectToHomepage()">Cancel</button>
-
-			<script>
-			  function redirectToHomepage() {
-				window.location.href = "/";
-			  }
-			</script>
-						
         </div>
     </center>
 </body>

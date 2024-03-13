@@ -61,7 +61,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for payment in payments %}
+                {% for payment in search %}
                 <tr>
                     <center>
                     <td>{{ payment['id'] }}</td>
@@ -69,8 +69,8 @@
                     <td>{{payment['utr']}}</td>
                     <td>{{payment['amount']}}</td>
                     <td>{{payment['transaction_date']}}</td>
+                    <form action="/admin/add_coin" method="POST">
                     <td>
-                        <form action="/admin/add_coin" method="POST">
                         <input type="hidden" name="amount" value="{{ payment['amount'] }}">
                         <input type="hidden" name="username" value="{{ payment['username'] }}">
                         <input type="hidden" name="id" value="{{ payment['id'] }}">
@@ -78,38 +78,20 @@
                         <button class="app-btn" name="button" value="approved" type="submit">Approve</button>
                         <button class="deny-btn" name="button" value="denied" type="submit">Deny</button>
                         <button class="deny-btn" name="button" value="duplicate" type="submit">Duplicate</button>
-                        </form>
                         {% elif payment['status'] == "approved" %}
-                        <button class="app-btn" type="button">Approved</button>
+                        <button class="app-btn" name="button" value="approved">Approved</button>
                         {% elif payment['status'] == "denied" %}
-                        <button class="deny-btn" type="button">Denied</button>
+                        <button class="deny-btn" name="button" value="denied">Denied</button>
                         {% elif payment['status'] == "duplicate" %}
-                        <button class="deny-btn" style="background-color: yellow; color: black;" type="button">Duplicate</button>
+                        <button class="deny-btn" style="background-color: yellow; color: black;" name="button" value="duplicate">Duplicate</button>
                         {% endif %}
                     </td>
                 </center>
+                </form>
             </tr>
             {% endfor %}
             
-            <div class="pagination  nextpage">
-                {% if page > 1 %}
-    <a href="{{ url_for('admin_addcoin', page=page-1) }}">Previous</a>
-{% endif %}
-
-{% for p in range(1, total_pages+1) %}
-    {% if page - 5 <= p <= page + 5 %}
-        <a href="{{ url_for('admin_addcoin', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
-    {% elif p == 1 or p == total_pages %}
-        <a href="{{ url_for('admin_addcoin', page=p) }}">{{ p }}</a>
-    {% elif p == page - 6 or p == page + 6 %}
-        <span>...</span>
-    {% endif %}
-{% endfor %}
-
-{% if page < total_pages %}
-    <a href="{{ url_for('admin_addcoin', page=page+1) }}" class="next">Next</a>
-{% endif %}
-
+            
                 </div>
             </tbody>
         </table>

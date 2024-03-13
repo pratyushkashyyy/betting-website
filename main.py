@@ -4,15 +4,33 @@ from functools import wraps
 from twilio.rest import Client
 import random,os,hashlib
 from werkzeug.utils import secure_filename
+from datetime import datetime, timezone, timedelta
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from redis import Redis
+
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+redis_client = Redis(host='localhost', port=6379)
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri='redis://127.0.0.1:6379'
+)
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def get_indian_time():
+    utc_now = datetime.utcnow()
+    ist_offset = timedelta(hours=5, minutes=30)
+    ist_now = utc_now + ist_offset
+    return ist_now
 
 def login_required(f):
     @wraps(f)
@@ -30,6 +48,7 @@ def index():
     return render_template("login.html")
 
 @app.route('/login',methods=["POST","GET"])
+@limiter.limit("5/minute")
 def login():
     if request.method == "POST":
         phone = request.form['phone']
@@ -44,7 +63,7 @@ def login():
                 session['username'] = user['username']
                 session['phone'] = phone
                 session['id'] = user['id']
-                if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+                if session['phone'] in ['8406909448', '7019222294', '7411123457']:
                     session['admin'] = True
                     flash('Logged in successfully as admin!', 'success')
                 db.close()
@@ -64,7 +83,7 @@ def login():
 @login_required
 def dashboard():
     page = request.args.get('page',1,type=int)
-    per_page = 8
+    per_page = 10
     offset = (page-1) * per_page
     db = get_database()
     cursor = db.cursor()
@@ -128,6 +147,7 @@ def generate_otp():
     return ''.join(random.choice('0123456789') for _ in range(6))
 
 @app.route('/get-otp', methods=["POST"])
+@limiter.limit("5/hour")
 def get_otp():
     if request.method == "POST":
         phone = request.form['phone']
@@ -157,11 +177,12 @@ def verify_otp():
     return render_template("otpverification.html")
 
 @app.route("/signup", methods=["POST","GET"])
+@limiter.limit("10/hour")
 def signup():
     if request.method == "POST":
         phone = session.get('phone')
         password = request.form['password']
-        username = request.form['username']
+        username = request.form['username'].capitalize()
         firstname = request.form['firstname'].capitalize()
         lastname = request.form['lastname'].capitalize()
         password_hash = hashlib.md5(password.encode()).hexdigest()
@@ -185,6 +206,7 @@ def signup():
     return render_template('signup.html')
 
 @app.route('/forget-password',methods=["POST","GET"])
+@limiter.limit("10 per hour")
 def forget_password():
     if request.method == "POST":
         phone = request.form['phone']
@@ -295,7 +317,8 @@ def addcoin():
             flash("already submitted !","warning")
             return render_template('coin.html',success_message="Already Submitted !",user=user,settings=settings)
         else:
-            cursor.execute("INSERT INTO add_coin (username,amount,transaction_type,utr,status) VALUES(?,?,?,?,'pending')",(user['username'],coin,payment_method,utr))        
+            transaction_date = get_indian_time().strftime("%Y-%m-%d %H:%M:%S")
+            cursor.execute("INSERT INTO add_coin (username,amount,transaction_type,utr,status,transaction_date) VALUES(?,?,?,?,'pending',?)",(user['username'],coin,payment_method,utr,transaction_date))        
             db.commit()
             db.close()
 
@@ -356,7 +379,8 @@ def withdraw():
         cursor.execute("SELECT balance FROM users WHERE phoneno = ?", (phone,))
         current_balance = cursor.fetchone()['balance']
         if int(coin) <= int(current_balance):
-            cursor.execute("INSERT INTO withdraw_coin (username, amount, transaction_type, number,status) VALUES (?, ?, ?, ?, 'open')",(user['username'],coin,payment_method,payment_id,))
+            transaction_date = get_indian_time().strftime("%Y-%m-%d %H:%M:%S")
+            cursor.execute("INSERT INTO withdraw_coin (username, amount, transaction_type, number,status,transaction_date) VALUES (?, ?, ?, ?, 'open',?)",(user['username'],coin,payment_method,payment_id,transaction_date,))
             new_balance = current_balance - int(coin)
             cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone))
             db.commit()
@@ -374,14 +398,16 @@ def history():
     db = get_database()
     cursor = db.cursor()
     phone = session['phone']
-    username = session['username']
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
+    username = user['username']
     challenges = cursor.execute("SELECT * FROM challenges WHERE first_user = ? OR second_user = ?", (username, username)).fetchall()
+    recharge = cursor.execute("SELECT * FROM add_coin WHERE username = ?",(username,)).fetchall()
+    withdraw = cursor.execute("SELECT * FROM withdraw_coin WHERE username = ?",(username,)).fetchall()
     settings = cursor.execute("SELECT * FROM setting").fetchone()
 
     db.close()
-    return render_template("history.html",user=user,challenges=challenges,settings=settings)
+    return render_template("history.html", user=user, challenges=challenges, settings=settings,recharge=recharge,withdraw=withdraw)
 
 
 @app.route("/leaderboard", methods=["POST", "GET"])
@@ -393,7 +419,7 @@ def leaderboard():
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
     settings = cursor.execute("SELECT * FROM setting").fetchone()
-    challenges = cursor.execute("SELECT * FROM users").fetchall()
+    challenges = cursor.execute("SELECT * FROM users ORDER BY wins DESC LIMIT 10").fetchall()
     
     db.close()
     return render_template("leaderboard.html",user=user,settings=settings,challenges=challenges)
@@ -605,6 +631,7 @@ def submit_result(challenge_id):
             db = get_database()
             cursor = db.cursor()
             existing_result = cursor.execute("SELECT * FROM results WHERE challenge_id = ?", (challenge_id,)).fetchone()
+            
             if not existing_result:
                 cursor.execute("INSERT INTO results (challenge_id,status) VALUES(?,?)",(challenge_id,'undecided',))
                 db.commit()
@@ -637,16 +664,16 @@ def submit_result(challenge_id):
                     return redirect(url_for('dashboard',challenge_id=challenge_id))
 
             else:
-                cursor.execute("UPDATE results SET first_user = ?, screenshot1 = ?, match_status = ? WHERE challenge_id = ?",(session['username'], filename, result, challenge_id))
+                cursor.execute("UPDATE results SET first_user = ?, screenshot1 = ?, match_status = ? WHERE challenge_id = ?",
+                               (session['username'], filename, result, challenge_id))
                 flash('Result submitted successfully!', 'success')
                 db.commit()                    
                 return redirect(url_for('dashboard',challenge_id=challenge_id))
-            
-        
 
         else:
-            flash('Invalid file format or size!', 'error')
+            flash('Please Attach any Screenshot !','info')
             return redirect(url_for('submit_result',challenge_id=challenge_id))
+        
     if request.method == "GET":
         db = get_database()
         cursor = db.cursor()
@@ -654,45 +681,60 @@ def submit_result(challenge_id):
         user = cursor.execute("SELECT * FROM users WHERE username = ?",(user_id,)).fetchone()
         challenge = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()
         return render_template("result.html",user=user,challenge=challenge)
+    
 def auto_win(challenge_id,cursor):
     challenge = cursor.execute("SELECT * FROM challenges WHERE id = ?",(challenge_id,)).fetchone()
     result1_row = cursor.execute("SELECT match_status FROM results WHERE challenge_id = ? AND first_user = ?",(challenge_id,challenge['first_user'])).fetchone()
     result2_row = cursor.execute("SELECT match_status2 FROM results WHERE challenge_id = ? AND second_user = ?", (challenge_id, challenge['second_user'])).fetchone()
-
-    if result1_row and result2_row:
-        result1 = result1_row[0]
-        result2 = result2_row[0]
-        if result1 == "win" and result2 == "loss":
-            cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(challenge['first_user'],challenge_id,))
-            cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("closed",challenge_id,))
-            cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
-            cursor.execute("UPDATE results SET winner = ? WHERE challenge_id = ?",(challenge['first_user'],challenge_id,))
-            bet_amount = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()['coins']
-            winning_amount = bet_amount + int(bet_amount-bet_amount*0.06)
-            cursor.execute("UPDATE challenges SET winnning_amount = ? where id = ?",(winning_amount,challenge_id))
-            cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 where username = ?",(winning_amount,challenge['first_user'],))
-            cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,challenge['first_user'],))
-            cursor.execute("UPDATE users SET active_challenge = 0 where username = ?",(challenge['second_user'],))
-            return challenge['first_user']
-        elif result1 == "loss" and result2 == "win":
-            cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(challenge['second_user'],challenge_id,))
-            cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("closed",challenge_id,))
-            cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
-            cursor.execute("UPDATE results SET winner = ? WHERE challenge_id = ?",(challenge['second_user'],challenge_id,))
-            bet_amount = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()['coins']
-            winning_amount = bet_amount + int(bet_amount-bet_amount*0.06)
-            cursor.execute("UPDATE challenges SET winnning_amount = ? where id = ?",(winning_amount,challenge_id))
-            cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 where username = ?",(winning_amount,challenge['second_user'],))
-            cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,challenge['second_user'],))
-            cursor.execute("UPDATE users SET active_challenge = 0 where username = ?",(challenge['first_user'],))
-            return challenge['second_user']
-    else:
-        return 'Error Happened, Please Contact Admin'
+    try:
+        if result1_row and result2_row:
+            result1 = result1_row[0]
+            result2 = result2_row[0]
+            if result1 == "win" and result2 == "loss":
+                cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(challenge['first_user'],challenge_id,))
+                cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("closed",challenge_id,))
+                cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
+                cursor.execute("UPDATE results SET winner = ? WHERE challenge_id = ?",(challenge['first_user'],challenge_id,))
+                bet_amount = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()['coins']
+                winning_amount = bet_amount + int(bet_amount-bet_amount*0.06)
+                cursor.execute("UPDATE challenges SET winnning_amount = ? where id = ?",(winning_amount,challenge_id))
+                cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 where username = ?",(winning_amount,challenge['first_user'],))
+                cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,challenge['first_user'],))
+                cursor.execute("UPDATE users SET active_challenge = 0 where username = ?",(challenge['second_user'],))
+                return challenge['first_user']
+            elif result1 == "loss" and result2 == "win":
+                cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(challenge['second_user'],challenge_id,))
+                cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("closed",challenge_id,))
+                cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
+                cursor.execute("UPDATE results SET winner = ? WHERE challenge_id = ?",(challenge['second_user'],challenge_id,))
+                bet_amount = cursor.execute("SELECT * FROM challenges where id = ?",(challenge_id,)).fetchone()['coins']
+                winning_amount = bet_amount + int(bet_amount-bet_amount*0.06)
+                cursor.execute("UPDATE challenges SET winnning_amount = ? where id = ?",(winning_amount,challenge_id))
+                cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 where username = ?",(winning_amount,challenge['second_user'],))
+                cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,challenge['second_user'],))
+                cursor.execute("UPDATE users SET active_challenge = 0 where username = ?",(challenge['first_user'],))
+                return challenge['second_user']
+            elif result1 == "cancel" and result2 == "cancel":
+                print("challenge cancelled !")
+                cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",("cancelled",challenge_id,))
+                cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("cancelled",challenge_id,))
+                cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
+                cursor.execute("UPDATE results SET winner = ? WHERE challenge_id = ?",("cancelled",challenge_id,))
+                challenge_coin = cursor.execute("select coins from challenges where id = ?",(challenge_id,)).fetchone()
+                cursor.execute("UPDATE users SET balance = balance + ?, active_challenge = 0 WHERE username = ?", (challenge_coin[0], challenge['first_user'],))
+                cursor.execute("UPDATE users SET balance = balance + ?, active_challenge = 0 WHERE username = ?", (challenge_coin[0], challenge['second_user'],))
+                cursor.execute("DELETE FROM challenges WHERE id = ?", (challenge_id,))
+                flash("Challenge cancelled !","success")
+            else:
+                print("error  happened")
+                return 'Error Happened, Please Contact Admin'
+    except Exception as e:
+        print(e)
 
 @app.route('/admin')
 @login_required
 def admin():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         return render_template('admin.html')
     else:
         return render_template("404.html")
@@ -700,7 +742,7 @@ def admin():
 @app.route('/admin/all_user', methods=["POST","GET"])
 @login_required
 def admin_alluser():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             page = request.args.get('page',1,type=int)
             per_page = 10
@@ -726,14 +768,35 @@ def admin_alluser():
                 flash(f"An Error happened: {str(e)}","error")
             finally:
                 db.close()
-            return render_template('all_user.html',users=users)    
+            return redirect(url_for('admin_alluser'))
     else:
         return render_template("404.html")
     
+@app.route('/admin/search/alluser', methods=['POST', 'GET'])
+@login_required
+def admin_alluser_search():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            search_query = request.form['search']
+            capitalize = search_query.capitalize()
+            search = cursor.execute("SELECT * FROM users WHERE username in (?, ?) OR phoneno = ?", (search_query, capitalize,search_query)).fetchall()
+            db.close()
+            if search:
+                return render_template("alluser_search.html", search=search)
+            else:
+                flash('No User records found for the provided username.', 'warning')
+                return redirect(url_for('admin_alluser'))
+        else:
+            return render_template("alluser_search.html")
+    else:
+        return render_template("404.html")
+
 @app.route('/admin/balance', methods=['POST'])
 @login_required
 def update_balance():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == 'POST':
             db = get_database()
             cursor = db.cursor()
@@ -748,7 +811,7 @@ def update_balance():
 @app.route('/admin/challenge_id',methods=["POST","GET"])
 @login_required
 def admin_challengeid():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             db = get_database()
             cursor = db.cursor()
@@ -780,10 +843,32 @@ def admin_challengeid():
     else:
         return render_template("404.html")
     
+@app.route('/admin/search/challenge', methods=['POST', 'GET'])
+@login_required
+def admin_challenge_search():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            search_query = request.form['search']
+            capitalize = search_query.capitalize()
+            
+            search = cursor.execute("SELECT * FROM challenges WHERE first_user in (?, ?) OR second_user in (?,?) OR id = ? ORDER BY id DESC", (search_query, capitalize,search_query,capitalize,search_query,)).fetchall()
+            db.close()
+            if search:
+                return render_template("challenge_search.html", search=search)
+            else:
+                flash('No Challenge records found for the provided username.', 'warning')
+                return redirect(url_for('admin_challengeid'))
+        else:
+            return render_template("challenge_search.html")
+    else:
+        return render_template("404.html")
+    
 @app.route('/admin/admin_result')
 @login_required
 def admin_result():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         db = get_database()
         cursor = db.cursor()
         page = request.args.get('page',1,type=int)
@@ -796,10 +881,31 @@ def admin_result():
     else:
         return render_template("404.html")
     
+@app.route('/admin/search/result', methods=['POST', 'GET'])
+@login_required
+def admin_result_search():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            search_query = request.form['search']
+            capitalize = search_query.capitalize()
+            search = cursor.execute("SELECT * FROM results WHERE first_user in (?, ?) OR second_user in (?,?) OR id = ? ORDER BY id DESC", (search_query, capitalize,search_query,capitalize,search_query,)).fetchall()
+            db.close()
+            if search:
+                return render_template("result_search.html", search=search)
+            else:
+                flash('No Results records found for the provided username.', 'warning')
+                return redirect(url_for('admin_result'))
+        else:
+            return render_template("result_search.html")
+    else:
+        return render_template("404.html")
+    
 @app.route('/admin/decide_winner',methods=["POST"])
 @login_required
 def admin_decide_winner():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         challenge_id = request.form['challenge_id']
         winner = request.form['user']
         db = get_database()
@@ -832,7 +938,7 @@ def admin_decide_winner():
 @app.route('/admin/add_coin',methods=["POST","GET"])
 @login_required
 def admin_addcoin():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             db = get_database()
             cursor = db.cursor()
@@ -864,10 +970,31 @@ def admin_addcoin():
     else:
         return render_template("404.html")
     
+@app.route('/admin/search/addcoin',methods=['POST','GET'])
+@login_required
+def admin_addcoin_search():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            search_query = request.form['search']
+            capitlize = search_query.capitalize()
+            search = cursor.execute("SELECT * FROM add_coin WHERE username in (?,?) ORDER BY id DESC",(search_query,capitlize)).fetchall()
+            db.close()
+            if search:
+                return render_template("addcoin_search.html",search=search)
+            else:
+                flash('No add Coin records found for the provided username.', 'warning')
+                return redirect(url_for('admin_addcoin'))
+        else:
+            return render_template('add_coin.html')
+    else:
+        return render_template("404.html")
+    
 @app.route('/admin/withdraw_coin', methods=["POST","GET"])
 @login_required
 def admin_withdrawcoin():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             db = get_database()
             cursor = db.cursor()
@@ -883,13 +1010,17 @@ def admin_withdrawcoin():
             db = get_database()
             cursor = db.cursor()
             id = request.form['id']
-            button = request.form['button'] 
+            button = request.form['button']
             if button == "approved":
                 cursor.execute("UPDATE withdraw_coin SET status = ? WHERE id = ?",(button,id,))
                 db.commit()
                 db.close()
                 flash(f"Withdrawal Approved !","success")
             elif button == "denied":
+                amount = request.form['amount']
+                username = request.form['username']
+                current_balance = cursor.execute("SELECT balance FROM users WHERE username = ?",(username,)).fetchone()[0]
+                cursor.execute("UPDATE users SET balance = ? + ? WHERE username = ?",(current_balance,amount,username)) 
                 cursor.execute("UPDATE withdraw_coin SET status = ? WHERE id = ?",(button,id))
                 db.commit()
                 db.close()
@@ -897,19 +1028,35 @@ def admin_withdrawcoin():
             return redirect(url_for('admin_withdrawcoin'))
     else:
         return render_template("404.html")
-
-@app.route('/admin/message')
+    
+    
+@app.route('/admin/search/withdraw', methods=['POST', 'GET'])
 @login_required
-def admin_message():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
-        return render_template('message.html')
+def admin_withdraw_search():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        if request.method == "POST":
+            db = get_database()
+            cursor = db.cursor()
+            search_query = request.form['search']
+            capitalize = search_query.capitalize()
+            search = cursor.execute("SELECT * FROM withdraw_coin WHERE username in (?, ?) ORDER BY id DESC", (search_query, capitalize,)).fetchall()
+            db.close()
+            if search:
+                return render_template("withdraw_search.html", search=search)
+            else:
+                flash('No withdrawal records found for the provided username.', 'warning')
+                return redirect(url_for('admin_withdrawcoin'))
+        else:
+
+            return render_template("withdraw_search.html")
     else:
         return render_template("404.html")
+
 
 @app.route('/admin/setting',methods=["POST","GET"])
 @login_required
 def setting():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             db = get_database()
             cursor = db.cursor()
@@ -930,7 +1077,7 @@ def setting():
 @app.route('/admin/setting/qr',methods=["POST","GET"])
 @login_required
 def setting_qr():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             db = get_database()
             cursor = db.cursor()
@@ -957,7 +1104,7 @@ def setting_qr():
 @app.route('/admin/setting/button', methods=['POST','GET'])
 @login_required
 def chat_button():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             db = get_database()
             cursor = db.cursor()
@@ -979,7 +1126,7 @@ def chat_button():
 @app.route('/admin/setting/header',methods=['GET','POST'])
 @login_required
 def header_scroll():
-    if session['phone'] == '8406909448' or session['phone'] == '7019222294' or session['phone'] == '7411123457':
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             db = get_database()
             cursor = db.cursor()
