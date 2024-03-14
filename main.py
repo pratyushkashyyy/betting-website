@@ -258,17 +258,45 @@ def confirm_password():
         flash('password do not match','warning')
     return render_template("newpass.html")
 
-@app.route("/profile")
+@app.route("/profile", methods=["POST", "GET"])
 @login_required
 def profile():
-    db = get_database()
-    cursor = db.cursor()
-    phone = session['phone']
-    cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
-    user = cursor.fetchone()
-    settings = cursor.execute("SELECT * FROM setting").fetchone()
-    db.close()
-    return render_template("profile.html",user=user,settings=settings)
+    if request.method == "GET":
+        db = get_database()
+        cursor = db.cursor()
+        phone = session['phone']
+        cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
+        user = cursor.fetchone()
+        settings = cursor.execute("SELECT * FROM setting").fetchone()
+        db.close()
+        return render_template("profile.html", user=user, settings=settings)
+    
+    if request.method == "POST":
+        db = get_database()
+        cursor = db.cursor()
+        name = request.form['name']
+        
+        if name:
+            name_parts = name.split()
+            if len(name_parts) == 2:
+                firstname, lastname = name_parts
+                cursor.execute("UPDATE users SET firstname = ?, lastname = ? WHERE phoneno = ?", (firstname, lastname, session['phone']))
+                db.commit()
+                flash("Your Display Name Updated!", "success")
+            elif len(name_parts) == 1:
+                firstname = name_parts[0]
+                cursor.execute("UPDATE users SET firstname = ? WHERE phoneno = ?", (firstname, session['phone']))
+                db.commit()
+                flash("Your Display Name Updated!", "success")
+            else:
+                flash("Please enter your name properly!", "warning")
+        else:
+            flash("Please enter your name!", "warning")
+        
+        db.close()
+        return redirect(url_for('profile'))
+
+    
 
 @app.route("/dare")
 @login_required
@@ -647,20 +675,26 @@ def submit_result(challenge_id):
                     cursor.execute("UPDATE results SET first_user = ?, screenshot1 = ?, match_status = ? WHERE challenge_id = ?",
                                    (session['username'], filename, result, challenge_id))
                     flash('Result submitted successfully!', 'success')
-                    winner = auto_win(challenge_id, cursor)
-                    if winner:
-                        flash(f"{winner} wins the challenge !","success")
-                    db.commit()
+                    user1 = cursor.execute("SELECT first_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+                    user2 = cursor.execute("SELECT second_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+                    if user1 and user2:
+                        winner = auto_win(challenge_id, cursor)
+                        if winner:
+                            flash(f"{winner} wins the challenge !","success")
+                        db.commit()
                     return redirect(url_for('dashboard',challenge_id=challenge_id))
 
             elif first_user:
                     cursor.execute("UPDATE results SET second_user = ?, screenshot2 = ?, match_status2 = ? WHERE challenge_id = ?",
                                    (session['username'], filename, result, challenge_id))
                     flash('Result submitted successfully!', 'success')
-                    winner = auto_win(challenge_id, cursor)
-                    if winner:
-                        flash(f"{winner} wins the challenge !","success")
-                    db.commit()
+                    user1 = cursor.execute("SELECT first_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+                    user2 = cursor.execute("SELECT second_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+                    if user1 and user2:
+                        winner = auto_win(challenge_id, cursor)
+                        if winner:
+                            flash(f"{winner} wins the challenge !","success")
+                        db.commit()
                     return redirect(url_for('dashboard',challenge_id=challenge_id))
 
             else:
