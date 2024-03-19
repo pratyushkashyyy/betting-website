@@ -47,9 +47,9 @@
     <div class="admin-navigation">
         <button class="nav-item" onclick="loadAllUsers()">All Users</button>
         <button class="nav-item" onclick="loadChallengeID()">Challenge ID</button>
-        <button class="nav-item" onclick="loadResult()">Result</button>
-        <button class="nav-item" onclick="loadAddCoin()">Add Coin</button>
-        <button class="nav-item" onclick="loadWithdrawCoin()">Withdraw Coin</button>
+        <button class="nav-item" onclick="loadResult()">Result {% if result_status %}  <span id="resultNotification" class="notification-dot"></span>  {% endif %}</button>
+        <button class="nav-item" onclick="loadAddCoin()">Add Coin {% if add_status %}  <span id="addCoinNotification" class="notification-dot"></span>  {% endif %} </button>
+        <button class="nav-item" onclick="loadWithdrawCoin()">Withdraw Coin {% if withdraw_status %}  <span id="withdrawCoinNotification" class="notification-dot"></span>  {% endif %} </button>
         <a href="https://dashboard.tawk.to/#/dashboard" target="_blank"> <button class="nav-item">Message</button></a>
         <button class="nav-item" onclick="loadSetting()">setting</button>
     </div>
@@ -83,6 +83,30 @@
     }
    
  
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    var addStatus = {{ add_status | tojson | lower }}; 
+    var resultStatus = {{ result_status | tojson | lower }};
+    var withdrawStatus = {{ withdraw_status | tojson | lower }};
+    
+    if (addStatus) {
+        blinkNotification("addCoinNotification");
+    }
+    if (resultStatus) {
+        blinkNotification("resultNotification");
+    }
+    if (withdrawStatus) {
+        blinkNotification("withdrawCoinNotification");
+    }
+});
+
+function blinkNotification(notificationId) {
+    var notification = document.getElementById(notificationId);
+    setInterval(function() {
+        notification.style.display = (notification.style.display === "none" ? "inline-block" : "none");
+    }, 500); // Adjust blinking speed (in milliseconds)
+}
 </script>
 
 </body>

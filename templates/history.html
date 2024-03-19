@@ -32,6 +32,7 @@
             <th>Room Id</th>
             <th>Winner</th>
             <th>Winning Amount</th>
+            <th>Time and Date</th>
           </tr>
         </thead>
         <tbody>
@@ -43,7 +44,8 @@
             <td>{{ match['second_user'] }}</td>
             <td>{{ match['room_code'] }}</td>
             <td>{{ match['winner'] }}</td>
-            <td>{{ match['winning_amount'] }}</td>
+            <td>{{ match['winnning_amount'] }}</td>
+            <td> {{ match['timestamp'] }} </td>
           </tr>
           {% endfor %}
         </tbody>

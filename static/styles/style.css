@@ -1,4 +1,3 @@
-/* Resetting default margin and padding for all elements */
 * {
     margin: 0;
     padding: 0;
@@ -186,8 +185,6 @@ body {
 	
 }
 
-
-
 .small {
   width: 120px;
   border-radius: 10px;
@@ -195,7 +192,9 @@ body {
 .diagonal {
     position: relative;
     line-height: 50px;
-    background: #1540c1;
+    background-color: #0d6efd;
+   
+    
     color: white;
     border: none;
     font-weight: bold;
@@ -248,15 +247,27 @@ a{
     color: aliceblue;
     cursor: pointer;
 }
-
-
-
+.diagonal:active{
+  
+    background: rgb(56, 112, 215);
+    color: black;
+}
 
 .rights {
-    margin-left: auto; /* Push the "All rights reserved" text to the right */
+    margin-left: auto;
 }
+
 .navbar-menu li button{
     padding: 10px;
+}
+.icon-button .fas.fa-copy{
+    background-color: rgba(5, 10, 14, 0.362);
+    border: none;
+    border-radius: 1px;
+    cursor: pointer;
+}
+.copy-button i {
+    color: rgb(10, 10, 10); 
 }
 
 @media screen and (max-width: 600px){

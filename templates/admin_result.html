@@ -69,14 +69,14 @@
                 {% for result in results %}
 
                 <tr>
-                    <td>{{ result['challenge_id'] }}</td>
-                    <td>{{ result['first_user'] }}</td>
-                    <td>{{ result['second_user'] }}</td>
-                    <td><a href = "https://gamemates.in/upload/{{ result['screenshot1'] }}" target="_blank">User 1</a></td>
-                    <td><a href = "https://gamemates.in/upload/{{ result['screenshot2'] }}" target="_blank">User 2</a></td>
-                    <td>{{ result['match_status'] }}</td>
-                    <td>{{ result['match_status2'] }}</td>
-                    <td>{% if result['status'] == "undecided" %}
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['challenge_id'] }}</td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['first_user'] }}</td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['second_user'] }}</td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}><a href = "https://gamemates.in/upload/{{ result['screenshot1'] }}" target="_blank">User 1</a></td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}><a href = "https://gamemates.in/upload/{{ result['screenshot2'] }}" target="_blank">User 2</a></td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['match_status'] }}</td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['match_status2'] }}</td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{% if result['status'] == "undecided" %}
                     <form action="/admin/decide_winner" method="POST">
                         <input type="hidden" name="challenge_id" value="{{ result['challenge_id'] }}">
                         <label for="users"></label>

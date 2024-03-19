@@ -9,6 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>   
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-JB6LKwhcOag20uoE0WNqRg+dROOXG5j7z/Ei+3h3Z6Lq7o8xg1LI4G+/IZwkVGYH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-JB6LKwhcOag20uoE0WNqRg+dROOXG5j7z/Ei+3h3Z6Lq7o8xg1LI4G+/IZwkVGYH" crossorigin="anonymous">
+
     {% block css %}  {% endblock %}
 </head>
 <body style="text-align: center;">
@@ -50,7 +53,7 @@
     </div>
 
     <div class="second-div">
-        <p class="phone-pay-text">UPI ID: {{settings['upi_id']}}</p>
+        <p style="font-size: 15px; font-weight: bold;">UPI ID: <button onclick="copyUPI()" class="icon-button copy-button"><i class="fas fa-copy"></i></button></p><p id="upi_id"> {{ settings['upi_id'] }} </p>
     </div>
 
     <div class="third-div" >
@@ -64,6 +67,35 @@
             navbarMenu.classList.toggle("active");
         }
     </script>
+        <script>
+            function copyUPI() {
+                var roomCode = document.getElementById("upi_id").innerText;
+                var tempTextArea = document.createElement("textarea");
+                tempTextArea.value = roomCode;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempTextArea);
+                
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+            });
+            Toast.fire({
+            icon: "success",
+            title: "UPI ID Copied !"
+            });
+    
+    
+            }
+        </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const preloader = document.getElementById('preloader');

@@ -54,6 +54,7 @@
         <table>
             <thead>
                 <tr>
+		    <th>ID</th>
                     <th>Name</th>
                     <th>Phone no.</th>
                     <th>User name</th>
@@ -66,6 +67,7 @@
                 {% for user in users %}
 <tr>
     <form action="/admin/balance" method="POST">
+    <td>{{ user['id'] }}</td>
     <td>{{ user['firstname'] + ' ' + user['lastname'] }}</td>
     <td>{{ user['phoneno'] }}</td>
     <td>{{ user['username'] }}</td>

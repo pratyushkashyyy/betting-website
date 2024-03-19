@@ -56,7 +56,8 @@
                     <th>User Name</th>
                     <th>payment method</th>
                     <th>Coin Amount</th>
-                    <th>UPI ID</th>
+                    <th>User Balance</th>
+	 	    <th>UPI ID</th>
                     <th>Date and time</th>
                     <th>Action</th>
                 </tr>
@@ -64,13 +65,14 @@
             <tbody>
                 {% for withdraw in withdraws %}
                 <tr>
-                    <td>{{withdraw['id']}}</td>
-                    <td>{{withdraw['username']}}</td>
-                    <td>{{withdraw['transaction_type']}}</td>
-                    <td>{{withdraw['amount']}}</td>
-                    <td>{{withdraw['number']}}</td>
-                    <td>{{withdraw['transaction_date']}}</td>
-                    <td>
+                    <td {% if withdraw['status'] == 'open' %} class="status" {% endif %}>{{withdraw['id']}}</td>
+                    <td {% if withdraw['status'] == 'open' %} class="status" {% endif %}>{{withdraw['username']}}</td>
+                    <td {% if withdraw['status'] == 'open' %} class="status" {% endif %}>{{withdraw['transaction_type']}}</td>
+                    <td {% if withdraw['status'] == 'open' %} class="status" {% endif %}>{{withdraw['amount']}}</td>
+                    <td {% if withdraw['status'] == 'open' %} class="status" {% endif %}>{{withdraw['balance']}}</td>
+		            <td {% if withdraw['status'] == 'open' %} class="status" {% endif %}>{{withdraw['number']}}</td>
+                    <td {% if withdraw['status'] == 'open' %} class="status" {% endif %}>{{withdraw['transaction_date']}}</td>
+                    <td {% if withdraw['status'] == 'open' %} class="status" {% endif %}>
                         {% if withdraw['status'] == 'open' %}
                         <form action="/admin/withdraw_coin" method="POST">
                             <input type="hidden" name="id" value="{{ withdraw['id'] }}">

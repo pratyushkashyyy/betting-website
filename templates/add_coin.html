@@ -64,12 +64,12 @@
                 {% for payment in payments %}
                 <tr>
                     <center>
-                    <td>{{ payment['id'] }}</td>
-                    <td>{{payment['username']}}</td>
-                    <td>{{payment['utr']}}</td>
-                    <td>{{payment['amount']}}</td>
-                    <td>{{payment['transaction_date']}}</td>
-                    <td>
+                    <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{ payment['id'] }}</td>
+                    <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['username']}}</td>
+                    <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['utr']}}</td>
+                    <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['amount']}}</td>
+                    <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['transaction_date']}}</td>
+                    <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>
                         <form action="/admin/add_coin" method="POST">
                         <input type="hidden" name="amount" value="{{ payment['amount'] }}">
                         <input type="hidden" name="username" value="{{ payment['username'] }}">

@@ -1,0 +1,1249 @@
+[2024-03-14 09:41:59 +0000] [875198] [INFO] Starting gunicorn 21.2.0
+[2024-03-14 09:41:59 +0000] [875198] [INFO] Listening at: http://127.0.0.1:8000 (875198)
+[2024-03-14 09:41:59 +0000] [875198] [INFO] Using worker: sync
+[2024-03-14 09:41:59 +0000] [875199] [INFO] Booting worker with pid: 875199
+[2024-03-14 14:46:59,769] ERROR in app: Exception on /get-otp [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask_limiter/extension.py", line 1299, in __inner
+    return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 160, in get_otp
+    message = client.messages.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/rest/api/v2010/account/message/__init__.py", line 564, in create
+    payload = self._version.create(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 465, in create
+    return self._parse_create(method, uri, response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 436, in _parse_create
+    raise self.exception(method, uri, response, "Unable to create record")
+twilio.base.exceptions.TwilioRestException: HTTP 400 error: Unable to create record: Invalid 'To' Phone Number: +91XXXX
+[2024-03-14 14:47:06,085] ERROR in app: Exception on /get-otp [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask_limiter/extension.py", line 1299, in __inner
+    return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 160, in get_otp
+    message = client.messages.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/rest/api/v2010/account/message/__init__.py", line 564, in create
+    payload = self._version.create(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 465, in create
+    return self._parse_create(method, uri, response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 436, in _parse_create
+    raise self.exception(method, uri, response, "Unable to create record")
+twilio.base.exceptions.TwilioRestException: HTTP 400 error: Unable to create record: Invalid 'To' Phone Number: +91XXXX
+[2024-03-14 14:47:07,400] ERROR in app: Exception on /get-otp [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask_limiter/extension.py", line 1299, in __inner
+    return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 160, in get_otp
+    message = client.messages.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/rest/api/v2010/account/message/__init__.py", line 564, in create
+    payload = self._version.create(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 465, in create
+    return self._parse_create(method, uri, response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 436, in _parse_create
+    raise self.exception(method, uri, response, "Unable to create record")
+twilio.base.exceptions.TwilioRestException: HTTP 400 error: Unable to create record: Invalid 'To' Phone Number: +91XXXX
+[2024-03-14 14:47:08,717] ERROR in app: Exception on /get-otp [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask_limiter/extension.py", line 1299, in __inner
+    return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 160, in get_otp
+    message = client.messages.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/rest/api/v2010/account/message/__init__.py", line 564, in create
+    payload = self._version.create(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 465, in create
+    return self._parse_create(method, uri, response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 436, in _parse_create
+    raise self.exception(method, uri, response, "Unable to create record")
+twilio.base.exceptions.TwilioRestException: HTTP 400 error: Unable to create record: Invalid 'To' Phone Number: +91XXXX
+[2024-03-14 14:47:10,056] ERROR in app: Exception on /get-otp [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask_limiter/extension.py", line 1299, in __inner
+    return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 160, in get_otp
+    message = client.messages.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/rest/api/v2010/account/message/__init__.py", line 564, in create
+    payload = self._version.create(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 465, in create
+    return self._parse_create(method, uri, response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 436, in _parse_create
+    raise self.exception(method, uri, response, "Unable to create record")
+twilio.base.exceptions.TwilioRestException: HTTP 400 error: Unable to create record: Invalid 'To' Phone Number: +91tphq,().'"XXXX
+[2024-03-14 16:10:28,713] ERROR in app: Exception on /accept_challenge/216 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 495, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-14 16:10:32,310] ERROR in app: Exception on /accept_challenge/216 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 495, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-14 16:10:35,132] ERROR in app: Exception on /accept_challenge/216 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 495, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-14 16:10:37,668] ERROR in app: Exception on /accept_challenge/216 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 495, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-14 16:10:41,832] ERROR in app: Exception on /accept_challenge/216 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 495, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-14 16:10:47,369] ERROR in app: Exception on /accept_challenge/216 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 495, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-14 17:31:25,720] ERROR in app: Exception on /create-challenge [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 471, in create_challenge
+    creator_id = user['username']
+                 ~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable
+[2024-03-14 17:32:02,333] ERROR in app: Exception on /admin/withdraw_coin [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 1064, in admin_withdrawcoin
+    current_balance = cursor.execute("SELECT balance FROM users WHERE username = ?",(username,)).fetchone()[0]
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+TypeError: 'NoneType' object is not subscriptable
+[2024-03-14 17:34:09,087] ERROR in app: Exception on /submit_result/241 [GET]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 725, in submit_result
+    return render_template("result.html",user=user,challenge=challenge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/pk/betting_website/templates/result.html", line 43, in top-level template code
+    <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1063, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 917, in build
+    rv = self._partial_build(endpoint, values, method, append_unknown)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 796, in _partial_build
+    rv = self._partial_build(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 809, in _partial_build
+    build_rv = rule.build(values, append_unknown)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/rules.py", line 831, in build
+    return self._build_unknown(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<werkzeug routing>", line 1, in <builder:'/submit_result/<int:challenge_id>'>
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/converters.py", line 163, in to_url
+    value = str(self.num_convert(value))
+                ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'id'
+[2024-03-14 17:36:01 +0000] [875198] [INFO] Handling signal: hup
+[2024-03-14 17:36:01 +0000] [875198] [INFO] Hang up: Master
+[2024-03-14 17:36:01 +0000] [875198] [ERROR] Worker (pid:875199) was sent SIGHUP!
+[2024-03-14 17:36:01 +0000] [898247] [INFO] Booting worker with pid: 898247
+[2024-03-14 17:36:01 +0000] [875198] [INFO] Handling signal: term
+[2024-03-14 17:36:02 +0000] [898247] [INFO] Worker exiting (pid: 898247)
+[2024-03-14 17:36:02 +0000] [875198] [INFO] Shutting down: Master
+[2024-03-14 18:38:44 +0000] [3738] [INFO] Starting gunicorn 21.2.0
+[2024-03-14 18:38:44 +0000] [3738] [INFO] Listening at: http://127.0.0.1:8000 (3738)
+[2024-03-14 18:38:44 +0000] [3738] [INFO] Using worker: sync
+[2024-03-14 18:38:44 +0000] [3739] [INFO] Booting worker with pid: 3739
+[2024-03-14 18:42:25 +0000] [3738] [INFO] Handling signal: term
+[2024-03-14 18:42:25 +0000] [3739] [INFO] Worker exiting (pid: 3739)
+793080
+session otp 793080
+[2024-03-14 18:42:25 +0000] [3738] [INFO] Shutting down: Master
+[2024-03-14 18:43:47 +0000] [3985] [INFO] Starting gunicorn 21.2.0
+[2024-03-14 18:43:47 +0000] [3985] [INFO] Listening at: http://127.0.0.1:8000 (3985)
+[2024-03-14 18:43:47 +0000] [3985] [INFO] Using worker: sync
+[2024-03-14 18:43:47 +0000] [3986] [INFO] Booting worker with pid: 3986
+[2024-03-14 18:43:54 +0000] [3985] [INFO] Handling signal: hup
+[2024-03-14 18:43:54 +0000] [3985] [INFO] Hang up: Master
+[2024-03-14 18:43:54 +0000] [3985] [ERROR] Worker (pid:3986) was sent SIGHUP!
+[2024-03-14 18:43:54 +0000] [3991] [INFO] Booting worker with pid: 3991
+[2024-03-15 19:00:48 +0000] [3985] [INFO] Handling signal: term
+[2024-03-15 19:00:48 +0000] [3991] [INFO] Worker exiting (pid: 3991)
+251121
+session otp 251121
+389864
+877164
+session otp 877164
+945113
+session otp 945113
+[2024-03-15 19:00:48 +0000] [3985] [INFO] Shutting down: Master
+[2024-03-15 19:03:51 +0000] [74256] [INFO] Starting gunicorn 21.2.0
+[2024-03-15 19:03:51 +0000] [74256] [INFO] Listening at: http://127.0.0.1:8000 (74256)
+[2024-03-15 19:03:51 +0000] [74256] [INFO] Using worker: sync
+[2024-03-15 19:03:51 +0000] [74257] [INFO] Booting worker with pid: 74257
+[2024-03-15 19:04:31 +0000] [74256] [ERROR] Worker (pid:74257) was sent SIGHUP!
+[2024-03-15 19:04:31 +0000] [74288] [INFO] Booting worker with pid: 74288
+[2024-03-15 19:04:31 +0000] [74256] [INFO] Handling signal: hup
+[2024-03-15 19:04:31 +0000] [74256] [INFO] Hang up: Master
+[2024-03-15 19:04:31 +0000] [74289] [INFO] Booting worker with pid: 74289
+[2024-03-15 19:04:32 +0000] [74288] [INFO] Worker exiting (pid: 74288)
+[2024-03-18 16:34:29 +0000] [74256] [INFO] Handling signal: term
+[2024-03-18 16:34:29 +0000] [74256] [ERROR] Worker (pid:74289) was sent SIGHUP!
+[2024-03-18 16:34:29 +0000] [74256] [INFO] Shutting down: Master
+[2024-03-18 17:35:37 +0000] [3776] [INFO] Starting gunicorn 21.2.0
+[2024-03-18 17:35:37 +0000] [3776] [INFO] Listening at: http://127.0.0.1:8000 (3776)
+[2024-03-18 17:35:37 +0000] [3776] [INFO] Using worker: sync
+[2024-03-18 17:35:37 +0000] [3777] [INFO] Booting worker with pid: 3777
+[2024-03-18 17:36:21 +0000] [3776] [INFO] Handling signal: hup
+[2024-03-18 17:36:21 +0000] [3776] [INFO] Hang up: Master
+[2024-03-18 17:36:21 +0000] [3776] [ERROR] Worker (pid:3777) was sent SIGHUP!
+[2024-03-18 17:36:21 +0000] [3814] [INFO] Booting worker with pid: 3814
+[2024-03-18 20:38:01,661] ERROR in app: Exception on /get-otp [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask_limiter/extension.py", line 1299, in __inner
+    return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 160, in get_otp
+    message = client.messages.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/rest/api/v2010/account/message/__init__.py", line 564, in create
+    payload = self._version.create(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 465, in create
+    return self._parse_create(method, uri, response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 436, in _parse_create
+    raise self.exception(method, uri, response, "Unable to create record")
+twilio.base.exceptions.TwilioRestException: HTTP 400 error: Unable to create record: Invalid 'To' Phone Number: +91123412XXXX
+[2024-03-19 03:39:30,437] ERROR in app: Exception on /create-challenge [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 480, in create_challenge
+    elif int(coins_involved) <= int(current_balance):
+         ^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: ''
+[2024-03-19 05:01:19,397] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:01:26,096] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:01:28,437] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:01:55,096] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:01:57,376] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:02:15,957] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:02:26,438] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:02:40,377] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:19:44,149] ERROR in app: Exception on /accept_challenge/244 [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 498, in accept_challenge
+    second_user = session['username']
+                  ~~~~~~~^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/sessions.py", line 84, in __getitem__
+    return super().__getitem__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'username'
+[2024-03-19 05:49:52,158] ERROR in app: Exception on /submit_result/247 [GET]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 728, in submit_result
+    return render_template("result.html",user=user,challenge=challenge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/pk/betting_website/templates/result.html", line 43, in top-level template code
+    <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1063, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 917, in build
+    rv = self._partial_build(endpoint, values, method, append_unknown)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 796, in _partial_build
+    rv = self._partial_build(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 809, in _partial_build
+    build_rv = rule.build(values, append_unknown)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/rules.py", line 831, in build
+    return self._build_unknown(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<werkzeug routing>", line 1, in <builder:'/submit_result/<int:challenge_id>'>
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/converters.py", line 163, in to_url
+    value = str(self.num_convert(value))
+                ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'id'
+[2024-03-19 06:10:42,681] ERROR in app: Exception on /create-challenge [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 480, in create_challenge
+    elif int(coins_involved) <= int(current_balance):
+         ^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: ''
+[2024-03-19 07:20:27,115] ERROR in app: Exception on /submit_result/249 [GET]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 728, in submit_result
+    return render_template("result.html",user=user,challenge=challenge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/pk/betting_website/templates/result.html", line 43, in top-level template code
+    <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1063, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 917, in build
+    rv = self._partial_build(endpoint, values, method, append_unknown)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 796, in _partial_build
+    rv = self._partial_build(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 809, in _partial_build
+    build_rv = rule.build(values, append_unknown)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/rules.py", line 831, in build
+    return self._build_unknown(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<werkzeug routing>", line 1, in <builder:'/submit_result/<int:challenge_id>'>
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/converters.py", line 163, in to_url
+    value = str(self.num_convert(value))
+                ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'id'
+[2024-03-19 07:28:14,257] ERROR in app: Exception on /submit_result/250 [GET]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 728, in submit_result
+    return render_template("result.html",user=user,challenge=challenge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/pk/betting_website/templates/result.html", line 43, in top-level template code
+    <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1063, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 917, in build
+    rv = self._partial_build(endpoint, values, method, append_unknown)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 796, in _partial_build
+    rv = self._partial_build(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 809, in _partial_build
+    build_rv = rule.build(values, append_unknown)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/rules.py", line 831, in build
+    return self._build_unknown(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<werkzeug routing>", line 1, in <builder:'/submit_result/<int:challenge_id>'>
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/converters.py", line 163, in to_url
+    value = str(self.num_convert(value))
+                ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'id'
+[2024-03-19 07:28:15,937] ERROR in app: Exception on /submit_result/250 [GET]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 728, in submit_result
+    return render_template("result.html",user=user,challenge=challenge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/pk/betting_website/templates/result.html", line 43, in top-level template code
+    <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1063, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 917, in build
+    rv = self._partial_build(endpoint, values, method, append_unknown)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 796, in _partial_build
+    rv = self._partial_build(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 809, in _partial_build
+    build_rv = rule.build(values, append_unknown)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/rules.py", line 831, in build
+    return self._build_unknown(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<werkzeug routing>", line 1, in <builder:'/submit_result/<int:challenge_id>'>
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/converters.py", line 163, in to_url
+    value = str(self.num_convert(value))
+                ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'id'
+[2024-03-19 07:28:28,152] ERROR in app: Exception on /submit_result/250 [GET]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 728, in submit_result
+    return render_template("result.html",user=user,challenge=challenge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/pk/betting_website/templates/result.html", line 43, in top-level template code
+    <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1063, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 917, in build
+    rv = self._partial_build(endpoint, values, method, append_unknown)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 796, in _partial_build
+    rv = self._partial_build(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 809, in _partial_build
+    build_rv = rule.build(values, append_unknown)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/rules.py", line 831, in build
+    return self._build_unknown(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<werkzeug routing>", line 1, in <builder:'/submit_result/<int:challenge_id>'>
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/converters.py", line 163, in to_url
+    value = str(self.num_convert(value))
+                ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'id'
+[2024-03-19 07:28:42,870] ERROR in app: Exception on /submit_result/250 [GET]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 728, in submit_result
+    return render_template("result.html",user=user,challenge=challenge)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "/home/pk/betting_app/lib/python3.11/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/pk/betting_website/templates/result.html", line 43, in top-level template code
+    <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1063, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 917, in build
+    rv = self._partial_build(endpoint, values, method, append_unknown)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 796, in _partial_build
+    rv = self._partial_build(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/map.py", line 809, in _partial_build
+    build_rv = rule.build(values, append_unknown)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/rules.py", line 831, in build
+    return self._build_unknown(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<werkzeug routing>", line 1, in <builder:'/submit_result/<int:challenge_id>'>
+  File "/home/pk/betting_app/lib/python3.11/site-packages/werkzeug/routing/converters.py", line 163, in to_url
+    value = str(self.num_convert(value))
+                ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'None' has no attribute 'id'
+[2024-03-19 08:48:26,237] ERROR in app: Exception on /admin/decide_winner [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 958, in admin_decide_winner
+    cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(winner,challenge_id,))
+sqlite3.OperationalError: database is locked
+[2024-03-19 08:48:31,593] ERROR in app: Exception on /admin/decide_winner [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 958, in admin_decide_winner
+    cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(winner,challenge_id,))
+sqlite3.OperationalError: database is locked
+[2024-03-19 08:48:36,608] ERROR in app: Exception on /admin/decide_winner [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 958, in admin_decide_winner
+    cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(winner,challenge_id,))
+sqlite3.OperationalError: database is locked
+[2024-03-19 08:48:41,622] ERROR in app: Exception on /admin/decide_winner [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 958, in admin_decide_winner
+    cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",(winner,challenge_id,))
+sqlite3.OperationalError: database is locked
+[2024-03-19 10:37:13,449] ERROR in app: Exception on /create-challenge [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 480, in create_challenge
+    elif int(coins_involved) <= int(current_balance):
+         ^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: ''
+[2024-03-19 10:37:24,137] ERROR in app: Exception on /create-challenge [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 480, in create_challenge
+    elif int(coins_involved) <= int(current_balance):
+         ^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: ''
+[2024-03-19 11:33:31,287] ERROR in app: Exception on /get-otp [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask_limiter/extension.py", line 1299, in __inner
+    return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 160, in get_otp
+    message = client.messages.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/rest/api/v2010/account/message/__init__.py", line 564, in create
+    payload = self._version.create(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 465, in create
+    return self._parse_create(method, uri, response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 436, in _parse_create
+    raise self.exception(method, uri, response, "Unable to create record")
+twilio.base.exceptions.TwilioRestException: HTTP 400 error: Unable to create record: 'To' number: +91123456XXXX, is not a valid mobile number
+[2024-03-19 11:34:14,218] ERROR in app: Exception on /get-otp [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask_limiter/extension.py", line 1299, in __inner
+    return cast(R, flask.current_app.ensure_sync(obj)(*a, **k))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 160, in get_otp
+    message = client.messages.create(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/rest/api/v2010/account/message/__init__.py", line 564, in create
+    payload = self._version.create(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 465, in create
+    return self._parse_create(method, uri, response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/twilio/base/version.py", line 436, in _parse_create
+    raise self.exception(method, uri, response, "Unable to create record")
+twilio.base.exceptions.TwilioRestException: HTTP 400 error: Unable to create record: 'To' number: +91123456XXXX, is not a valid mobile number
+[2024-03-19 11:34:38,076] ERROR in app: Exception on /addcoin [POST]
+Traceback (most recent call last):
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_app/lib/python3.11/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 42, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pk/betting_website/main.py", line 353, in addcoin
+    cursor.execute("INSERT INTO add_coin (username,amount,transaction_type,utr,status,transaction_date) VALUES(?,?,?,?,'pending',?)",(user['username'],coin,payment_method,utr,transaction_date))
+                                                                                                                              ~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable

@@ -8,6 +8,7 @@ from datetime import datetime, timezone, timedelta
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from redis import Redis
+import time
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -147,24 +148,30 @@ def generate_otp():
     return ''.join(random.choice('0123456789') for _ in range(6))
 
 @app.route('/get-otp', methods=["POST"])
-@limiter.limit("5/hour")
+@limiter.limit("20/hour")
 def get_otp():
     if request.method == "POST":
-        phone = request.form['phone']
-        session['phone'] = phone
-        otp = generate_otp()
-        print(otp)
-        session['otp'] = otp
-        client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '236ada804a2c1cfe6548633288e58fa0')
-        message = client.messages.create(
-                        body='Your otp for GameMates is '+otp,
-                        from_='+18144580408',
-                        to='+91'+phone
-                     )
-        flash("OTP Sent !","success")
-        return redirect(url_for('verify_otp'))
+        try:
+            phone = request.form['phone']
+            session['s_phone'] = phone
+            otp = generate_otp()
+            print(otp)
+            session['otp'] = otp
+            client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '236ada804a2c1cfe6548633288e58fa0')
+            message = client.messages.create(
+                            body='Your otp for GameMates is '+otp,
+                            from_='+18144580408',
+                            to='+91'+phone
+                        )
+            flash("OTP Sent !","success")
+            return redirect(url_for('verify_otp'))
+        except Exception as e:
+            print(e)
+            flash("Enter a valid Phone Number !","warning")
+            return redirect(url_for('login'))
  
 @app.route('/otpverify',methods=["POST","GET"])
+@limiter.limit("10/hour")
 def verify_otp():
     if request.method == "POST":
         otp = request.form['otp']
@@ -180,9 +187,10 @@ def verify_otp():
 @limiter.limit("10/hour")
 def signup():
     if request.method == "POST":
-        phone = session.get('phone')
+        phone = session.get('s_phone')
         password = request.form['password']
         username = request.form['username'].capitalize()
+        username = username.strip()
         firstname = request.form['firstname'].capitalize()
         lastname = request.form['lastname'].capitalize()
         password_hash = hashlib.md5(password.encode()).hexdigest()
@@ -191,7 +199,7 @@ def signup():
         existing_user = cursor.execute("select phoneno from users where phoneno = ?",(phone,)).fetchone()
         existing_username = cursor.execute("SELECT COUNT(*) FROM users WHERE username = ?", (username,)).fetchone()
         if existing_user:
-            session.pop('phone',None)
+            session.pop('s_phone',None)
             flash('User already exist, Login !')
             return redirect(url_for('login'))
         if existing_username[0] > 0:
@@ -225,6 +233,7 @@ def forget_password():
     return render_template('forgetpassword.html')
 
 @app.route('/verifyotp',methods=["POST","GET"])
+@limiter.limit("10/hour")
 def verifyotp():
     if request.method == "POST":
         otp = request.form['otp']
@@ -429,9 +438,9 @@ def history():
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
     username = user['username']
-    challenges = cursor.execute("SELECT * FROM challenges WHERE first_user = ? OR second_user = ?", (username, username)).fetchall()
-    recharge = cursor.execute("SELECT * FROM add_coin WHERE username = ?",(username,)).fetchall()
-    withdraw = cursor.execute("SELECT * FROM withdraw_coin WHERE username = ?",(username,)).fetchall()
+    challenges = cursor.execute("SELECT * FROM challenges WHERE first_user = ? OR second_user = ? ORDER BY id DESC LIMIT 30", (username, username)).fetchall()
+    recharge = cursor.execute("SELECT * FROM add_coin WHERE username = ? ORDER BY id DESC LIMIT 30",(username,)).fetchall()
+    withdraw = cursor.execute("SELECT * FROM withdraw_coin WHERE username = ? ORDER BY id DESC LIMIT 30",(username,)).fetchall()
     settings = cursor.execute("SELECT * FROM setting").fetchone()
 
     db.close()
@@ -457,6 +466,9 @@ def leaderboard():
 @app.route('/create-challenge', methods=['GET', 'POST'])
 @login_required
 def create_challenge():
+    timestamp = datetime.now()
+    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S')
+    print(timestamp)
     if request.method == 'POST':
         game_type = request.form['game-select']
         coins_involved = request.form['coin']
@@ -475,8 +487,8 @@ def create_challenge():
             cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone))
             cursor.execute("UPDATE users SET active_challenge = '1' where username = ?",(session['username'],))
             flash('Coins Deducted successfully!', 'success')
-            cursor.execute("INSERT INTO challenges (game_type, coins, first_user, status) VALUES (?, ?, ?, ?)",
-                   (game_type, coins_involved, creator_id, 'open'))
+            cursor.execute("INSERT INTO challenges (game_type, coins, first_user, status,timestamp) VALUES (?, ?, ?, ?, ?)",
+                   (game_type, coins_involved, creator_id, 'open', timestamp))
             db.commit()
             flash('Challenge created successfully!', 'success')
             return redirect(url_for("dashboard"))
@@ -603,6 +615,14 @@ def enter_room_code(challenge_id):
         room_code = request.form['room_code']
         db = get_database()
         cursor = db.cursor()
+        challenge = cursor.execute("SELECT second_user, status FROM challenges WHERE id = ?",(challenge_id,)).fetchone()
+        if not challenge:
+            flash("Challenge Doesn't Exist !","warning")
+            return redirect(url_for('dashboard'))
+        second_user, status = challenge
+        if second_user is None or status == 'open':
+            flash("Other User Has Cancelled the Match !","warning")
+            return redirect(url_for('dashboard'))
         cursor.execute("UPDATE challenges SET room_code = ?, status = 'started' WHERE id = ?", (room_code, challenge_id))
         db.commit()
 
@@ -651,13 +671,20 @@ def upload(filename):
 def submit_result(challenge_id):
     if request.method == 'POST':
         result = request.form['result']
-        screenshot = request.files['screenshot']
+        if result != 'cancel':
+            screenshot = request.files['screenshot']
+        else:
+            screenshot = None
         if screenshot and allowed_file(screenshot.filename):
+            timestamp = int(time.time())
             filename = secure_filename(screenshot.filename)
+            _, ext = os.path.splitext(filename)
+            filename = f"screenshot_{generate_otp()}_{timestamp}{ext}"
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             screenshot.save(file_path)
             db = get_database()
             cursor = db.cursor()
+            cursor.execute("BEGIN TRANSACTION")
             existing_result = cursor.execute("SELECT * FROM results WHERE challenge_id = ?", (challenge_id,)).fetchone()
             
             if not existing_result:
@@ -718,8 +745,8 @@ def submit_result(challenge_id):
     
 def auto_win(challenge_id,cursor):
     challenge = cursor.execute("SELECT * FROM challenges WHERE id = ?",(challenge_id,)).fetchone()
-    result1_row = cursor.execute("SELECT match_status FROM results WHERE challenge_id = ? AND first_user = ?",(challenge_id,challenge['first_user'])).fetchone()
-    result2_row = cursor.execute("SELECT match_status2 FROM results WHERE challenge_id = ? AND second_user = ?", (challenge_id, challenge['second_user'])).fetchone()
+    result1_row = cursor.execute("SELECT match_status FROM results WHERE challenge_id = ?",(challenge_id,)).fetchone()
+    result2_row = cursor.execute("SELECT match_status2 FROM results WHERE challenge_id = ?", (challenge_id,)).fetchone()
     try:
         if result1_row and result2_row:
             result1 = result1_row[0]
@@ -769,7 +796,16 @@ def auto_win(challenge_id,cursor):
 @login_required
 def admin():
     if session['phone'] in ['8406909448', '7019222294', '7411123457']:
-        return render_template('admin.html')
+        db = get_database()
+        cursor = db.cursor()
+        add = cursor.execute("SELECT status FROM add_coin").fetchall()
+        add_status = any(status[0] == 'pending' for status in add)
+        result = cursor.execute("SELECT status FROM results").fetchall()
+        result_status = any(status[0] == 'undecided' for status in result)
+        withdraw = cursor.execute("SELECT status FROM withdraw_coin").fetchall()
+        withdraw_status = any(status[0] == 'open' for status in withdraw)
+        db.close()
+        return render_template('admin.html',add_status=add_status,result_status=result_status,withdraw_status=withdraw_status)
     else:
         return render_template("404.html")
     
@@ -783,7 +819,7 @@ def admin_alluser():
             offset = (page-1) * per_page
             db = get_database()
             cursor = db.cursor()
-            users = cursor.execute("SELECT * FROM users LIMIT ? OFFSET ?",(per_page,offset)).fetchall()
+            users = cursor.execute("SELECT * FROM users ORDER BY id DESC LIMIT ? OFFSET ?",(per_page,offset)).fetchall()
             total_users = cursor.execute("SELECT COUNT(*) FROM users").fetchone()[0]
             total_pages = (total_users + per_page - 1) // per_page
             db.close()
@@ -1035,7 +1071,13 @@ def admin_withdrawcoin():
             page = request.args.get('page',1,type=int)
             per_page = 10
             offset = (page-1) * per_page
-            withdraws = cursor.execute("SELECT * FROM withdraw_coin ORDER BY CASE WHEN status = 'open' THEN 1 ELSE 2 END, id DESC LIMIT ? OFFSET ?",(per_page,offset)).fetchall()
+            withdraws = cursor.execute('''
+SELECT w.*, u.balance
+FROM withdraw_coin w
+JOIN users u ON w.username = u.username
+ORDER BY CASE WHEN w.status = 'open' THEN 1 ELSE 2 END, w.id DESC
+LIMIT ? OFFSET ?;
+''',(per_page,offset)).fetchall()
             total_withdrawals = cursor.execute("SELECT COUNT(*) FROM withdraw_coin").fetchone()[0]
             total_pages = (total_withdrawals + per_page - 1) // per_page
             db.close()

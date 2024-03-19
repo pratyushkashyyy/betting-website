@@ -25,19 +25,18 @@ body {
 .admin-navigation {
     padding: 10px; /* Add padding around the navigation */
 }
+
 .nav-item {
-    display: inline-block ;
+    display: inline-block;
     padding: 12px 24px; /* Default padding */
     text-decoration: none;
     color: wheat;
     background-color: black; /* Default background color for buttons */
     border-radius: 5px; /* Rounded corners */
     margin: 10px auto; /* Margin from all sides */
-    max-width: 200px;
-    margin-right: 100px; /* Limit button width */
-    /* Other styles for nav-item */
+    max-width: 200px; /* Limit button width */
+    position: relative; /* Position the button relative to its container */
 }
-
 /* No hover effect */
 .nav-item:active {
     background-color: #454242; /* No hover effect */
@@ -398,6 +397,36 @@ body {
 }
 .qr:active{
     opacity: 0.5;
+}
+
+
+
+.notification-dot {
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute; /* Position the dot absolutely */
+    top: 50%; /* Position the dot vertically in the middle */
+    right: 5px; /* Adjust the spacing from the right side */
+    transform: translate(0, -50%); /* Center the dot vertically */
+    display: none; /* Hide the dot initially */
+}
+
+/* Define the blinking animation */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Apply the blinking animation */
+.blink {
+    animation: blink 1s infinite;
+}
+
+.status{
+    background-color: rgba(47, 36, 198, 0.158);
 }
 
 @media screen and (max-width: 768px) {
