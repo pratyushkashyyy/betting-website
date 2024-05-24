@@ -67,12 +67,12 @@
                 <tbody>
                     {% for challenge in challenges %}
                     <tr>
-                        <td>{{ challenge['id']}}</td>
-                        <td>{{ challenge['game_type'] }}</td>
-                        <td>{{ challenge['first_user'] }} V/S {{challenge['second_user'] }}</td>
-                        <td>{{ challenge['coins'] }}</td>
-                        <td>{{ challenge['winner'] }}</td>
-                        <td>
+                        <td {% if challenge['status'] != 'closed' %} class="status" {% endif %}>{{ challenge['id']}}</td>
+                        <td {% if challenge['status'] != 'closed' %} class="status" {% endif %}>{{ challenge['game_type'] }}</td>
+                        <td {% if challenge['status'] != 'closed' %} class="status" {% endif %}>{{ challenge['first_user'] }} V/S {{challenge['second_user'] }}</td>
+                        <td {% if challenge['status'] != 'closed' %} class="status" {% endif %}>{{ challenge['coins'] }}</td>
+                        <td {% if challenge['status'] != 'closed' %} class="status" {% endif %}>{{ challenge['winner'] }}</td>
+                        <td {% if challenge['status'] != 'closed' %} class="status" {% endif %}>
                             <form action="/admin/challenge_id" method="POST">
                                 <input type="hidden" name="challenge_id" value="{{ challenge['id'] }}">
                                 <button class="del-btn" type="submit">Delete</button>

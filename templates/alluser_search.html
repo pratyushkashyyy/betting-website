@@ -59,7 +59,8 @@
                     <th>User name</th>
                     <th>Balance</th>
                     <th>Total Wins</th>
-                    <th>Actions</th> 
+                    <th>Actions</th>
+                    <th>Ban/Unban</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,6 +81,19 @@
             <input type="hidden" name="username" value="{{ user['username'] }}">
             <button class="delete-btn" name="delete" type="submit">Delete</button>
         </form>
+    </td>
+    <td>
+        {% if user['is_banned'] == false %}
+        <form action="/admin/ban_user" method="POST">
+            <input type="hidden" name="user_id" value="{{ user['id'] }}">
+            <button class="deny-btn" type="submit" >Ban user</button>
+        </form> 
+        {% elif user['is_banned'] == true %}
+            <form action="/admin/unban_user" method="POST">
+            <input type="hidden" name="user_id" value="{{ user['id'] }}">
+            <button class="deny-btn" type="submit"> Unban User </button> 
+        </form>    
+        {% endif %}
     </td>
 </tr>
 {% endfor %}    

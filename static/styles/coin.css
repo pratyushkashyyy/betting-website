@@ -4,13 +4,13 @@ body {
     
  } 
  BODY{
-        background-image: url("https://i.ibb.co/txtY9ZR/bg.jpg");
+        background-image: url('/static/bg.jpg');
             background-size: cover;
         }
   
 
 .payment-heading {
-background-color: black;
+    background-color: black;
     color: rgb(243, 235, 235);
     text-align: center;
     margin-top: 10px;
@@ -70,15 +70,15 @@ background-color: black;
     border-radius: 5px;
     padding: 8px 8px; 
 
-    
-
 }
 
 .pay-by-qr {
+    
     text-align: center;
     margin-top: -20px;
     color: #007bff; /* Change text color */
 }
+
 
 @media screen and (max-width: 600px) {
     .form-container{

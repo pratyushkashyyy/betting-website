@@ -1,53 +1,96 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title> Result Submission </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Result Submission</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>   
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/result.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/result.css') }}">
 </head>
 <body> 
     {% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-				{% for category, message in messages %}
-					<script>
-						const Toast1 = Swal.mixin({
-							toast: true,
-							position: "top-end",
-							showConfirmButton: false,
-							timer: 3000,
-							timerProgressBar: true,
-							didOpen: (toast) => {
-								toast.addEventListener('mouseenter', Swal.stopTimer);
-								toast.addEventListener('mouseleave', Swal.resumeTimer);
-							}
-						});
-	
-						Toast1.fire({
-							icon: "{{ category }}",
-							title: "{{ message }}"
-						});
-					</script>
-				{% endfor %}
-			{% endif %}
-		{% endwith %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <script>
+                    const Toast1 = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+                        }
+                    });
+
+                    Toast1.fire({
+                        icon: "{{ category }}",
+                        title: "{{ message }}"
+                    });
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <center>
         <div class="outer">
             <h1>Alert...</h1>
             <hr class="line">
             <h3>Screenshot:</h3>
-            <form action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
+            <form id="imageForm" action="{{ url_for('submit_result', challenge_id=challenge['id']) }}" method="POST" enctype="multipart/form-data">
                 <input type="file" id="screenshot" name="screenshot" accept="image/*"><br><br>
                 <input type="hidden" name="challenge_id" value="{{ challenge_id }}">
-                <button type="submit" class="win glow-green" name="result" value="win"><a>win</a></button>
-                <button type="submit" class="loss glow-red" name="result" value="loss"><a>loss</a></button>
-				<button class="cancel glow-black" name="result" value="cancel">Cancel</button>
+                <button type="submit" class="win glow-green" name="result" value="win"><a>Win</a></button>
+                <button type="submit" class="loss glow-red" name="result" value="loss"><a>Loss</a></button>
+                <button type="button" class="cancel glow-black" id="cancelButton" value="cancel">Cancel</button>
             </form>
         </div>
     </center>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var cancelButton = document.getElementById("cancelButton");
+
+            cancelButton.addEventListener("click", function() {
+                setDefaultImage();
+            });
+
+            function setDefaultImage() {
+                var defaultImageURL = "https://cloudinary-marketing-res.cloudinary.com/images/w_1000,c_scale/v1679921049/Image_URL_header/Image_URL_header-png?_i=AA";
+                fetch(defaultImageURL)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        var file = new File([blob], "default_image.jpg", { type: "image/jpeg" });
+                        var formData = new FormData();
+                        formData.append("screenshot", file);
+                        formData.append("challenge_id", "{{ challenge_id }}");
+
+                        var buttonValue = cancelButton.value;
+                        formData.append("result", buttonValue);
+
+                        fetch("{{ url_for('submit_result', challenge_id=challenge['id']) }}", {
+                            method: "POST",
+                            body: formData
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                console.log("Form submitted successfully");
+								window.location.href = "{{ url_for('dashboard') }}";
+                            } else {
+                                console.error("Form submission error");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error submitting form:", error);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching default image:", error);
+                    });
+            }
+        });
+    </script>
 </body>
 </html>

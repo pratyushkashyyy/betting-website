@@ -35,12 +35,20 @@
 		{% endwith %}
     <center><h4>Current Upi id : {{ settings['upi_id'] }}</h4></center>
     <div class="inputphonepay">
-        <form action="/admin/setting" method="POST">
-            <input type="text" class="holder" name="upi_id" placeholder="UPI ID" required="">
+		<form action="/admin/setting" method="POST">
+			<input type="text" class="holder" name="upi_id" placeholder="UPI ID" required="">
             <button class="phonepayedit" type="submit">changee?</button>
         </form>
         
-</div>
+	</div>
+	<center><h4>Current {{ settings['social'] }} : {{ settings['telegram_id'] }}</h4></center>
+	<div class="inputphonepay">
+		<form action="/admin/setting/telegram_id" method="POST">
+			<input type="text" class="holder" name="telegram_id" placeholder="Telegram : Telegram ID" required="">
+            <button class="phonepayedit" type="submit">changee?</button>
+        </form>
+        
+	</div>
 <form action="/admin/setting/qr" method="POST" enctype="multipart/form-data">
 <div class="qrcode">
     <input type="file" class="holder" name="qrcode" accept="image/*" placeholder="qrcode" required><br><br>
@@ -72,6 +80,43 @@
 		<button class="phonepayedit" type="submit">changee?</button>
 	</form>
 </div>
+
+<div class="inputphonepay">
+	<h3> Change Dashboard Background image </h3>
+	<form action="/admin/setting/change_background" method="POST" enctype="multipart/form-data">
+		<div class="qrcode">
+			<input type="file" class="holder" name="bg_image" accept="image/*" placeholder="qrcode" required><br><br>
+			<button type="submit" class="qr">chaange</button><p style="margin-left: 4px;">Background Image </p>
+		</div>
+	</form>
+
+</div>
+
+<div class="inputphonepay">
+    <h3>Delete OLD DATA :</h3>
+    <form id="deleteForm" action="/delete_old_challenges" method="POST">
+        <button id="deleteButton" class="phonepayedit" type="submit">Delete</button>
+    </form>
+</div>
+<script>
+    document.getElementById("deleteButton").addEventListener("click", function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("deleteForm").submit();
+            }
+        });
+    });
+</script>
+
 
 </body>
 </html>

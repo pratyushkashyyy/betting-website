@@ -1,5 +1,5 @@
 BODY{
-    background-image: url("https://i.ibb.co/txtY9ZR/bg.jpg");
+    background-image: url("/static/bg.jpg");
         background-size: cover;
     }
 .outer-container {

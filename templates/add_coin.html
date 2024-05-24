@@ -55,6 +55,7 @@
                     <th>User ID</th>
                     <th>User Name</th>
                     <th>UTR</th>
+                    <th>Payment Method</th>
                     <th>Coin Amount</th>
                     <th>Date and time</th>
                     <th>Action</th>
@@ -67,6 +68,7 @@
                     <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{ payment['id'] }}</td>
                     <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['username']}}</td>
                     <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['utr']}}</td>
+                    <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['transaction_type']}}</td>
                     <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['amount']}}</td>
                     <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>{{payment['transaction_date']}}</td>
                     <td {% if payment['status'] == 'pending' %} class="status" {% endif %}>

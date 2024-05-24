@@ -189,6 +189,16 @@
                         </center>
 
                     {%endif%}
+                
+                {% elif challenge['status'] == 'pending' %}
+                <div class="col-3" style="margin-bottom: 10px;">
+                    <div class="snippet" data-title="dot-falling">
+                        <div class="stage">
+                            <div class="dot-falling"></div>
+                        </div>
+                    </div>
+                </div>
+                <p style="font-weight: bold;">Pending Result</p>
 
                 {% elif challenge['status'] == 'closed' %}
                 <p><b>Winner: </b>{{ challenge['winner'] }}</p>

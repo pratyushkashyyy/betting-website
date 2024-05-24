@@ -141,6 +141,7 @@ body {
 .navbar-menu li button:active {
     opacity: 0.7;
 }
+
 @media only screen and (max-width: 600px) {
     .navbar-menu {
       overflow-y: auto;
@@ -157,11 +158,13 @@ body {
 }
 
 .second-div {
-    
+    display: flex;
+    flex-direction: row;
     color: rgb(9, 172, 253);
     padding: 10px;
     text-align: center;
-    background-color: rgb(255, 255, 255); /* Center text */
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
 }
 
 .third-div {
@@ -261,14 +264,18 @@ a{
     padding: 10px;
 }
 .icon-button .fas.fa-copy{
-    background-color: rgba(5, 10, 14, 0.362);
+    /* background-color: rgb(4, 4, 4); */
     border: none;
     border-radius: 1px;
     cursor: pointer;
+   
+   
+   
 }
 .copy-button i {
     color: rgb(10, 10, 10); 
 }
+
 
 @media screen and (max-width: 600px){
     .footer-content{
@@ -282,5 +289,9 @@ a{
         max-width: 100%;
         width: 100%;
         height: 100%;
+    }
+    .second-div button{
+        border: 2px solid black;
+        padding: 3px;
     }
 }

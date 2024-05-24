@@ -52,12 +52,17 @@
         </marquee>
     </div>
 
-    <div class="second-div">
-        <p style="font-size: 15px; font-weight: bold;">UPI ID: <button onclick="copyUPI()" class="icon-button copy-button"><i class="fas fa-copy"></i></button></p><p id="upi_id"> {{ settings['upi_id'] }} </p>
+    <div class="second-div">UPI ID: &nbsp; <p id="upi_id"> {{ settings['upi_id'] }} </p>
+        &nbsp; <button onclick="copyUPI()" class="icon-button copy-button ">Copy</button>
+        
+    </div>
+    <div class="second-div">{{ settings['social'] }}: &nbsp; <p id="telegram_id"> {{ settings['telegram_id'] }} </p>
+        &nbsp;<button onclick="copyTelegram()" class="icon-button copy-button ">Copy</button>
+        
     </div>
 
     <div class="third-div" >
-        <a href="/dare" style="color: white;">
+        <a href="/dare" style="color: rgb(17, 17, 17);">
        <button class="mt small diagonal"> DARE</button></a>
     </div>
 
@@ -96,6 +101,35 @@
     
             }
         </script>
+            <script>
+                function copyTelegram() {
+                    var roomCode = document.getElementById("telegram_id").innerText;
+                    var tempTextArea = document.createElement("textarea");
+                    tempTextArea.value = roomCode;
+                    document.body.appendChild(tempTextArea);
+                    tempTextArea.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(tempTextArea);
+                    
+                const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+                });
+                Toast.fire({
+                icon: "success",
+                title: "Telegram ID Copied !"
+                });
+        
+        
+                }
+            </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const preloader = document.getElementById('preloader');

@@ -42,7 +42,7 @@
 
 <div id="all-users-section" >
     <div class="all-users-heading">
-        <h3>All Users</h3>
+        <h3>All Users</h3><p>Count - {{total_users}}</p>
         <form action="/admin/search/alluser" method="POST">
             <input type="text" class="search-input" placeholder="Search" name="search">
         </form>
@@ -60,7 +60,8 @@
                     <th>User name</th>
                     <th>Balance</th>
                     <th>Total Wins</th>
-                    <th>Actions</th> 
+                    <th>Actions</th>
+                    <th>Ban/Unban</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,7 +76,7 @@
     <td>{{ user['wins'] }}</td>
     <td>
             <input type="hidden" name="username" value="{{ user['username'] }}">
-            <button class="edit-btn" name="edit" type="submit">Edit</button>
+            <button class="edit-btn" name="edit" type="submit">Update</button>
         </form>
 
         <form action="/admin/all_user" method="POST">
@@ -83,8 +84,23 @@
             <button class="delete-btn" name="delete" type="submit">Delete</button>
         </form>
     </td>
+    <td>
+        {% if user['is_banned'] == false %}
+        <form action="/admin/ban_user" method="POST">
+            <input type="hidden" name="user_id" value="{{ user['id'] }}">
+            <button class="deny-btn" type="submit" >Ban user</button>
+        </form> 
+        {% elif user['is_banned'] == true %}
+            <form action="/admin/unban_user" method="POST">
+            <input type="hidden" name="user_id" value="{{ user['id'] }}">
+            <button class="deny-btn" type="submit"> Unban User </button> 
+        </form>    
+        {% endif %}
+    </td>
+
+
 </tr>
-{% endfor %}    
+{% endfor %}  
 <div class="pagination  nextpage">
     {% if page > 1 %}
     <a href="{{ url_for('admin_alluser', page=page-1) }}">Previous</a>

@@ -56,12 +56,13 @@
                 <tr>
                     <th>Challenge id </th>
                     <th>User 1</th>
-                    <th>user 2</th>
                     <th>Screenshot1</th>
+                    <th>user 2</th>
                     <th>Screenshot2</th>
                     <th>Status 1</th>
                     <th>Status 2</th>
                     <th>Select Winner</th> 
+                    <th>Cancel Match</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,8 +72,8 @@
                 <tr>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['challenge_id'] }}</td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['first_user'] }}</td>
-                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['second_user'] }}</td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}><a href = "https://gamemates.in/upload/{{ result['screenshot1'] }}" target="_blank">User 1</a></td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['second_user'] }}</td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}><a href = "https://gamemates.in/upload/{{ result['screenshot2'] }}" target="_blank">User 2</a></td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['match_status'] }}</td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['match_status2'] }}</td>
@@ -86,10 +87,22 @@
                         </select>
                         
                         <button  class="su"  type="submit">Submit</button>
+
                         {% elif result['status'] == "decided" %}
-                            <button  class="su" >Winner Decided</button>
+                            <button  class="su" >{{result['winner']}}</button>
                         {% endif %}
                     </form>
+                    </td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{% if result['status'] == "undecided" %}
+
+                        <form action="/admin/cancel_match" method="POST">
+                        <input type="hidden" name="challenge_id" value="{{ result['challenge_id'] }}">
+                        <button  class="su"  type="submit">Cancel</button>
+                        </form>
+
+                        {% elif result['status'] == "decided" %}
+                            <button  class="deny-btn">Decided</button>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

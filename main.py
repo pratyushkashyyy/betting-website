@@ -1,14 +1,14 @@
 from flask import Flask, request,url_for,render_template,redirect,flash,session,send_from_directory,jsonify
 from database import get_database
 from functools import wraps
-from twilio.rest import Client
+
 import random,os,hashlib
 from werkzeug.utils import secure_filename
 from datetime import datetime, timezone, timedelta
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from redis import Redis
-import time
+import time,requests
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -16,6 +16,7 @@ redis_client = Redis(host='localhost', port=6379)
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1000 * 1000
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 limiter = Limiter(
     get_remote_address,
@@ -61,14 +62,19 @@ def login():
         user = cursor.fetchone()
         if user:
             if user['password'] == password_hash:
-                session['username'] = user['username']
-                session['phone'] = phone
-                session['id'] = user['id']
-                if session['phone'] in ['8406909448', '7019222294', '7411123457']:
-                    session['admin'] = True
-                    flash('Logged in successfully as admin!', 'success')
-                db.close()
-                return redirect(url_for('dashboard'))
+                if user['is_banned'] == False:
+                    session['username'] = user['username']
+                    session['phone'] = phone
+                    session['id'] = user['id']
+                    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+                        session['admin'] = True
+                        flash('Logged in successfully as admin!', 'success')
+                    db.close()
+                    return redirect(url_for('dashboard'))
+                else:
+                    db.close()
+                    return render_template("login.html",error_message="User has been Banned !")
+
             else:
                 db.close()
                 return render_template("login.html",error_message="Incorrect Login Password !")
@@ -79,6 +85,10 @@ def login():
     if request.method == "GET":
         return redirect(url_for("index"))
     return render_template("login.html")
+
+@app.route('/sitemap', methods=["GET"])
+def sitemap():
+    return redirect(url_for('static',filename="sitemap.xml"))
 
 @app.route('/dashboard')
 @login_required
@@ -148,21 +158,15 @@ def generate_otp():
     return ''.join(random.choice('0123456789') for _ in range(6))
 
 @app.route('/get-otp', methods=["POST"])
-@limiter.limit("20/hour")
+@limiter.limit("30/hour")
 def get_otp():
     if request.method == "POST":
         try:
             phone = request.form['phone']
             session['s_phone'] = phone
             otp = generate_otp()
-            print(otp)
             session['otp'] = otp
-            client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '236ada804a2c1cfe6548633288e58fa0')
-            message = client.messages.create(
-                            body='Your otp for GameMates is '+otp,
-                            from_='+18144580408',
-                            to='+91'+phone
-                        )
+            requests.get(f"https://www.fast2sms.com/dev/bulkV2?authorization=SlEb0FOyQ9YJrU3Wp7d5MmqioDunAPZtCVsGT8Nwx1vX64LKfaqynbGMVHDCE4dYv7xfmhTgc26SUXwi&route=otp&variables_values={otp}&flash=0&numbers={phone}")
             flash("OTP Sent !","success")
             return redirect(url_for('verify_otp'))
         except Exception as e:
@@ -171,7 +175,7 @@ def get_otp():
             return redirect(url_for('login'))
  
 @app.route('/otpverify',methods=["POST","GET"])
-@limiter.limit("10/hour")
+@limiter.limit("30/hour")
 def verify_otp():
     if request.method == "POST":
         otp = request.form['otp']
@@ -184,7 +188,7 @@ def verify_otp():
     return render_template("otpverification.html")
 
 @app.route("/signup", methods=["POST","GET"])
-@limiter.limit("10/hour")
+@limiter.limit("30/hour")
 def signup():
     if request.method == "POST":
         phone = session.get('s_phone')
@@ -214,26 +218,20 @@ def signup():
     return render_template('signup.html')
 
 @app.route('/forget-password',methods=["POST","GET"])
-@limiter.limit("10 per hour")
+@limiter.limit("30 per hour")
 def forget_password():
     if request.method == "POST":
         phone = request.form['phone']
         session['number'] = phone
         otp = generate_otp()
-        print(otp)
         session['otp'] = otp
-        client = Client('ACb0a62a64b64ac6a9f1f926b3512dcc86', '236ada804a2c1cfe6548633288e58fa0')
-        message = client.messages.create(
-                        body='Your otp is'+otp,
-                        from_='+18144580408',
-                        to='+91'+phone
-                     )
+        requests.get(f"https://www.fast2sms.com/dev/bulkV2?authorization=SlEb0FOyQ9YJrU3Wp7d5MmqioDunAPZtCVsGT8Nwx1vX64LKfaqynbGMVHDCE4dYv7xfmhTgc26SUXwi&route=otp&variables_values={otp}&flash=0&numbers={phone}")
         flash("OTP sent !","info")
         return redirect(url_for('verifyotp'))
     return render_template('forgetpassword.html')
 
 @app.route('/verifyotp',methods=["POST","GET"])
-@limiter.limit("10/hour")
+@limiter.limit("30/hour")
 def verifyotp():
     if request.method == "POST":
         otp = request.form['otp']
@@ -468,7 +466,6 @@ def leaderboard():
 def create_challenge():
     timestamp = datetime.now()
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S')
-    print(timestamp)
     if request.method == 'POST':
         game_type = request.form['game-select']
         coins_involved = request.form['coin']
@@ -479,24 +476,27 @@ def create_challenge():
         creator_id = user['username']
         session['username'] = creator_id
         current_balance = user['balance']
-        if user['active_challenge'] == 1:
-            flash('You already have an active challenge.', 'error')
+        try:
+            if user['active_challenge'] == 1:
+                flash('You already have an active challenge.', 'error')
+                return redirect(url_for('dashboard'))
+            elif int(coins_involved) <= int(current_balance):
+                new_balance = current_balance - int(coins_involved)
+                cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone))
+                cursor.execute("UPDATE users SET active_challenge = '1' where username = ?",(session['username'],))
+                flash('Coins Deducted successfully!', 'success')
+                cursor.execute("INSERT INTO challenges (game_type, coins, first_user, status,timestamp) VALUES (?, ?, ?, ?, ?)",
+                    (game_type, coins_involved, creator_id, 'open', timestamp))
+                db.commit()
+                flash('Challenge created successfully!', 'success')
+                return redirect(url_for("dashboard"))
+        except Exception as e:
+            print(e)
+            flash("Please Enter Coin !","warning")
             return redirect(url_for('dashboard'))
-        elif int(coins_involved) <= int(current_balance):
-            new_balance = current_balance - int(coins_involved)
-            cursor.execute("UPDATE users SET balance = ? WHERE phoneno = ?", (new_balance, phone))
-            cursor.execute("UPDATE users SET active_challenge = '1' where username = ?",(session['username'],))
-            flash('Coins Deducted successfully!', 'success')
-            cursor.execute("INSERT INTO challenges (game_type, coins, first_user, status,timestamp) VALUES (?, ?, ?, ?, ?)",
-                   (game_type, coins_involved, creator_id, 'open', timestamp))
-            db.commit()
-            flash('Challenge created successfully!', 'success')
-            return redirect(url_for("dashboard"))
         else:
             flash('You Dont Have Enough Balance in Your Account !','warning')
             return redirect(url_for("dashboard"))
-    return render_template('create_challenge.html')
-
 @app.route('/accept_challenge/<int:challenge_id>', methods=['POST'])
 @login_required
 def accept_challenge(challenge_id):
@@ -670,11 +670,15 @@ def upload(filename):
 @login_required
 def submit_result(challenge_id):
     if request.method == 'POST':
-        result = request.form['result']
-        if result != 'cancel':
-            screenshot = request.files['screenshot']
-        else:
-            screenshot = None
+        result = request.form.get('result')
+        screenshot = request.files.get('screenshot')
+        db = get_database()
+        cursor = db.cursor()
+        existing_submission = cursor.execute("SELECT * FROM results where challenge_id = ? AND (first_user = ? or second_user = ?)",(challenge_id,session['username'],session['username'])).fetchone()
+        if existing_submission:
+                flash('You have already submitted a result for this challenge','warning')
+                db.close()
+                return redirect(url_for('dashboard'))
         if screenshot and allowed_file(screenshot.filename):
             timestamp = int(time.time())
             filename = secure_filename(screenshot.filename)
@@ -682,54 +686,49 @@ def submit_result(challenge_id):
             filename = f"screenshot_{generate_otp()}_{timestamp}{ext}"
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             screenshot.save(file_path)
-            db = get_database()
-            cursor = db.cursor()
             cursor.execute("BEGIN TRANSACTION")
             existing_result = cursor.execute("SELECT * FROM results WHERE challenge_id = ?", (challenge_id,)).fetchone()
             
             if not existing_result:
                 cursor.execute("INSERT INTO results (challenge_id,status) VALUES(?,?)",(challenge_id,'undecided',))
                 db.commit()
-            existing_submission = cursor.execute("SELECT * FROM results where challenge_id = ? AND (first_user = ? or second_user = ?)",(challenge_id,session['username'],session['username'])).fetchone()
-            if existing_submission:
-                flash('You have already submitted a result for this challenge','warning')
+
+            first_user = cursor.execute("SELECT first_user FROM challenges where id = ?",(challenge_id,)).fetchone()[0]
+            second_user = cursor.execute("SELECT second_user FROM challenges where id = ?",(challenge_id,)).fetchone()[0]
+
+            if first_user == session['username']:
+
+                cursor.execute("UPDATE results SET first_user = ?, screenshot1 = ?, match_status = ? WHERE challenge_id = ?",
+                                   (session['username'], filename, result, challenge_id))
+                db.commit()
+                flash("Result Submitted Successfully !","success")
+                user1 = cursor.execute("SELECT first_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+                user2 = cursor.execute("SELECT second_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+                if user1 and user2:
+                    winner = auto_win(challenge_id,cursor)
+                    db.commit()
+                    if winner:
+                        flash(f"{winner} wins the challenge !","success")
                 return redirect(url_for('dashboard'))
-
-            first_user = cursor.execute("SELECT first_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
-            second_user = cursor.execute("SELECT second_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
             
-            if second_user:
-                    cursor.execute("UPDATE results SET first_user = ?, screenshot1 = ?, match_status = ? WHERE challenge_id = ?",
+            if second_user == session['username']:
+                cursor.execute("UPDATE results SET second_user = ?, screenshot2 = ?, match_status2 = ? WHERE challenge_id = ?",
                                    (session['username'], filename, result, challenge_id))
-                    flash('Result submitted successfully!', 'success')
-                    user1 = cursor.execute("SELECT first_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
-                    user2 = cursor.execute("SELECT second_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
-                    if user1 and user2:
-                        winner = auto_win(challenge_id, cursor)
-                        if winner:
-                            flash(f"{winner} wins the challenge !","success")
-                        db.commit()
-                    return redirect(url_for('dashboard',challenge_id=challenge_id))
-
-            elif first_user:
-                    cursor.execute("UPDATE results SET second_user = ?, screenshot2 = ?, match_status2 = ? WHERE challenge_id = ?",
-                                   (session['username'], filename, result, challenge_id))
-                    flash('Result submitted successfully!', 'success')
-                    user1 = cursor.execute("SELECT first_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
-                    user2 = cursor.execute("SELECT second_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
-                    if user1 and user2:
-                        winner = auto_win(challenge_id, cursor)
-                        if winner:
-                            flash(f"{winner} wins the challenge !","success")
-                        db.commit()
-                    return redirect(url_for('dashboard',challenge_id=challenge_id))
+                db.commit()
+                flash("Result Submitted Successfully !","success")
+                user1 = cursor.execute("SELECT first_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+                user2 = cursor.execute("SELECT second_user FROM results where challenge_id = ?",(challenge_id,)).fetchone()[0]
+                if user1 and user2:
+                    winner = auto_win(challenge_id,cursor)
+                    db.commit()
+                    if winner:
+                        flash(f"{winner} wins the challenge !","success")
+                return redirect(url_for('dashboard'))
+            
 
             else:
-                cursor.execute("UPDATE results SET first_user = ?, screenshot1 = ?, match_status = ? WHERE challenge_id = ?",
-                               (session['username'], filename, result, challenge_id))
-                flash('Result submitted successfully!', 'success')
-                db.commit()                    
-                return redirect(url_for('dashboard',challenge_id=challenge_id))
+                flash("Error submitted Result , Contact Admin !","warning")
+                return redirect(url_for('dashboard'))
 
         else:
             flash('Please Attach any Screenshot !','info')
@@ -776,7 +775,6 @@ def auto_win(challenge_id,cursor):
                 cursor.execute("UPDATE users SET active_challenge = 0 where username = ?",(challenge['first_user'],))
                 return challenge['second_user']
             elif result1 == "cancel" and result2 == "cancel":
-                print("challenge cancelled !")
                 cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",("cancelled",challenge_id,))
                 cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("cancelled",challenge_id,))
                 cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
@@ -786,10 +784,18 @@ def auto_win(challenge_id,cursor):
                 cursor.execute("UPDATE users SET balance = balance + ?, active_challenge = 0 WHERE username = ?", (challenge_coin[0], challenge['second_user'],))
                 cursor.execute("DELETE FROM challenges WHERE id = ?", (challenge_id,))
                 flash("Challenge cancelled !","success")
-            else:
-                print("error  happened")
-                return 'Error Happened, Please Contact Admin'
+            
+            elif result1 == 'win' and result1 == 'win':
+                cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("pending",challenge_id,))
+                flash("Result Pending","warning")
+                
+            elif result1 == 'loss' and result1 == 'loss':
+                cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("pending",challenge_id,))
+                flash("Result Pending","warning")
+                
+            
     except Exception as e:
+        print("Error Happened!!!")
         print(e)
 
 @app.route('/admin')
@@ -823,7 +829,7 @@ def admin_alluser():
             total_users = cursor.execute("SELECT COUNT(*) FROM users").fetchone()[0]
             total_pages = (total_users + per_page - 1) // per_page
             db.close()
-            return render_template('all_user.html',users=users,page=page,total_pages=total_pages)
+            return render_template('all_user.html',users=users,page=page,total_pages=total_pages,total_users=total_users)
         if request.method == "POST":
             db = get_database()
             cursor = db.cursor()
@@ -850,8 +856,7 @@ def admin_alluser_search():
             db = get_database()
             cursor = db.cursor()
             search_query = request.form['search']
-            capitalize = search_query.capitalize()
-            search = cursor.execute("SELECT * FROM users WHERE username in (?, ?) OR phoneno = ?", (search_query, capitalize,search_query)).fetchall()
+            search = cursor.execute("SELECT * FROM users WHERE username LIKE ? OR phoneno = ?", (search_query, search_query)).fetchall()
             db.close()
             if search:
                 return render_template("alluser_search.html", search=search)
@@ -868,14 +873,20 @@ def admin_alluser_search():
 def update_balance():
     if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == 'POST':
-            db = get_database()
-            cursor = db.cursor()
-            username = request.form['username']
-            new_balance = request.form['balance']
-            cursor.execute("UPDATE users SET balance = ? WHERE username =?",(new_balance,username))
-            db.commit()
-            flash("User Balance Updated !","success")
-            return redirect(url_for('admin_alluser'))
+            try:
+                db = get_database()
+                cursor = db.cursor()
+                username = request.form['username']
+                new_balance = request.form['balance']
+                new_balance = int(new_balance)
+                cursor.execute("UPDATE users SET balance = ? WHERE username =?",(new_balance,username))
+                db.commit()
+                flash("User Balance Updated !","success")
+                return redirect(url_for('admin_alluser'))
+            except Exception as e:
+                print(e)
+                flash("Please Enter Valid Amount !","warning")
+                return redirect(url_for('admin_alluser'))
 
     
 @app.route('/admin/challenge_id',methods=["POST","GET"])
@@ -1003,6 +1014,40 @@ def admin_decide_winner():
         return redirect(url_for('admin_result'))
     else:
         return render_template("404.html")
+
+@app.route('/admin/cancel_match', methods=['POST'])
+@login_required
+def admin_cancel_match():
+        if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+            try:
+                challenge_id = request.form['challenge_id']
+                db = get_database()
+                cursor = db.cursor()
+                challenge = cursor.execute("SELECT * FROM challenges WHERE id = ?",(challenge_id,)).fetchone()
+                cursor.execute("UPDATE challenges SET winner = ? WHERE id = ?",("cancelled",challenge_id,))
+                cursor.execute("UPDATE challenges SET status = ? WHERE id = ?",("cancelled",challenge_id,))
+                cursor.execute("UPDATE results SET status = ? WHERE challenge_id = ?",("decided",challenge_id,))
+                cursor.execute("UPDATE results SET winner = ? WHERE challenge_id = ?",("cancelled",challenge_id,))
+                challenge_coin = cursor.execute("select coins from challenges where id = ?",(challenge_id,)).fetchone()
+                print(challenge_coin[0])
+                print(challenge['first_user'],challenge['second_user'])
+                cursor.execute("UPDATE users SET balance = balance + ?, active_challenge = 0 WHERE username = ?", (challenge_coin[0], challenge['first_user'],))
+                cursor.execute("UPDATE users SET balance = balance + ?, active_challenge = 0 WHERE username = ?", (challenge_coin[0], challenge['second_user'],))
+                cursor.execute("DELETE FROM challenges WHERE id = ?", (challenge_id,))
+                flash("Challenge cancelled !","success")
+                db.commit()
+                return redirect(url_for('admin_result'))
+            except Exception as e:
+                db.rollback()
+                flash(f"error happened {e}","warning")
+                return redirect(url_for('admin_result'))
+            finally:
+                db.close()
+        
+        else:
+                return render_template("404.html")
+            
+
 
 
 @app.route('/admin/add_coin',methods=["POST","GET"])
@@ -1150,6 +1195,34 @@ def setting():
             return redirect(url_for('setting'))
     else:
         return render_template("404.html")
+
+@app.route('/admin/setting/telegram_id',methods=["POST","GET"])
+@login_required
+def setting_telegram():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        if request.method == "GET":
+            db = get_database()
+            cursor = db.cursor()
+            settings = cursor.execute("SELECT * FROM setting").fetchone()
+            return render_template('setting.html',settings=settings)
+
+        if request.method == "POST":
+            db =get_database()
+            cursor = db.cursor()
+            telegram = request.form['telegram_id']
+            tel = telegram.split(":")
+            social = tel[0].strip()
+            new_telegram = tel[1].strip()
+            cursor.execute("UPDATE setting set telegram_id = ?",(new_telegram,))
+            cursor.execute("UPDATE setting set social = ?",(social,))
+            db.commit()
+            db.close()
+            flash("Telegram Id updated","success")
+            return redirect(url_for('setting'))
+    else:
+        return render_template("404.html")
+
+
 @app.route('/admin/setting/qr',methods=["POST","GET"])
 @login_required
 def setting_qr():
@@ -1221,5 +1294,122 @@ def header_scroll():
         return render_template("404.html")
 
 
+@app.route('/admin/setting/change_background',methods=['GET','POST'])
+@login_required
+def change_background():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        if request.method == "GET":
+            db = get_database()
+            cursor = db.cursor()
+            settings = cursor.execute("SELECT * FROM setting").fetchone()
+            db.close()
+            return render_template('setting.html',settings=settings)
+        if request.method == "POST":
+            try:
+                db = get_database()
+                cursor = db.cursor()
+                bg_image = request.files['bg_image']
+                if bg_image and allowed_file(bg_image.filename):
+                    filename = "bg.jpg"
+                    file_path = os.path.join('static', filename)
+                    os.makedirs(os.path.dirname(file_path),exist_ok=True)
+                    bg_image.save(file_path)
+
+                db.commit()
+            except Exception as e:
+                db.rollback()
+                flash(f"Some error happened ! ,{e}")
+            finally:
+                db.close()
+
+            return redirect(url_for('setting'))
+    else:
+        return render_template("404.html")
+
+
+@app.route('/delete_old_challenges', methods=['POST'])
+def delete_old_challenge():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        try:
+            db = get_database()
+            cursor = db.cursor()
+            days_ago = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S')
+            old_results = cursor.execute("SELECT id, screenshot1, screenshot2 FROM results WHERE challenge_id IN (SELECT id FROM challenges WHERE timestamp < ?)", (days_ago,)).fetchall()
+
+            for result in old_results:
+                screenshot1_path = result[1]
+                screenshot2_path = result[2]
+                if screenshot1_path:
+                    file_path1 = os.path.join(app.config['UPLOAD_FOLDER'], screenshot1_path)
+                    if os.path.exists(file_path1):
+                        os.remove(file_path1)
+                if screenshot2_path:
+                    file_path2 = os.path.join(app.config['UPLOAD_FOLDER'], screenshot2_path)
+                    if os.path.exists(file_path2):
+                        os.remove(file_path2)
+
+            cursor.execute("DELETE FROM results WHERE challenge_id IN (SELECT id FROM challenges WHERE timestamp < ?)", (days_ago,))
+            db.commit()
+
+            cursor.execute("DELETE FROM challenges WHERE timestamp < ?",(days_ago,))
+            db.commit()
+            
+            flash("Old challenges and associated results deleted successfully !","success")
+            return redirect(url_for('setting'))
+        except Exception as e:
+            flash(f"Error deleting old challenges and results: {str(e)}", "error")
+            return redirect(url_for('setting'))
+        finally:
+            db.close()
+    else:
+        return render_template("404.html")
+
+@app.route('/admin/ban_user/', methods=['POST'])
+def admin_ban_user():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:    
+        db = get_database()
+        cursor = db.cursor()
+        try:
+            user_id = request.form['user_id']
+            cursor.execute("UPDATE users SET is_banned = ? WHERE id = ?",(True,user_id))
+            db.commit()
+        except Exception as e:
+            flash(f"Error Happened ! {e}","warning")
+            return redirect(url_for('admin_alluser'))
+            db.rollback()
+        finally:
+            db.close()
+        flash("User has been banned !","success")
+        return redirect(url_for("admin_alluser"))
+    else:
+        return render_template("404.html")
+
+@app.route('/admin/unban_user/', methods=['POST'])
+def admin_unban_user():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:    
+        db = get_database()
+        cursor = db.cursor()
+        try:
+            user_id = request.form['user_id']
+            cursor.execute("UPDATE users SET is_banned = ? WHERE id = ?",(False,user_id))
+            db.commit()
+        except Exception as e:
+            flash(f"Error Happened ! {e}","warning")
+            return redirect(url_for('admin_alluser'))
+            db.rollback()
+        finally:
+            db.close()
+        flash("User has been Unbanned !","success")
+        return redirect(url_for("admin_alluser"))
+    else:
+        return render_template("404.html")
+
+
+    
+@app.errorhandler(404)
+def error(e):
+    return render_template('404_1.html'), 404
+
+
 if __name__ == "__main__":
-    app.run(debug=True,host='0.0.0.0',port=80)
+    app.run(debug=True,host='0.0.0.0',port=8000)
