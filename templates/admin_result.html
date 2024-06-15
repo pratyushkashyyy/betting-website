@@ -57,6 +57,7 @@
                     <th>Challenge id </th>
                     <th>User 1</th>
                     <th>Screenshot1</th>
+                    <th>Room Code </th>
                     <th>user 2</th>
                     <th>Screenshot2</th>
                     <th>Status 1</th>
@@ -73,6 +74,7 @@
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['challenge_id'] }}</td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['first_user'] }}</td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}><a href = "https://gamemates.in/upload/{{ result['screenshot1'] }}" target="_blank">User 1</a></td>
+                    <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['room_code'] }}</td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['second_user'] }}</td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}><a href = "https://gamemates.in/upload/{{ result['screenshot2'] }}" target="_blank">User 2</a></td>
                     <td {% if result['status'] == 'undecided' %} class="status" {% endif %}>{{ result['match_status'] }}</td>

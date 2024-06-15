@@ -955,7 +955,7 @@ def admin_result():
         page = request.args.get('page',1,type=int)
         per_page = 10
         offset = (page-1) * per_page
-        results = cursor.execute("SELECT * FROM results ORDER BY CASE WHEN status = 'undecided' THEN 1 ELSE 2 END, id DESC LIMIT ? OFFSET ?", (per_page, offset)).fetchall()
+        results = cursor.execute("SELECT * FROM results JOIN challenges ON results.challenge_id = challenges.id ORDER BY CASE WHEN results.status = 'undecided' THEN 1 ELSE 2 END, id DESC LIMIT ? OFFSET ?", (per_page, offset)).fetchall()
         total_results = cursor.execute("SELECT COUNT(*) FROM results").fetchone()[0]
         total_pages = (total_results + per_page - 1) // per_page
         return render_template('admin_result.html',results=results,page=page,total_pages=total_pages)
