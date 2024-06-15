@@ -94,7 +94,7 @@ def sitemap():
 @login_required
 def dashboard():
     page = request.args.get('page',1,type=int)
-    per_page = 10
+    per_page = 20
     offset = (page-1) * per_page
     db = get_database()
     cursor = db.cursor()
@@ -114,7 +114,7 @@ def dashboard():
     settings = cursor.execute("SELECT * FROM setting").fetchone()
     message = cursor.execute("SELECT * FROM messages").fetchall()
     total_challenges = cursor.execute("SELECT COUNT(*) FROM challenges").fetchone()[0]
-    total_pages = (total_challenges + per_page - 1) // per_page
+    total_pages = 5
     db.close()
     if 'success_message_displayed' not in session:
         session['success_message_displayed'] = True
