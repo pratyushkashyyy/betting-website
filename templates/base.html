@@ -56,6 +56,27 @@
         &nbsp; <button onclick="copyUPI()" class="icon-button copy-button ">Copy</button>
         
     </div>
+    
+    <div class="second-div">
+        <div class="pay-by-qr">
+
+            <a href="https://gamemates.in/upload/{{settings['qr_code']}}" id="pay-by-qr" style="font-size: large; text-shadow: #1114d0 0 0 10px, #FF0000 2px 2px 2px;" >Pay by QR Code</a>
+    
+            <script>
+                const payByQR = document.getElementById('pay-by-qr');
+                    payByQR.addEventListener('click', function(event) {
+                    event.preventDefault();
+                            Swal.fire({
+                        title: "Pay by QR Code",
+                        text: "Scan the QR Code to make the payment.",
+                        imageUrl: "https://gamemates.in/upload/{{settings['qr_code']}}",
+                        imageAlt: "QR Code"
+                    });
+                });
+            </script>
+                </div>
+    </div>
+
     <div class="second-div">{{ settings['social'] }}: &nbsp; <p id="telegram_id"> {{ settings['telegram_id'] }} </p>
         &nbsp;<button onclick="copyTelegram()" class="icon-button copy-button ">Copy</button>
         
