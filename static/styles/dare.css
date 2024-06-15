@@ -1,6 +1,6 @@
 BODY{
     background-image: url("/static/bg.jpg");
-        background-size: cover;
+        background-size: fixed;
     }
 .outer-container {
     border: 2px solid black;

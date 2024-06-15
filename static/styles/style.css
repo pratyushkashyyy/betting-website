@@ -267,16 +267,51 @@ a{
     /* background-color: rgb(4, 4, 4); */
     border: none;
     border-radius: 1px;
-    cursor: pointer;
-   
-   
-   
+    cursor: pointer;   
 }
 .copy-button i {
     color: rgb(10, 10, 10); 
 }
 
+.pay-button{
+    border-color: #0d6efd;
+    border-radius: 7px;
+    cursor: pointer;
+    padding: 5px 5px;
+}
+.pay-button-hover{
+    border-radius: 7px;
+}
 
+#button-2 {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  #button-2 a {
+    position: relative;
+    transition: all .35s ease-Out;
+  }
+  
+  #slide {
+    width: 100%;
+    height: 100%;
+    left: -200px;
+    background: #BFC0C0;
+    position: absolute;
+    transition: all .35s ease-Out;
+    bottom: 0;
+  }
+  
+  #button-2:hover #slide {
+    left: 0;
+  }
+  
+  #button-2:hover a {
+    color: #2D3142;
+  }
+  
 @media screen and (max-width: 600px){
     .footer-content{
         display: flex;

@@ -58,10 +58,11 @@
     </div>
     
     <div class="second-div">
-        <div class="pay-by-qr">
-
+        <div class="pay-button-hover" id="button-2">
+            <div id="slide"></div>
+            <button class="pay-button">
             <a href="https://gamemates.in/upload/{{settings['qr_code']}}" id="pay-by-qr" style="font-size: large; text-shadow: #1114d0 0 0 10px, #FF0000 2px 2px 2px;" >Pay by QR Code</a>
-    
+            </button>
             <script>
                 const payByQR = document.getElementById('pay-by-qr');
                     payByQR.addEventListener('click', function(event) {
@@ -74,7 +75,7 @@
                     });
                 });
             </script>
-                </div>
+        </div>
     </div>
 
     <div class="second-div">{{ settings['social'] }}: &nbsp; <p id="telegram_id"> {{ settings['telegram_id'] }} </p>

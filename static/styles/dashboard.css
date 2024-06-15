@@ -1,6 +1,6 @@
 body{
     background-image: url("/static/bg.jpg");
-    background-size: cover;
+    background-size: fixed;
     
 }.main-container {
     display: flex;

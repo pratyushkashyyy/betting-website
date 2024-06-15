@@ -4,7 +4,7 @@ body {
     }
     BODY{
         background-image: url("/static/bg.jpg");
-            background-size: cover;
+            background-size: fixed;
         }
 
 .form-container {
