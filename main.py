@@ -1293,7 +1293,6 @@ def header_scroll():
     else:
         return render_template("404.html")
 
-# jbjhkfhjfjhkvhj
 
 @app.route('/admin/setting/change_background',methods=['GET','POST'])
 @login_required
