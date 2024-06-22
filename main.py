@@ -1,7 +1,6 @@
 from flask import Flask, request,url_for,render_template,redirect,flash,session,send_from_directory,jsonify
 from database import get_database
 from functools import wraps
-
 import random,os,hashlib
 from werkzeug.utils import secure_filename
 from datetime import datetime, timezone, timedelta
@@ -454,10 +453,20 @@ def leaderboard():
     cursor.execute("SELECT * FROM users WHERE phoneno = ?", (phone,))
     user = cursor.fetchone()
     settings = cursor.execute("SELECT * FROM setting").fetchone()
-    challenges = cursor.execute("SELECT * FROM users ORDER BY wins DESC LIMIT 10").fetchall()
-    
+    challenges = cursor.execute("SELECT * FROM users ORDER BY wins DESC LIMIT 5").fetchall()
+    monthly = cursor.execute('''SELECT 
+    u.username, 
+    COUNT(wr.win_id) AS win_count
+FROM 
+    users u
+LEFT JOIN 
+    win_records wr ON u.username = wr.user_id 
+WHERE 
+    strftime('%Y-%m', wr.win_date) = strftime('%Y-%m', 'now')
+GROUP BY 
+    u.username''').fetchall()
     db.close()
-    return render_template("leaderboard.html",user=user,settings=settings,challenges=challenges)
+    return render_template("leaderboard.html",user=user,settings=settings,challenges=challenges,monthly=monthly)
 
 
 
@@ -743,6 +752,7 @@ def submit_result(challenge_id):
         return render_template("result.html",user=user,challenge=challenge)
     
 def auto_win(challenge_id,cursor):
+    matchdate = get_indian_time().strftime("%Y-%m-%d %H:%M:%S")
     challenge = cursor.execute("SELECT * FROM challenges WHERE id = ?",(challenge_id,)).fetchone()
     result1_row = cursor.execute("SELECT match_status FROM results WHERE challenge_id = ?",(challenge_id,)).fetchone()
     result2_row = cursor.execute("SELECT match_status2 FROM results WHERE challenge_id = ?", (challenge_id,)).fetchone()
@@ -760,6 +770,7 @@ def auto_win(challenge_id,cursor):
                 cursor.execute("UPDATE challenges SET winnning_amount = ? where id = ?",(winning_amount,challenge_id))
                 cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 where username = ?",(winning_amount,challenge['first_user'],))
                 cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,challenge['first_user'],))
+                cursor.execute("INSERT INTO win_records (user_id, win_date) VALUES (? , ?)",( challenge['first_user'],matchdate))
                 cursor.execute("UPDATE users SET active_challenge = 0 where username = ?",(challenge['second_user'],))
                 return challenge['first_user']
             elif result1 == "loss" and result2 == "win":
@@ -772,6 +783,7 @@ def auto_win(challenge_id,cursor):
                 cursor.execute("UPDATE challenges SET winnning_amount = ? where id = ?",(winning_amount,challenge_id))
                 cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 where username = ?",(winning_amount,challenge['second_user'],))
                 cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,challenge['second_user'],))
+                cursor.execute("INSERT INTO win_records (user_id, win_date) VALUES (? , ?)",( challenge['second_user'], matchdate))
                 cursor.execute("UPDATE users SET active_challenge = 0 where username = ?",(challenge['first_user'],))
                 return challenge['second_user']
             elif result1 == "cancel" and result2 == "cancel":
@@ -986,6 +998,7 @@ def admin_result_search():
 @app.route('/admin/decide_winner',methods=["POST"])
 @login_required
 def admin_decide_winner():
+    matchdate = get_indian_time().strftime("%Y-%m-%d %H:%M:%S")
     if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         challenge_id = request.form['challenge_id']
         winner = request.form['user']
@@ -1007,6 +1020,7 @@ def admin_decide_winner():
         cursor.execute("UPDATE challenges SET winnning_amount = ? where id = ?",(winning_amount,challenge_id))
         cursor.execute("UPDATE users SET balance = balance + ? , active_challenge = 0 where username = ?",(winning_amount,winner))
         cursor.execute("UPDATE users SET wins = wins + ? where username = ?",(1,winner))
+        cursor.execute("INSERT INTO win_records (user_id, win_date) VALUES (? , ?)",(winner, matchdate))
         cursor.execute("UPDATE users SET active_challenge = 0 where username = ?",(loser,))
         db.commit()
         db.close()
