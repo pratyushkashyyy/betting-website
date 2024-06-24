@@ -171,6 +171,32 @@
 
 
 <footer class="footer"><center>
+    &nbsp <p>Online Users: <span id="online-users">0</span></p>
+
+    <script>
+        function updateOnlineUsers() {
+            fetch('/online_user')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('online-users').textContent = data.online_user;
+                });
+        }
+        setInterval(updateOnlineUsers, 30000);
+
+        updateOnlineUsers();
+
+        setInterval(function() {
+            fetch('/update_status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})  
+            });
+        }, 30000);
+    </script>
+
+
     <div class="footer-content">
         <center><p> <a  href="https://tawk.to/chat/65e5bbfd9131ed19d974c1a2/1ho4mclmg" style="color: white;">Contact Admin</a></p></center>
         <center><p class="rights"><a href="/terms" style="color: white;"> Play Ludo. All rights reserved.</a></p></center>

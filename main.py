@@ -1438,8 +1438,34 @@ def admin_unban_user():
     else:
         return render_template("404.html")
 
+@app.route('/online_user',methods=['GET'])
+def online_user():
+    try:
+        db = get_database()
+        cursor = db.cursor()
+        count = cursor.execute("SELECT COUNT(*) FROM users WHERE is_online = 1").fetchone()[0]
+        return jsonify(online_user=count)
 
-    
+    except Exception as e:
+        flash(f"Cant fetch online user count {e}","warning")
+        return redirect(url_for("dashboard"))
+
+    finally:
+        db.close()
+
+@app.route('/update_status', methods=['POST'])
+def update_status():
+    if 'username' in session:
+        username = session['username']
+        print(username)
+        db = get_database()
+        cursor = db.cursor()
+        cursor.execute("UPDATE users SET is_online = 1 WHERE username = ?", (username,))
+        db.commit()
+        db.close()
+        return '', 204
+    return redirect(url_for("dashboard"))
+        
 @app.errorhandler(404)
 def error(e):
     return render_template('404_1.html'), 404
