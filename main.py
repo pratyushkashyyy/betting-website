@@ -1,4 +1,4 @@
-from flask import Flask, request,url_for,render_template,redirect,flash,session,send_from_directory,jsonify
+from flask import Flask, request,url_for,render_template,redirect,flash,session,send_from_directory,jsonify,current_app
 from database import get_database
 from functools import wraps
 import random,os,hashlib
@@ -8,6 +8,8 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from redis import Redis
 import time,requests
+import threading
+
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -1465,11 +1467,29 @@ def update_status():
         db.close()
         return '', 204
     return redirect(url_for("dashboard"))
-        
+
+def background_task():
+    while True:
+        time.sleep(40)
+        with app.app_context():
+            try:
+                db = get_database()
+                cursor = db.cursor()
+                cursor.execute("""
+                    UPDATE users
+                    SET is_online = 0
+                    WHERE is_online = 1
+                """)
+                db.commit()
+            except Exception as e:
+                print(f"Error in background task: {e}")
+            finally:
+                db.close()
+
 @app.errorhandler(404)
 def error(e):
     return render_template('404_1.html'), 404
 
-
 if __name__ == "__main__":
+    threading.Thread(target=background_task, daemon=True).start()
     app.run(debug=True,host='0.0.0.0',port=8000)
