@@ -833,7 +833,7 @@ def admin_alluser():
     if session['phone'] in ['8406909448', '7019222294', '7411123457']:
         if request.method == "GET":
             page = request.args.get('page',1,type=int)
-            per_page = 10
+            per_page = 20
             offset = (page-1) * per_page
             db = get_database()
             cursor = db.cursor()
@@ -909,7 +909,7 @@ def admin_challengeid():
             db = get_database()
             cursor = db.cursor()
             page = request.args.get('page',1,type=int)
-            per_page = 10
+            per_page = 25
             offset = (page-1) * per_page
             challenges = cursor.execute("SELECT * FROM challenges order by id desc LIMIT ? OFFSET ?",(per_page,offset)).fetchall()
             total_challenges = cursor.execute("SELECT COUNT(*) FROM challenges").fetchone()[0]
@@ -965,7 +965,7 @@ def admin_result():
         db = get_database()
         cursor = db.cursor()
         page = request.args.get('page',1,type=int)
-        per_page = 10
+        per_page = 25
         offset = (page-1) * per_page
         results = cursor.execute("SELECT * FROM results JOIN challenges ON results.challenge_id = challenges.id ORDER BY CASE WHEN results.status = 'undecided' THEN 1 ELSE 2 END, id DESC LIMIT ? OFFSET ?", (per_page, offset)).fetchall()
         total_results = cursor.execute("SELECT COUNT(*) FROM results").fetchone()[0]
@@ -1072,7 +1072,7 @@ def admin_addcoin():
             db = get_database()
             cursor = db.cursor()
             page = request.args.get('page',1,type=int)
-            per_page = 10
+            per_page = 25
             offset = (page-1) * per_page
             payments = cursor.execute("SELECT * FROM add_coin ORDER BY CASE WHEN status = 'pending' THEN 1 ELSE 2 END, id DESC LIMIT ? OFFSET ?",(per_page,offset)).fetchall()
             total_add_coin = cursor.execute("SELECT COUNT(*) FROM add_coin").fetchone()[0]
@@ -1128,7 +1128,7 @@ def admin_withdrawcoin():
             db = get_database()
             cursor = db.cursor()
             page = request.args.get('page',1,type=int)
-            per_page = 10
+            per_page = 25
             offset = (page-1) * per_page
             withdraws = cursor.execute('''
 SELECT w.*, u.balance
@@ -1337,6 +1337,26 @@ def change_background():
                 db.close()
 
             return redirect(url_for('setting'))
+    else:
+        return render_template("404.html")
+
+@app.route('/delete_monthly_leaderboard', methods=['POST'])
+def delete_monthly_leaderboard():
+    if session['phone'] in ['8406909448', '7019222294', '7411123457']:
+        try:
+            db = get_database()
+            cursor = db.cursor()
+            cursor.execute("DELETE FROM win_records")
+            db.commit()
+            flash("Monthly Leader deleted successfully !","success")
+            return redirect(url_for('setting')) 
+
+        except Exception as e:
+            db.rollback()
+            flash(f"Error in Deleting monthly leaderboard: {str(e)}", "error")
+            return redirect(url_for('setting'))
+        finally:
+            db.close()
     else:
         return render_template("404.html")
 
