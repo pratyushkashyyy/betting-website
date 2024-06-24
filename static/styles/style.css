@@ -281,6 +281,7 @@ a{
 }
 .pay-button-hover{
     border-radius: 7px;
+
 }
 
 #button-2 {
@@ -298,7 +299,7 @@ a{
     width: 100%;
     height: 100%;
     left: -200px;
-    background: #BFC0C0;
+    background: #989d9f2b;
     position: absolute;
     transition: all .35s ease-Out;
     bottom: 0;
@@ -309,7 +310,7 @@ a{
   }
   
   #button-2:hover a {
-    color: #2D3142;
+    color: #000000;
   }
   
 @media screen and (max-width: 600px){
