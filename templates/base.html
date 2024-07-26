@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>   
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/video.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-JB6LKwhcOag20uoE0WNqRg+dROOXG5j7z/Ei+3h3Z6Lq7o8xg1LI4G+/IZwkVGYH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-JB6LKwhcOag20uoE0WNqRg+dROOXG5j7z/Ei+3h3Z6Lq7o8xg1LI4G+/IZwkVGYH" crossorigin="anonymous">
 
@@ -196,6 +197,16 @@
         }, 3000);
     </script>
 
+<div class="bubble" id="bubble">▶️</div>
+<div class="video-container" id="videoContainer">
+    <span class="close-btn" id="closeBtn">&times;</span>
+    <video id="video" controls>
+        <source src="/static/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<script src="/static/styles/video.js"></script>
 
     <div class="footer-content">
         <center><p> <a  href="https://tawk.to/chat/65e5bbfd9131ed19d974c1a2/1ho4mclmg" style="color: white;">Contact Admin</a></p></center>

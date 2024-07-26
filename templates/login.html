@@ -8,9 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/login.css') }}">
-    
-
-	
+    	
 </head>
 <body>
 <div id="preloader">
@@ -66,7 +64,7 @@
             </script>
         {% endif %}
         <form action="/login" method="POST">
-            <label for="chk" aria-hidden="true" class="logme" style="color: black;">GameMates</label>
+            <label for="chk" aria-hidden="true" class="logme" style="color: black;"><img src="static/logo.png" width="140px" style="transform: scale(1.8); transition: transform 0.2s;" /></label>
             <input type="tel" name="phone" placeholder="Phone number" required="" minlength="10" maxlength="10">
             <input class="form-control" id="contact" name="password" type="text" minlength="6" placeholder="Password" />
             <div class="forget"><a href="/forget-password"> Forgot Password?</a></div>

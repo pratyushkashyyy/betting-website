@@ -466,7 +466,13 @@ LEFT JOIN
 WHERE 
     strftime('%Y-%m', wr.win_date) = strftime('%Y-%m', 'now')
 GROUP BY 
-    u.username''').fetchall()
+    u.username
+ORDER BY
+    wins
+DESC LIMIT
+    5
+
+    ''').fetchall()
     db.close()
     return render_template("leaderboard.html",user=user,settings=settings,challenges=challenges,monthly=monthly)
 
